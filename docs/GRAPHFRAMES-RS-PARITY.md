@@ -351,3 +351,38 @@ jobs and a session-scoped native state, is S6 of `FABLE-ON-ASTRA.md`.
 Whether it is two to three times faster than a co-partitioned relational
 round is a measurement Argentea cannot give yet, because it has no
 capacity evidence; item 6's matrix is the place it enters once it has.
+
+## 10. Baseline observed on Sail, 2026-09-28
+
+Run locally on Capitola against the delivered x86_64 binary
+`target/extensions-datafusion-final/mac-x86-de8e67098/sail` in local mode
+with four partitions, 100,000 vertices and 800,000 synthetic edges, client
+writes `repartition(4, key).sortWithinPartitions(key).write.parquet`.
+Script: session scratchpad `layout-exp/baseline.py`. What the plans show:
+
+- **Sail writes one file per partition and the name carries the index**:
+  `{token}_{i}.zst.parquet`, `i` in 0..3. Section 3's first question is
+  answered without a host change.
+- **The Parquet scan regroups files by byte ranges.** The state files came
+  back as four groups of one file each, but the edge files came back as
+  four groups made of byte ranges that straddle files
+  (`_0:0..1315012, _1:0..2136` in one group). The buckets are destroyed at
+  scan time, before any declaration could matter. This is the
+  `ListingTable` behavior graphframes-rs's provider exists to override, and
+  it means the read side must build its own file groups, one file per
+  group, in index order.
+- **Every join repartitions both sides**: `RepartitionExec(Hash([src],4))`
+  under the edge scan and `RepartitionExec(Hash([id],4))` under the state
+  scan for the message join, again for the aggregate, again for the
+  vertices join. Three hash shuffles per round of what is 800,000 rows
+  here and 260 M rows on Graph500-24.
+- **Sem's estimate, live**: the aggregate over the 800,000-row message
+  stream carries `Rows=Inexact(800000)` into the join back to vertices,
+  whose true output is 100,000 rows. The optimizer chose `CollectLeft` with
+  the 100,000-row state as the build side, which is the harmless
+  orientation here; in Sail's distributed planner that same
+  `CollectLeft` + Left join is what triggers the unconditional repartition
+  rule of section 3.
+
+The round took 32 ms at this size; the point of the run is the plan shape,
+not the time.
