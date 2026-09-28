@@ -395,6 +395,41 @@ Not yet done: the end-to-end run on a Sail server (an x86_64 wheel is being
 built for the delivered x86_64 binary on Capitola; Linux on morrobay waits
 for the campaign), the job planner's left-join rule, the measurement.
 
+## 12. Where the declaration dies in Sail, and the host fix
+
+Run on Capitola against the delivered x86_64 host `de8e67098` with the
+x86_64 wheel built from `work/declared-layout` (script
+`layout-exp/declared_join.py`): two `checkpoint`s joined on their key and
+the aggregate materialized by `id` before the left join. Results match the
+shuffle formulation exactly (zero mismatches on 100,000 rows). The plans do
+not: Sail shows `NativeRelationExec: local, opaque_region=true` for each
+checkpoint scan, and a `RepartitionExec(Hash)` above every one of them.
+
+The wrapper is not at fault; it forwards the inner plan's properties. The
+loss is in the FFI crossing. `datafusion-ffi` 55.1 carries
+`Partitioning::Hash` and the output ordering across the boundary, but every
+expression in them arrives as a `ForeignPhysicalExpr`: a handle that can be
+evaluated, compares equal only to itself (`PartialEq` is pointer identity),
+and projects through nothing. The optimizer asks whether the scan's
+`Hash([foreign], 4)` satisfies the join's `Hash([#0@0])` after the rename
+projection, and it cannot, so it repartitions. The same happens to the
+declared order. Pecan cannot run on this host at all (it predates the
+host-owned utils service), so the Pecan comparison itself waits for a
+current host on morrobay.
+
+The fix is small and lives in the host wrapper
+(`crates/sail-session/src/extensions/plan.rs`): when the native relation is
+wrapped, restate its declared partitioning and ordering with host `Column`s.
+A column is the one expression whose identity its display gives away,
+`name@index`, and the restatement is accepted only when the plan's own
+schema has that name at that index; anything else is kept as it came. About
+sixty lines, applied on `work/declared-layout`, to be verified by the FFI
+round-trip tests the wrapper already has and then by the same experiment
+showing no `RepartitionExec` above the scans. This is the "declared layout
+reaches the host optimizer" change of section 5, in its final form: nothing
+in the codec, nothing graph-specific, one wrapper restating what the FFI
+could not carry. It is the first candidate for a granular upstream PR.
+
 ## 10. Baseline observed on Sail, 2026-09-28
 
 Run locally on Capitola against the delivered x86_64 binary
