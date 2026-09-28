@@ -218,3 +218,54 @@ No number here is a measurement of ours. Sem's three times is his
 measurement on his hardware against his naive variant. Whether Pecan-after
 matches graphframes-rs is decided by item 6 and reported with its envelope,
 in the campaign format, with every outcome retained.
+
+## 7. The endgame Sem describes, and what DataFusion already has
+
+Sem's expected end state: once declared co-partitioning is in DataFusion and
+Sail supports it, edges are written once and every read is a sort-merge join
+in linear time. DataFusion 55 is part of the way there, and the direction is
+range partitioning rather than hash:
+
+- DataFusion 55.0.0 added native range partitioning, `Partitioning::Range`
+  with a declared ordering and split points, so that pre-partitioned inputs
+  can avoid repartitioning ([release post](https://datafusion.apache.org/blog/output/2026/08/25/datafusion-55.0.0/),
+  [epic #25421](https://github.com/apache/datafusion/issues/25421)).
+- `ListingTable::scan` now declares `Range` from the partition split points
+  of a Hive-partitioned listing ([PR #25279](https://github.com/apache/datafusion/pull/25279));
+  that PR also records why declaring `Hash` for such scans was wrong and
+  dropped rows. This is the engine-level version of the declaring provider:
+  the scan itself carries the layout, and no wrapper is needed.
+- Open items that map one to one onto the fork's gaps: `JoinSelection`
+  should check whether inputs already satisfy co-partitioning before
+  choosing `CollectLeft` ([#25301](https://github.com/apache/datafusion/issues/25301)),
+  the same defect as Sail's job-planner left-join rule; preserving
+  partitioning through co-partitioned full outer joins
+  ([#25436](https://github.com/apache/datafusion/issues/25436)); plan-time
+  pruning for range partitioning ([#25437](https://github.com/apache/datafusion/issues/25437));
+  and input-size checks before reusing join partitioning
+  ([PR #25787](https://github.com/apache/datafusion/pull/25787)).
+- Sail already plans `Partitioning::Range` into its shuffles
+  (`job_graph/planner.rs`, and `ExplicitRepartitionExec` in
+  `sail-physical-plan`), so a range-partitioned checkpoint is not foreign
+  to it.
+
+Two consequences for section 4. First, write the checkpoints
+range-partitioned by key rather than hash-partitioned: sort by the key,
+split into N buckets by split points, one file per bucket, and record the
+split points beside the files. Range gives the same co-partitioned merge
+join, is what DataFusion's scans are learning to declare natively, and is
+what Sail's planner already shuffles on, so the interim wrapper of item 3
+becomes the smallest possible shim and disappears when Sail moves to a
+DataFusion where the listing declares it. Second, the messages side of the
+round, which comes out of a hash aggregate, would then need one range
+repartition per round; that is the small side, and it is the trade the
+engine direction implies. graphframes-rs's hash layout stays the reference
+for the measurement in item 6 either way.
+
+Sources: [DataFusion 55.0.0 release post](https://datafusion.apache.org/blog/output/2026/08/25/datafusion-55.0.0/),
+[epic #25421](https://github.com/apache/datafusion/issues/25421),
+[PR #25279](https://github.com/apache/datafusion/pull/25279),
+[#25301](https://github.com/apache/datafusion/issues/25301),
+[#25436](https://github.com/apache/datafusion/issues/25436),
+[#25437](https://github.com/apache/datafusion/issues/25437),
+[PR #25787](https://github.com/apache/datafusion/pull/25787).
