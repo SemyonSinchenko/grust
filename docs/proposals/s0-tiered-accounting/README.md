@@ -1,11 +1,11 @@
 # S0 tiered accounting: a proposed change to the Sail fork, for review
 
 This is the first step of the sequence in [`FABLE-ON-ASTRA.md`](../../FABLE-ON-ASTRA.md)
-(S0, "separate staging from kernel in every measurement"), prepared as a
-patch and **not applied to any Sail branch**. It exists on a local branch
-`work/s0-tiered-accounting` in `~/src/sail-large-graphs` (commit
-`e33d130f8` on top of the remote tip `b87fb27ac`) and nowhere else. Per
-`AGENTS.md` "Sail Discipline", it becomes a pull request only after review.
+(S0, "separate staging from kernel in every measurement"), prepared on
+the fork branch `work/s0-tiered-accounting` of `querygraph/sail` (commit
+`e33d130f8` on top of `work/extensions-traversal-bench` at `b87fb27ac`).
+The patch here is the reviewable copy. Per `AGENTS.md` "Sail Discipline" the
+fork is ours to build in; nothing here is an upstream change.
 
 `0001-s0-tiered-accounting.patch` touches ten files under
 `examples/extensions/` and nothing in Sail's own crates:
@@ -42,9 +42,7 @@ sampler and cell code has no tests yet. Not done: the cit-Patents and
 Graph500-24 importers, the `--ulimit nofile` container option, summarizer
 columns, documentation.
 
-Note for the reviewer: the rule adopted after this patch was written says
-Nutmeg native code is edited in `~/src/nutmeg` and the vendored copy is
-refreshed by PR. The vendored copy has diverged from that repository (it
-carries the optimized kernels and traversal work), so this patch edits the
-vendored copy; the same change should be ported to `~/src/nutmeg` when the
-two are reconciled.
+Note for the reviewer: the vendored Nutmeg copy under the fork has diverged
+from `~/src/nutmeg` (it carries the optimized kernels and traversal work), so
+this patch edits the vendored copy; the same change should be ported to
+`~/src/nutmeg` when the two are reconciled.
