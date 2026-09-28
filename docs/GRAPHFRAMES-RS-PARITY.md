@@ -478,11 +478,27 @@ identical results over eight rounds.
 **At 100,000 vertices and 800,000 edges the declared layout is slower**,
 0.40 s per round against 0.21 s. At that size the shuffle it removes costs
 almost nothing, while it adds one materialization per round (the messages)
-and pays the driver-side writer for it. The crossover is a function of the
-edge count; the 2 M-vertex, 16 M-edge run that measures it is recorded
-below when it completes. This is exactly the measurement section 4 item 6
-asks for, and it is why the section refuses to promise Sem's factor before
-it is seen.
+and pays the driver-side writer for it. **At 2,000,000 vertices and 16,000,000 edges it is still slower**, and
+by more: 4.95 s per round against 2.9 s, eight rounds each, results
+identical, and its setup (snapshot and the edge checkpoint) 44 s against
+12.5 s. Local mode on Capitola, four partitions, one host process. The
+joins did lose their shuffles; the cost moved into the checkpoint writer.
+Every round writes two checkpoints of 2 M rows through the extension, which
+executes the input across the FFI and sorts and encodes each bucket on its
+own two-thread runtime, while Sail's writer runs on the server's threads.
+graphframes-rs pays none of that: it writes in process with DataFusion's
+full parallelism, which is mechanism 2 of section 2 showing up on the write
+side rather than the read side.
+
+So the honest state is: the read side is solved and verified (declared
+scans, host restatement, no shuffle under the joins), the write side is
+correct but slow on the driver, and the parity Sem measured needs the
+write side distributed, which is the deferred form above: a worker-placed
+entry point exporting the engine-hash bucket function, `partitionBy` on the
+bucket through Sail's own writer, and the reader taking a partition
+directory per bucket. That is the next change. The measurements here are
+the ones section 4 item 6 asks for, and they are why this document refuses
+to promise Sem's factor before it is seen.
 
 ## 10. Baseline observed on Sail, 2026-09-28
 
