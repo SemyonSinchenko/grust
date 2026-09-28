@@ -433,6 +433,57 @@ reaches the host optimizer" change of section 5, in its final form: nothing
 in the codec, nothing graph-specific, one wrapper restating what the FFI
 could not carry. It is the first candidate for a granular upstream PR.
 
+## 13. The write side, corrected: Sail's writer does not bucket
+
+With the host restatement in place and a Sail host built from
+`work/declared-layout` on Capitola, the declared join planned with no
+`RepartitionExec` on either side, and returned wrong rows: the snapshot's
+anti-join reported 595,200 edges whose source "does not reference a
+vertex", the inner join 204,800 of 800,000. The two checkpoints were not
+co-partitioned. The bucket sizes said why: 26,272 and three times 24,576
+rows, exact multiples of the 8,192-row batch. Sail writes Parquet through
+DataFusion's sink, whose demuxer spreads batches round-robin over
+`minimum_parallel_output_files` (default four) files, so a file's index is
+the order batches arrived, not a hash bucket. Two frames derived from the
+same `range` looked consistent only because their batches arrived in the
+same order. Section 3's first question was answered wrong by the naming
+alone; the check it asked for was the one that mattered.
+
+Two ways to make the layout true by construction:
+
+- **A bucket computed by the engine's own hash, written as a partition
+  directory.** `partitionBy(bucket)` is deterministic whatever the writer
+  does with files, and stays distributed. But the bucket has to be
+  DataFusion's repartition hash, not Spark's `hash`, or a declared scan
+  joined to something DataFusion itself hash-partitioned would be wrong
+  silently. That needs a scalar UDF from the extension, and the host loader
+  refuses scalar UDFs from a driver-placed extension, so it means a second,
+  worker-placed entry point. This is the distributed form and is deferred.
+- **The extension writes the checkpoint itself**, as graphframes-rs does:
+  `checkpoint(frame, path, key, N)` executes its input through the FFI,
+  repartitions with `RepartitionExec(Hash([key], N))`, sorts each bucket
+  with the partitioning preserved, and writes one `part-{i}.parquet` per
+  bucket, consuming all buckets concurrently because a repartition's
+  distributor blocks on an unread output. The write runs on the driver and
+  is attempted once. This is what `work/declared-layout` now does, and it
+  is the form the experiments use.
+
+With the writer in place, against the same host: both snapshot anti-joins
+return zero rows as the plain formulation does; the inner join returns all
+800,000 rows; the round's two joins plan as partitioned hash joins directly
+over the two native relations with no repartition; the only shuffle left in
+a round is the aggregate's, by `dst`. PageRank under both layouts gives
+identical results over eight rounds.
+
+**At 100,000 vertices and 800,000 edges the declared layout is slower**,
+0.40 s per round against 0.21 s. At that size the shuffle it removes costs
+almost nothing, while it adds one materialization per round (the messages)
+and pays the driver-side writer for it. The crossover is a function of the
+edge count; the 2 M-vertex, 16 M-edge run that measures it is recorded
+below when it completes. This is exactly the measurement section 4 item 6
+asks for, and it is why the section refuses to promise Sem's factor before
+it is seen.
+
 ## 10. Baseline observed on Sail, 2026-09-28
 
 Run locally on Capitola against the delivered x86_64 binary
