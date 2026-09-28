@@ -309,3 +309,45 @@ actually does:
   `id`, which also feeds the co-partitioned join. DataFusion's own fix is
   [#25301](https://github.com/apache/datafusion/issues/25301): check
   co-partitioning before choosing `CollectLeft`.
+
+## 9. The GraphX-style design Sem sketches is Argentea
+
+Sem's further sketch: keep a routing hash table in memory and use the
+triplet memory model, as default GraphX does, but keep the triplets on disk
+by partition and route every vertex-state update directly to the partitions
+that need it. From the couch, two to three times faster again than
+graphframes-rs; much harder to code; needs the graph-partitioning
+literature, although 2D partitioning already carries well. He adds that it
+is not a Spark Connect extension's level, because it means going into the
+tokio workers and doing something like `mapPartitions`; that it is hard to
+pull in without breaking the Sail runtime, being a hack over the plan; and
+that range partitioning or bucketing is the proper way, compared with
+declaring partitioning in the plan by hand.
+
+That design exists in the fork. It is Argentea, on
+`work/extensions-traversal-bench`: native adjacency partitions held by
+Sail workers for the lifetime of one job, vertex-state updates carried as
+typed messages through Sail's own shuffles to the owning partition, rounds
+unrolled as native stages, and the placement of native stages pinned
+through Sail's slot groups. Sem's prediction of what it costs is accurate,
+and the integration document records the price: worker-side decoding of
+native relations, native admission on workers, job-owned native state, one
+attempt for regions holding native state, and placement validation. Those
+are the focused host hooks it needed; they are exactly the "going into the
+workers" he expects, and they are the reason it is qualified only on tiny
+fixtures so far and only within a bounded number of rounds per job. The
+partitioning question he raises is open there too: Argentea partitions by
+Sail's ordinary hash shuffle, with no 1D or 2D vertex-cut strategy yet.
+What it has that his sketch lacks is the memory accounting through the
+host pool and the failure and cancellation qualification.
+
+So the three layers line up as the plan already has them. The relational
+loop with declared layout (this document's sections 3 to 5) is the
+portable path and the one to make honest against graphframes-rs first. The
+range-partitioned, bucketed form of it (section 7) is the proper version
+Sem prefers, and it is where DataFusion is heading. Argentea is the
+GraphX-style layer above both, and its next question, continuation across
+jobs and a session-scoped native state, is S6 of `FABLE-ON-ASTRA.md`.
+Whether it is two to three times faster than a co-partitioned relational
+round is a measurement Argentea cannot give yet, because it has no
+capacity evidence; item 6's matrix is the place it enters once it has.
