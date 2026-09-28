@@ -500,6 +500,55 @@ directory per bucket. That is the next change. The measurements here are
 the ones section 4 item 6 asks for, and they are why this document refuses
 to promise Sem's factor before it is seen.
 
+## 14. The distributed write, measured, and where parity stands
+
+The distributed form exists on `work/declared-layout` (`17f8461f1`):
+`nutmeg_bucket(key, n)` from a functions-only entry point placed `any`,
+verified equal to the partition `RepartitionExec` sends each row to;
+`checkpoint(mode="distributed")` writing `partitionBy` on that bucket
+through Sail's own writer; the reader taking a directory per bucket. It is
+correct, and on this host it is slower than everything else. One frame of
+16 M rows, local mode, four partitions, Capitola under load (times vary
+run to run by up to a factor of three; the ratios hold):
+
+| Write of the same 16 M-row frame | Seconds | Bucketed by key? |
+| --- | ---: | --- |
+| Sail `repartition(4).write.parquet` | 1.5 to 5.8 | no |
+| Sail `repartition(4, key).sortWithinPartitions(key).write.parquet` | 5.9 to 14.1 | **no**: DataFusion's demuxer spreads batches round-robin over `minimum_parallel_output_files` files |
+| Sail `write.partitionBy(bucket)`, bucket from `id % 4` or `nutmeg_bucket` | 11.6 to 12.5 | yes, one directory per bucket |
+| same with `repartition(4, bucket).sortWithinPartitions(bucket, key)` | 28.8 to 36.0 | yes, sorted |
+| extension writer, `mode="driver"` | 12.3 to 16.8 | yes, sorted |
+
+So a bucketed, sorted checkpoint costs eight to twenty times a plain write
+on Sail today, whichever route produces it, and the hash partitioning the
+client asks for with `repartition(n, key)` never reaches the files. The
+shuffle a declared layout removes from a round costs less than that at
+16 M edges in one process. Parity with graphframes-rs on Sail is therefore
+blocked on the write path, not on the read path, which is done: declared
+scans, host restatement, shuffle-free joins, all verified. The three
+candidates, in order:
+
+1. **Sail's `partitionBy` write is slow**, eight times a plain write for a
+   four-value partition column, and its sorted variant slower still. This
+   is an upstream performance finding with a reproduction
+   (`layout-exp/partitionby_probe.py`, times above); it deserves a report
+   with the probe attached, before any Sail change is proposed.
+2. **The driver writer pays the FFI.** Its work is a hash repartition, four
+   sorts and four Parquet encodes, which should be a few seconds; it takes
+   twelve to seventeen. The input is produced by the host and crosses the
+   FFI batch by batch into the extension's runtime. Profiling that
+   crossing is the next engineering step if route 1 stalls.
+3. **Measure where shuffles cost more.** On morrobay with process workers,
+   a round's shuffle crosses Flight between processes and the declared
+   layout's saving grows while the write cost does not; the Linux campaign
+   harness is where the comparison belongs, after the running campaign.
+
+One observation is retained as unexplained: a single distributed write of
+16 M rows once produced two identical files per bucket, 32 M rows in all,
+and did not do so in four repetitions afterwards, including one from a
+fresh session. The directory was not kept. Any recurrence should be kept
+whole and reported to Sail with the plan.
+
 ## 10. Baseline observed on Sail, 2026-09-28
 
 Run locally on Capitola against the delivered x86_64 binary

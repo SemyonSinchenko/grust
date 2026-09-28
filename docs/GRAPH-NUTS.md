@@ -302,7 +302,7 @@ the session scratchpad, not under `~/src`.
 | `querygraph/sail` | `work/extensions-traversal-bench` (`b87fb27ac`) | active branch | Argentea, traversal benchmark, Graph500 preparation, the large campaign. `sail-large-graphs` checks it out, 76 behind as of 2026-09-28. |
 | `querygraph/sail` | PR 30 `graphframes-rs-like` (`b772a112c8`) | open, do-not-merge | Sem's pure-PySpark Pregel and benchmark results; base is `work/extensions-datafusion-graphs`. |
 | `querygraph/sail` | `work/s0-tiered-accounting` (`e33d130f8`) | pushed | S0 tiered accounting (see `grust/docs/proposals/s0-tiered-accounting/`). |
-| `querygraph/sail` | `work/declared-layout` | pushed | The `checkpointed` relation, Pecan's declared layout, and the host wrapper restating a native relation's declared layout with host columns (first upstream PR candidate). |
+| `querygraph/sail` | `work/declared-layout` (`17f8461f1`) | pushed | The `checkpointed` relation and `checkpoint` writer (driver and distributed modes), `nutmeg_bucket` from a functions-only entry point, Pecan's declared layout, and the host wrapper restating a native relation's declared layout with host columns (first upstream PR candidate). Read side verified; write side measured slow on Sail, see `GRAPHFRAMES-RS-PARITY.md` §14. |
 | `querygraph/sail` | `pr-2522`, `session-factory-hook` | rescued from AWS | Tree-verified replays of the host branches (`grust/LAKESAIL-AWS-QUERYGRAPH.md` §3–4). |
 | `alexy/sail` | `csv-nanos-followup` (`e3037a5a`) | open upstream as lakehq/sail#2672 | Format-aware nanosecond widening for CSV schema inference; rebased onto merged #2522. Watch james-willis's draft #2657, which rewrites the same function. |
 | `lakehq/sail` | #2630 | merged | The session factory hook: an embedder chooses the session factory. Nutmeg's only required Sail change (`nutmeg/docs/sail-prs.md`). |
@@ -523,9 +523,14 @@ maps it onto repositories.
    owner-local partition files; placement-stability measurement; the
    session-scoped native-state maintainer request in the form of
    `maintainer-request.md`.
-7. Keep `sail-extensions-poc` as the promoted implementation branch and
+7. **Parity thread, next:** report Sail's `partitionBy` write cost upstream
+   with `partitionby_probe.py`; profile the FFI batch crossing in the
+   driver checkpoint writer; rerun the shuffle-versus-declared comparison
+   on morrobay with process workers once the campaign ends; then the
+   four-way Graph500-24 measurement (`GRAPHFRAMES-RS-PARITY.md` §4 item 6).
+8. Keep `sail-extensions-poc` as the promoted implementation branch and
    update the Graph Nuts page and its evidence manifest after each qualified
    campaign.
-8. Keep this file current: every new repository, branch, document, pull
+9. Keep this file current: every new repository, branch, document, pull
    request or host that touches graph work gets a row here in the same
    commit that creates it.
