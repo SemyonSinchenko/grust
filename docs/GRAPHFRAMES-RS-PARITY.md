@@ -269,3 +269,43 @@ Sources: [DataFusion 55.0.0 release post](https://datafusion.apache.org/blog/out
 [#25436](https://github.com/apache/datafusion/issues/25436),
 [#25437](https://github.com/apache/datafusion/issues/25437),
 [PR #25787](https://github.com/apache/datafusion/pull/25787).
+
+## 8. A hash-join trap Sem names, checked against DataFusion 55.1
+
+Sem's warning: in the round's join of edges to vertex state, followed by a
+group-by and the join back to vertices, the group-by output really has
+O(|V|) rows, but DataFusion sizes the build side conservatively and tries to
+allocate O(|E|), which under a memory limit ends in an out-of-memory
+failure. What the DataFusion 55.1.0 source the fork compiles against
+actually does:
+
+- **The estimate is O(|E|).** An aggregate's output row estimate falls
+  back to its input's row count, made inexact, when the distinct count of
+  the group key is unknown (`datafusion-physical-plan-55.1.0/src/aggregates/mod.rs`,
+  `estimate_num_rows`), and its byte estimate is that row count times the
+  row width. A group-by over the E-row message stream is therefore
+  estimated at E rows unless something upstream knows the key's
+  cardinality.
+- **The estimate drives the plan, not the runtime reservation.**
+  `JoinSelection` picks the build side and the `CollectLeft` broadcast mode
+  from `total_byte_size`, then `num_rows` (`datafusion-physical-optimizer-55.1.0/src/join_selection.rs`,
+  `should_swap_join_order`, the `hash_join_single_partition_threshold`
+  checks). At execution the build side reserves by the actual bytes of each
+  collected batch (`hash_join/exec.rs`, the `try_fold` over the build
+  stream) and sizes its table by the actual row count; the dense
+  "perfect hash" array map reserves by the key range, which for dense
+  integer ids is O(|V|). So in 55.1 the O(|E|) figure decides which side is
+  built and whether it is broadcast to every partition; a wrong choice
+  there is memory amplified by the partition count, which is the failure
+  Sem describes, and older versions reserved more eagerly.
+- **The mitigation is the one graphframes-rs already applies.** It
+  checkpoints the aggregated messages before the join back to vertices
+  (`pregel.rs`, "spill aggregated to disk to reduce memory peak"), so the
+  join sees a file with exact statistics of O(|V|) rows, not an estimate.
+  Under a pool, `prefer_smj` avoids the build side altogether. Pecan's
+  power method joins the un-materialized group-by directly
+  (`vertices.join(message, "id", "left")`), so item 5 of section 4 must
+  materialize the aggregated messages first, as a bucketed checkpoint on
+  `id`, which also feeds the co-partitioned join. DataFusion's own fix is
+  [#25301](https://github.com/apache/datafusion/issues/25301): check
+  co-partitioning before choosing `CollectLeft`.
