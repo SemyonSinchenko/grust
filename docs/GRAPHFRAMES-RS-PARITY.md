@@ -423,9 +423,12 @@ wrapped, restate its declared partitioning and ordering with host `Column`s.
 A column is the one expression whose identity its display gives away,
 `name@index`, and the restatement is accepted only when the plan's own
 schema has that name at that index; anything else is kept as it came. About
-sixty lines, applied on `work/declared-layout`, to be verified by the FFI
-round-trip tests the wrapper already has and then by the same experiment
-showing no `RepartitionExec` above the scans. This is the "declared layout
+sixty lines, on `work/declared-layout`, verified by the wrapper's tests: the
+restatement accepts a column only when the schema agrees, and two sources
+declaring a foreign key column now join with no `RepartitionExec` and no
+`SortExec` while returning every row; the crate's unit suite passes. The
+same experiment against a host built from that branch, on morrobay, is the
+remaining confirmation. This is the "declared layout
 reaches the host optimizer" change of section 5, in its final form: nothing
 in the codec, nothing graph-specific, one wrapper restating what the FFI
 could not carry. It is the first candidate for a granular upstream PR.
