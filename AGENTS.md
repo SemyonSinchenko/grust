@@ -169,6 +169,32 @@ coordinator's.
 - **Publish timings from a dedicated host only**, and label every other host's
   numbers as ratios on a shared box, never as absolute results.
 
+## Sail Discipline
+
+The failure: on 2026-09-28 the Graph Nuts scaling plan was written into the
+Sail fork's `docs/` and pushed there, and an S0 measurement change was started
+across the fork's vendored Nutmeg crate and benchmark harness, before anyone
+had reviewed either. Both had to be pulled back.
+
+- **Sail is touched only through pull requests, and only with small, limited
+  edits after careful review.** That covers `lakehq/sail` upstream and every
+  `querygraph/sail` branch and worktree (`~/src/sail`, `~/src/sail-extensions-poc`,
+  `~/src/sail-large-graphs`, the alignment checkouts). Do not commit or push
+  to a Sail branch directly. Prepare the change on a local branch, state what
+  it touches and why in one paragraph, and hand it to the operator for review;
+  the operator decides whether it becomes a PR.
+- **Documents do not go into Sail.** Plans, reviews, handoffs, diagnoses and
+  the Graph Nuts map live in `grust/docs` (see `docs/GRAPH-NUTS.md`). The Sail
+  fork's `docs/development/extensions` tree holds the evidence reports written
+  beside the code; nothing new is added there without the review above.
+- **Nutmeg's native code is edited in the Nutmeg repository**
+  (`~/src/nutmeg`), not in the copy vendored under the Sail fork's
+  `examples/extensions/vendor`. A vendored copy is refreshed from Nutmeg by a
+  reviewed PR, never edited in place.
+- **Benchmark harness changes are proposed, not landed.** A harness edit
+  changes what every later campaign means; it is reviewed like a Sail change
+  even when it lives under `examples/`.
+
 ## File Discipline
 
 - Prefer keeping source and documentation files under 500 lines, and try to keep
