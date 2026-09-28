@@ -28,7 +28,7 @@ engine or imply a combined leaderboard.
 | Directory | Role | Status and source of truth |
 |---|---|---|
 | `src/sail` | Upstream Sail checkout | Use for clean upstream comparisons and maintainer-facing changes. |
-| `src/sail-extensions-poc` | Main extension proof of concept | Current reference for Pecan, Nutmeg integration, protocol examples, staged graph execution, and the small Sail-side API surface. Its `docs/` contains focused design and scaling notes such as `SCALING-NUTS.md`. |
+| `src/sail-extensions-poc` | Main extension proof of concept | Current reference for Pecan, Nutmeg integration, protocol examples, staged graph execution, and the small Sail-side API surface. Design plans and scaling notes live in `grust/docs`, not here; this repository holds code, tutorials and evidence. |
 | `src/sail-large-graphs` | Large-graph execution, Argentea and traversal qualification work; branch `work/extensions-traversal-bench` | Use for real-graph ingestion, staging pressure, `ulimit`, spill behavior and distributed capacity experiments. Results must be copied into the evidence archive and summarized in the master plan. **The remote branch is the authority**: on 2026-09-28 the local checkout (`9c9ea46c8`) was 76 commits behind `querygraph/work/extensions-traversal-bench` (`b87fb27ac`) and carried five uncommitted host-file edits under `crates/sail-common-datafusion` and `crates/sail-execution`. Everything Argentea-related listed below lives on the remote tip. |
 | `src/sail-querygraph-alignment` | Sail alignment and upstream compatibility checkout; branch `agent/sail-performance-alignment` | Use to compare extension assumptions with current Sail/DataFusion APIs and to stage maintainer-compatible changes. |
 | `src/sail-grust-performance-alignment` | Performance-oriented Sail/Grust alignment; branch `agent/grust-performance-alignment` | Use for cross-checking execution and accounting behavior; do not treat it as the canonical published extension source unless explicitly promoted. |
@@ -38,6 +38,12 @@ engine or imply a combined leaderboard.
 The canonical extension implementation is `sail-extensions-poc`. Large-graph
 work may diverge while experiments run, but every promoted change must be
 reapplied to the canonical branch and recorded with its source commit.
+
+**Where documents go.** Plans, reviews, handoffs and this map live in
+`grust/docs`. The Sail fork receives only small, limited edits after careful
+review; its `docs/development/extensions` tree holds the evidence reports and
+design records that were written beside the code, and nothing new is added
+there without that review.
 
 Both Sail checkouts are worktrees of one clone whose remotes are `origin`
 (lakehq/sail, upstream), `querygraph` (the querygraph/sail fork where all
@@ -58,8 +64,8 @@ work runs, not different definitions of the algorithms.
 | **Argentea** | `sail-large-graphs/examples/extensions/argentea` (Rust core, worker adapters, Python client) | Native CSR partitions on Sail workers for the lifetime of one Sail job; ordinary Flight shuffles carry messages; rounds unrolled as native stages in one job | Reference and residual PageRank (32-phase), BFS in reference, frontier and direction-switching forms (128-stage in process clusters), WCC (min-label and seeded star) and weighted SSSP pass process-cluster qualification; PageRank and BFS pass physical two-host (Capitola/Morrobay) qualification. Bounded rounds per job; one attempt for native regions; no capacity or performance evidence. |
 
 The scaling review and improvement sequence for all four is
-`sail-extensions-poc/docs/FABLE-ON-ASTRA.md`; its diagnosis input is
-`sail-extensions-poc/docs/SCALING-NUTS.md`.
+`grust/docs/FABLE-ON-ASTRA.md`; its diagnosis input is
+`grust/docs/SCALING-NUTS.md`.
 
 ### Algorithm libraries and native paths
 
@@ -169,7 +175,7 @@ dangling fixtures apply, as for the first two tracks.
 
 Grust 0.23.0 registers 36 kernels and Nutmeg Banda exposes all of them. Only
 PageRank, WCC, BFS and SSSP have relational or Argentea forms.
-`FABLE-ON-ASTRA.md` section 6 classifies every kernel by shape (sweep,
+`grust/docs/FABLE-ON-ASTRA.md` section 6 classifies every kernel by shape (sweep,
 frontier, Pregel, join, global) and says which path can carry it to what size
 once the scaling sequence lands. Seven of them (closeness, harmonic,
 betweenness, louvain, leiden, spanning tree, Tarjan SCC) scale only through a
@@ -223,7 +229,7 @@ The earlier sparse campaign (`sail-extensions-poc`,
 convergence caps) covers the 15 path/method combinations on bounded-component
 graphs up to one million vertices.
 
-`FABLE-ON-ASTRA.md` reads these together with Sem's PR 30 numbers and orders
+`grust/docs/FABLE-ON-ASTRA.md` reads these together with Sem's PR 30 numbers and orders
 the work: separate staging from kernel measurement (S0); integer identity
 through staging (S1); sort only for kernels that read order, with a spilling
 sort when they do (S2); a dense integer projection without per-node strings or
@@ -336,9 +342,9 @@ validation and scaling work. Paths are relative to the named repository.
 
 ### Scaling and benchmark evidence
 
-- `sail-extensions-poc/docs/SCALING-NUTS.md` — current large-graph diagnosis
+- `grust/docs/SCALING-NUTS.md` — current large-graph diagnosis
   and bounded-memory staging plan.
-- `sail-extensions-poc/docs/FABLE-ON-ASTRA.md` — review of all four paths
+- `grust/docs/FABLE-ON-ASTRA.md` — review of all four paths
   against the retained evidence and the ordered improvement sequence S0–S6
   with a per-kernel reach table.
 - `sail-large-graphs/docs/development/extensions/pecan-nutmeg-large-benchmark.md`
@@ -387,6 +393,10 @@ validation and scaling work. Paths are relative to the named repository.
 - `grust/docs/book/chapters/algorithms-under-measurement.md` — measurement
   context for the shared algorithm surface.
 - `grust/HANDOFF.md` — release and in-flight state as of 2026-09-25.
+- `grust/docs/GRAPH-NUTS-HANDOFF-FABLE.md` — Astra's handoff of the Graph
+  Nuts plan on 2026-09-28: finish the running Morrobay campaign untouched,
+  rebuild the baseline from the traversal-bench tip, implement S0, then
+  Argentea.
 - `grust/GRUST-SAIL.md` and `nutmeg/docs/sail-prs.md` — the Sail changes
   Nutmeg needed and their gate.
 - `grust/LAKESAIL-AWS-QUERYGRAPH.md` — what the four AWS hosts held and where
@@ -424,7 +434,7 @@ documents, then remove them in a deliberate cleanup:
 
 ## Immediate work queue
 
-The ordered sequence with gates is `FABLE-ON-ASTRA.md` section 5; this list
+The ordered sequence with gates is `grust/docs/FABLE-ON-ASTRA.md` section 5; this list
 maps it onto repositories.
 
 1. **S0, in `sail-large-graphs`:** add cit-Patents and Graph500-24 to the
