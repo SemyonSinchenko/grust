@@ -352,6 +352,49 @@ Whether it is two to three times faster than a co-partitioned relational
 round is a measurement Argentea cannot give yet, because it has no
 capacity evidence; item 6's matrix is the place it enters once it has.
 
+## 11. Progress on the fork, 2026-09-28
+
+Branch `work/declared-layout` of `querygraph/sail` (worktree
+`~/src/sail-declared-layout`), on top of `b87fb27ac`:
+
+- **The provider needs no wrapper.** DataFusion 55.1.0's
+  `FileScanConfigBuilder` already has `with_output_partitioning`, and a scan
+  that declares its partitioning refuses the optimizer's file re-splitting
+  (`FileScanConfig::repartitioned` returns `None` when it is set). So the
+  `checkpointed` relation is a plain Parquet `FileScanConfig` with one file
+  group per bucket in index order, the key's ascending order declared per
+  group, and `Partitioning::Hash([key], N)` declared on the config. Section
+  3's codec concern shrinks with it: Sail's task codec already serializes a
+  `FileScanConfig` with a Parquet source; only the declaration is dropped on
+  the worker, where nothing re-plans. Sem's "movement in 55" is exactly this
+  builder method.
+- **Verb `checkpointed(path, key, partitions)`** in the Nutmeg extension
+  (`examples/extensions/nutmeg/src/checkpoint.rs`, ~200 lines with tests):
+  lists a local directory, reads the bucket index from the trailing integer
+  of each file name (Sail's `{token}_{i}.zst.parquet` and graphframes-rs's
+  `part-{i}.parquet` both parse), refuses a missing or duplicated bucket,
+  a key that is not a column, or a relative path, and reads the schema from
+  bucket 0's footer. Python: `Nutmeg.checkpointed(...)` and
+  `Nutmeg.checkpoint(frame, path, key, partitions)`, which writes
+  `repartition(N, key).sortWithinPartitions(key)` and returns the declared
+  scan.
+- **Unit tests pass on arm64** with a plain DataFusion context: a join of
+  two checkpoints on the key plans with no `RepartitionExec` and no
+  `SortExec` and returns exactly the reference rows; a group-by on the key
+  plans with no repartition and keeps N partitions; the refusals fire.
+- **Pecan gained `layout="declared"`** (`GraphAlgorithms(spark, layout=...)`):
+  `StagingRun.materialize(frame, key=...)` writes bucketed and sorted and
+  reads back through `checkpointed`; the snapshot stages vertices by `id`
+  and edges by `src`; power PageRank stages `weighted` by `src`, `dangling`
+  and `rank` by `id`, and, under the declared layout only, materializes the
+  aggregated messages by `id` before the join back to vertices, which is
+  the section 8 mitigation. The shuffle layout is unchanged and remains the
+  default.
+
+Not yet done: the end-to-end run on a Sail server (an x86_64 wheel is being
+built for the delivered x86_64 binary on Capitola; Linux on morrobay waits
+for the campaign), the job planner's left-join rule, the measurement.
+
 ## 10. Baseline observed on Sail, 2026-09-28
 
 Run locally on Capitola against the delivered x86_64 binary
