@@ -241,18 +241,25 @@ to Sail (S6). Each step has a fixture and a gate.
 ## Checkouts and builds on Capitola
 
 `~/src` is the operator's whole workspace; only the entries below belong to
-this work, and every one of them must be listed here. Reuse these builds
-before starting a new one: the disk had 21 GB free of 3.6 TB on
-2026-09-28, and a Sail build is 40 to 50 GB.
+this work, and every one of them must be listed here. On 2026-09-28 the
+operator had every Cargo compile cache under `~/src` removed (467 GB across
+24 `target` directories, among them `sail-extensions-poc/target/debug`,
+`grust/target`, `nutmeg/target`, `grust-binding-forms/target`,
+`grust/benchmarks/lsqb/target`); the disk went from 12 GB to 464 GB free.
+Delivery records under `sail-extensions-poc/target/extensions-*` kept their
+binaries, wheels, receipts and logs; only their `deps`, `build`,
+`incremental` and `.fingerprint` caches went. Any `target/` named below as a
+build is therefore gone and rebuilds on first use; a Sail host build is 40
+to 50 GB.
 
 ### Sail worktrees (one clone, `~/src/sail`, remotes `origin`=lakehq, `querygraph`, `fork`=alexy)
 
 | Directory | Branch | What is built there |
 |---|---|---|
 | `~/src/sail` | `lakecat` (`9f6f8065d`, 2026-08-28) | The clone itself; LakeCat work, 3 dirty files. Not a graph checkout. |
-| `~/src/sail-extensions-poc` | `work/extensions-datafusion-graphs` | 66 GB. `target/debug` (46 GB) is an arm64 debug build whose `sail` binary links a Python at `/install/lib` that no longer exists and **does not start**. Runnable: `target/extensions-datafusion-final/mac-x86-de8e67098/sail` (x86_64, links the uv Python `cpython-3.12.13-macos-x86_64-none`, runs under Rosetta) with its `wheels/`; `target/extensions-datafusion-development/mac-x86/sail` likewise. Wheels: `target/extensions-poc/wheels/` and `target/extensions-datafusion-development/nutmeg-wheels/` (arm64 `sail_nutmeg`). Python: `.venv` (arm64 3.12.8, PySpark 4.0.1, `sail_nutmeg` installed) and `.venvs/extensions-datafusion`, `.venvs/extensions-x86*`. Delivery records: `target/extensions-datafusion-final/README.md`, `target/extensions-distributed-poc/`, `target/pecan-benchmark/`. |
+| `~/src/sail-extensions-poc` | `work/extensions-datafusion-graphs` | 12 GB after the cleanup (`target/debug`, whose arm64 binary did not start, is gone). Runnable: `target/extensions-datafusion-final/mac-x86-de8e67098/sail` (x86_64, links the uv Python `cpython-3.12.13-macos-x86_64-none`, runs under Rosetta) with its `wheels/`; `target/extensions-datafusion-development/mac-x86/sail` likewise. Wheels: `target/extensions-poc/wheels/` and `target/extensions-datafusion-development/nutmeg-wheels/` (arm64 `sail_nutmeg`). Python: `.venv` (arm64 3.12.8, PySpark 4.0.1, `sail_nutmeg` installed) and `.venvs/extensions-datafusion`, `.venvs/extensions-x86*`. Delivery records: `target/extensions-datafusion-final/README.md`, `target/extensions-distributed-poc/`, `target/pecan-benchmark/`. |
 | `~/src/sail-large-graphs` | `work/s0-tiered-accounting` (from `work/extensions-traversal-bench` at `b87fb27ac`) | No `target/`; its builds run on morrobay under `~/src/sail-extensions-gates/` (for example `graph-kernels-traversal-1f18/`, the running campaign) and in Colima. The stash `preserve pre-catchup sail-large-graphs worktree 2026-09-28` holds three files that differ from the tip; audited, nothing unique but a small scheduler test difference. |
-| `~/src/sail-declared-layout` | `work/declared-layout` (from `b87fb27ac`; pushed) | The graphframes-rs parity work: the `checkpointed` relation and Pecan's `layout="declared"` (pushed), and the host wrapper restating a native relation's declared layout with host columns (`crates/sail-session/src/extensions/plan.rs`, tested). Builds: an arm64 test build of the extension in the session scratchpad `s0-target` (1.8 GB) and an x86_64 wheel `sail_nutmeg-0.1.0-cp312-cp312-macosx_10_12_x86_64.whl` in scratchpad `x86-wheel/` with its x86 venv `x86venv/`, made for the delivered x86 host; that host predates Pecan's utils service, so the Pecan comparison must run on morrobay. |
+| `~/src/sail-declared-layout` | `work/declared-layout` (from `b87fb27ac`; pushed) | The graphframes-rs parity work: the `checkpointed` relation and Pecan's `layout="declared"` (pushed), and the host wrapper restating a native relation's declared layout with host columns (`crates/sail-session/src/extensions/plan.rs`, tested). Builds (session scratchpad, not `~/src`): arm64 extension artifacts in `s0-target`, the host check/test build in `host-target`, an arm64 wheel in `arm64-wheel/` and an x86_64 wheel `sail_nutmeg-0.1.0-cp312-cp312-macosx_10_12_x86_64.whl` in scratchpad `x86-wheel/` with its x86 venv `x86venv/`, made for the delivered x86 host; that host predates Pecan's utils service, so the Pecan comparison must run on morrobay. |
 | `~/src/sail-querygraph-alignment` | `agent/sail-performance-alignment` | Alignment checkout, no graph build. |
 | `~/src/sail-grust-performance-alignment` | `agent/grust-performance-alignment` | Alignment checkout, no graph build. |
 | `~/src/sail-upstream-pr.7kGHU1` | `agent/sail-performance-hot-paths` | Ephemeral PR worktree (lakehq/sail#2400). |
@@ -262,14 +269,14 @@ before starting a new one: the disk had 21 GB free of 3.6 TB on
 
 | Directory | Branch | Notes |
 |---|---|---|
-| `~/src/nutmeg` | `main` (`f267b03`) | 15 GB `target/`. Pins Sail `f1cf1729b` and Grust `6504c0c`. |
+| `~/src/nutmeg` | `main` (`f267b03`) | Pins Sail `f1cf1729b` and Grust `6504c0c`. `target/` removed 2026-09-28. |
 | `~/src/nutmeg-signed` | `work/spark-signed-integers` (`2c0813c`) | Signed-integer column handling for Spark. |
 | `~/src/canonical-order/nutmeg` | `work/canonical-order` (`1492ca2`, 2026-09-21) | Astra's canonical-order staging experiment; relevant to S2. |
 | `~/src/bounded-staging/nutmeg` | `work/bounded-staging` (`5220db1`, 2026-09-21) | Astra's bounded-memory staging experiment; relevant to S1/S2. Both experiment directories also link `grust` to a Claude worktree at `fd4e3ec`. |
-| `~/src/grust` | `work/proposal-v5` | 68 GB, of which `target/` is 15.6 GB; the rest is evidence and book material. |
-| `~/src/grust-narrow-u32`, `grust-pagerank-f32`, `grust-fastrp-f64`, `grust-pagerank-fused` | see the Grust rows above | Kernel experiment worktrees; `grust-pagerank-fused/target` 1 GB. |
-| `~/src/grust-binding-forms`, `grust-arrow-null`, `grust-benchmark-krill`, `grust-benchmark-helix-sdk3`, `grust-release-krill`, `grust-arrow-pipeline` (+ `grust-arrow-buffer-owner`, `grust-lancedb-cancellation`), `grust-acorn-*`, `grust-copepod-delivery`, `grust-gooseneck-delivery` | various | Earlier Grust release and backend worktrees, not Graph Nuts; listed so nobody rebuilds into them by accident. `grust-binding-forms` is 27 GB. |
-| `~/src/grustframes` | `agent/sail-triplet-integration` | 2.4 GB `target/`. |
+| `~/src/grust` | `work/proposal-v5` | Evidence and book material; `target/` and `benchmarks/lsqb/target` removed 2026-09-28. |
+| `~/src/grust-narrow-u32`, `grust-pagerank-f32`, `grust-fastrp-f64`, `grust-pagerank-fused` | see the Grust rows above | Kernel experiment worktrees; their `target/` caches removed 2026-09-28. |
+| `~/src/grust-binding-forms`, `grust-arrow-null`, `grust-benchmark-krill`, `grust-benchmark-helix-sdk3`, `grust-release-krill`, `grust-arrow-pipeline` (+ `grust-arrow-buffer-owner`, `grust-lancedb-cancellation`), `grust-acorn-*`, `grust-copepod-delivery`, `grust-gooseneck-delivery` | various | Earlier Grust release and backend worktrees, not Graph Nuts; listed so nobody rebuilds into them by accident. `grust-binding-forms/target` (27 GB) removed 2026-09-28. |
+| `~/src/grustframes` | `agent/sail-triplet-integration` | `target/` removed 2026-09-28. |
 | `~/src/sedona-db-extension-poc` | `work/sail-extension-poc` | The Sedona extension, 5 dirty files. |
 
 ### Benchmarks, site, references
