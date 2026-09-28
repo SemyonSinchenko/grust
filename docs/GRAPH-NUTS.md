@@ -45,7 +45,12 @@ review; its `docs/development/extensions` tree holds the evidence reports and
 design records that were written beside the code, and nothing new is added
 there without that review.
 
-Both Sail checkouts are worktrees of one clone whose remotes are `origin`
+Astra's gate and work checkouts live under `/private/tmp/sail-*` (about 60
+detached worktrees of the same clone plus logs and receipts: 1,054 entries,
+64 GB on 2026-09-28, oldest from 2026-09-16). They are Astra's to prune;
+`git worktree list` in `~/src/sail` shows which are still registered.
+
+All Sail checkouts under `~/src` are worktrees of one clone whose remotes are `origin`
 (lakehq/sail, upstream), `querygraph` (the querygraph/sail fork where all
 graph branches live) and `fork` (alexy/sail, a true GitHub fork, used only to
 open upstream pull requests because `querygraph/sail` is not registered as a
@@ -260,9 +265,7 @@ to 50 GB.
 | `~/src/sail-extensions-poc` | `work/extensions-datafusion-graphs` | 12 GB after the cleanup (`target/debug`, whose arm64 binary did not start, is gone). Runnable: `target/extensions-datafusion-final/mac-x86-de8e67098/sail` (x86_64, links the uv Python `cpython-3.12.13-macos-x86_64-none`, runs under Rosetta) with its `wheels/`; `target/extensions-datafusion-development/mac-x86/sail` likewise. Wheels: `target/extensions-poc/wheels/` and `target/extensions-datafusion-development/nutmeg-wheels/` (arm64 `sail_nutmeg`). Python: `.venv` (arm64 3.12.8, PySpark 4.0.1, `sail_nutmeg` installed) and `.venvs/extensions-datafusion`, `.venvs/extensions-x86*`. Delivery records: `target/extensions-datafusion-final/README.md`, `target/extensions-distributed-poc/`, `target/pecan-benchmark/`. |
 | `~/src/sail-large-graphs` | `work/s0-tiered-accounting` (from `work/extensions-traversal-bench` at `b87fb27ac`) | No `target/`; its builds run on morrobay under `~/src/sail-extensions-gates/` (for example `graph-kernels-traversal-1f18/`, the running campaign) and in Colima. The stash `preserve pre-catchup sail-large-graphs worktree 2026-09-28` holds three files that differ from the tip; audited, nothing unique but a small scheduler test difference. |
 | `~/src/sail-declared-layout` | `work/declared-layout` (from `b87fb27ac`; pushed) | The graphframes-rs parity work: the `checkpointed` relation and Pecan's `layout="declared"` (pushed), and the host wrapper restating a native relation's declared layout with host columns (`crates/sail-session/src/extensions/plan.rs`, tested). Builds (session scratchpad, not `~/src`): arm64 extension artifacts in `s0-target`, the host check/test build in `host-target`, an arm64 wheel in `arm64-wheel/` and an x86_64 wheel `sail_nutmeg-0.1.0-cp312-cp312-macosx_10_12_x86_64.whl` in scratchpad `x86-wheel/` with its x86 venv `x86venv/`, made for the delivered x86 host; that host predates Pecan's utils service, so the Pecan comparison must run on morrobay. |
-| `~/src/sail-querygraph-alignment` | `agent/sail-performance-alignment` | Alignment checkout, no graph build. |
-| `~/src/sail-grust-performance-alignment` | `agent/grust-performance-alignment` | Alignment checkout, no graph build. |
-| `~/src/sail-upstream-pr.7kGHU1` | `agent/sail-performance-hot-paths` | Ephemeral PR worktree (lakehq/sail#2400). |
+| (removed 2026-09-28) `sail-querygraph-alignment`, `sail-grust-performance-alignment`, `sail-upstream-pr.7kGHU1` | `agent/sail-performance-alignment`, `agent/grust-performance-alignment`, `agent/sail-performance-hot-paths` | August alignment and PR worktrees, clean and fully pushed; the worktrees were removed, the branches remain in the clone. |
 | `~/src/canonical-order/sail`, `~/src/bounded-staging/sail` (symlink to the former) | detached `f1cf1729b` (the Sail commit Nutmeg 0.1.0 pins) | Astra's experiment layout from 2026-09-21, see the Nutmeg row. |
 
 ### Nutmeg and Grust
