@@ -190,10 +190,13 @@ Two more observations from the evidence:
 Pecan is the path that already runs at 260 M edges, so its limits are the
 ones that matter for going further.
 
-- **No checkpoint purge.** The Connect API has no filesystem list or delete,
-  so neither Pecan nor PR 30 can remove the Parquet state it wrote. Sem's
-  Graph500-24 run wrote 7.7 GB; a 1,000-iteration cap at that rate is a disk
-  problem before it is a memory problem.
+- **Checkpoint purge is host-owned, and PR 30 lacks it.** The Connect API
+  has no filesystem list or delete. Pecan removes each round's stage through
+  the host-owned `gf.utils.v1` relation (`crates/sail-session/src/extensions/graph_utils`);
+  PR 30's checkpointer has no purge. Sem's Graph500-24 run wrote 7.7 GB; a
+  1,000-iteration cap at that rate is a disk problem before it is a memory
+  problem. (Corrected 2026-09-28; an earlier revision said Pecan had no
+  purge.)
 - **No declared layout.** Every round re-joins edges to state. The optimizer
   does not know the edge relation is sorted or partitioned by source, so
   there is no way to keep a sort-merge join from re-sorting or to pin a hash
@@ -353,18 +356,18 @@ recorded; results checked against Pecan on the same input.
 
 ### S5. Pecan hardening, and settling the PR 30 question
 
-- **Purge.** Two options, in order of preference. First, a session-scoped
-  temporary directory that Sail deletes on session close, requested through
-  the same maintainer channel as the session factory hook (which merged
-  upstream as lakehq/sail#2630). Second, a `Command.extension` verb in the
-  Nutmeg extension that deletes paths under a caller-declared prefix, which
-  needs no Sail change but ties Pecan to the extension being loaded. Do the
-  second now, propose the first.
-- **Layout.** Materialize the edge relation once per algorithm invocation,
-  repartitioned and sorted by source into a cached temp view, and write every
-  round's join against that view. Measure whether DataFusion re-sorts; if it
-  does, that is the evidence for a small "declared sort order on a temp view"
-  ask.
+- **Purge.** Already done for Pecan through the host-owned `gf.utils.v1`
+  relation; what remains is a session-scoped temporary directory that Sail
+  deletes on session close, so that a client that dies mid-run leaves
+  nothing behind. Propose it through the same channel as the session
+  factory hook (merged upstream as lakehq/sail#2630).
+- **Layout.** This is the item that carries graphframes-rs's speed, and it
+  has its own document: [`GRAPHFRAMES-RS-PARITY.md`](GRAPHFRAMES-RS-PARITY.md).
+  In short: write every checkpoint hash-bucketed and sorted by its key, read
+  it back through a provider that declares that partitioning and order, so
+  the round's joins need no shuffle and no sort; fix the job planner's
+  left-join rule that repartitions regardless; measure against the
+  graphframes-rs CLI on the same host.
 - **Message form.** Port PR 30's delta message with `skip_dest_state` into
   Pecan as a third PageRank method beside `reference` and `optimized`. Then
   run all three, and PR 30 itself, on cit-Patents and Graph500-24 in one

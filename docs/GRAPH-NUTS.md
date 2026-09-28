@@ -347,6 +347,10 @@ validation and scaling work. Paths are relative to the named repository.
 - `grust/docs/FABLE-ON-ASTRA.md` — review of all four paths
   against the retained evidence and the ordered improvement sequence S0–S6
   with a per-kernel reach table.
+- `grust/docs/GRAPHFRAMES-RS-PARITY.md` — where graphframes-rs's speed
+  comes from (declared co-partitioned, sorted checkpoints), what the fork
+  lacks, the ordered change to reach parity and the measurement that decides
+  it; the distilled upstream candidates.
 - `sail-large-graphs/docs/development/extensions/pecan-nutmeg-large-benchmark.md`
   and its `pecan-nutmeg-large-benchmark/README.md` — the 180-trial Morrobay
   campaign and its evidence index.

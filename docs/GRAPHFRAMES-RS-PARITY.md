@@ -1,0 +1,220 @@
+# Matching graphframes-rs: where its speed comes from, and how the fork gets it
+
+Written 2026-09-28 against graphframes-rs `b4da56d` (DataFusion 55.0.1,
+Apache-2.0), the `querygraph/sail` fork at `b87fb27ac` (DataFusion 55.1.0),
+and Pecan as of `bd8ce9ae8`. Sem's claim, verbatim in translation: his
+graphframes-rs, with direct access to DataFusion and the plan, comes out
+about three times faster than the naive variant; and the trick is about 300
+lines, half boilerplate, in `src/memory/hash_partitioned.rs`. He adds that
+DataFusion 55 has some movement on range partitioning and co-partitioning,
+still raw.
+
+This document answers "make sure our direct DataFusion plan access is as
+efficient as his" by naming the mechanisms, checking each against the fork,
+and setting out the smallest change that reaches parity, with the
+measurement that decides it. It corrects one claim in
+[`FABLE-ON-ASTRA.md`](FABLE-ON-ASTRA.md) on the way.
+
+## 1. What "naive" is, and what we have
+
+The naive variant is a client-driven loop: Python builds one relational
+round per iteration, the engine executes it, the state is written to
+Parquet and read back, and nothing about the written files' layout is told
+to the next round. Sem's PR 30 is that shape on plain PySpark. **Pecan is
+that shape too.** Its `StagingRun.materialize` does
+`frame.repartition(N).write.parquet(path)` then `spark.read.parquet(path)`
+(`pyspark_pecan/staging.py`), and its PageRank round is three Spark Connect
+jobs plus the write: the dangling-mass scalar, the convergence scalar, and
+the state write (`algorithms.py`, `pagerank`). Grenada is Pecan with a
+different entrance. The graph-table helpers (`GraphTables`: degrees,
+triplets, walks) generate ordinary plans but have no loop. Nothing in the
+fork runs an iterative relational algorithm inside the engine; the
+graphframes-rs integration plan records that as "deferred server-side
+option".
+
+So the honest baseline is: our direct-plan path for iterative algorithms
+does not exist yet, and our relational path is the naive one.
+
+## 2. Where the three times comes from
+
+Read from graphframes-rs `src/algorithm/pregel.rs`, `src/memory/hash_partitioned.rs`
+and `src/memory/parquet_checkpointer.rs`.
+
+1. **Declared co-partitioning and order on every checkpoint.** A checkpoint
+   is written by a hand-built `RepartitionExec(Hash([key], N))` followed by
+   a `SortExec` on the key with partitioning preserved, one Parquet file per
+   bucket named `part-{i}` (`write_batches`; the comment explains why the
+   plan is built by hand: the optimizer may drop a logical hash repartition
+   over a single-partition source). It is read back through a
+   `TableProvider` whose scan wraps the `ListingTable` source in a
+   `DataSource` that declares `output_partitioning = Hash([key], N)` and an
+   equivalence class with the key ordering (`HashPartitionedTable`,
+   `HashPartitionedSource`). The comment at the scan says why the wrapper is
+   needed: `ListingTable` groups files by statistics and would collapse N
+   tiny buckets into one group, defeating both the partition count and the
+   validated ordering. The edge relation is checkpointed once, pre-sorted
+   by `src` (`pregel.rs`, `push_pre_sorted(..., EDGE_SRC)`), and each
+   iteration's state by `id`.
+
+   Consequence: the two joins of a round, state to edges on `src` and state
+   to aggregated messages on `id`, satisfy `Distribution::HashPartitioned`
+   on both sides and arrive sorted, so `EnforceDistribution` inserts no
+   repartition and `EnforceSorting` no sort. With `prefer_smj` the join is a
+   sort-merge join streaming two sorted files. The edge relation, the large
+   side, is never shuffled again after the first checkpoint. That is the
+   dominant per-round cost in the naive variant and it is gone.
+
+2. **One engine round per iteration, in process.** The loop is Rust over
+   `DataFrame`s in one `SessionContext`. There is no Connect round trip, no
+   Python, and the convergence check is a `count` on the activity column of
+   the state just written. Pecan pays three jobs per round plus the write;
+   at cit-Patents scale (Sem's 14 s, 19 rounds) that fixed cost is a
+   visible fraction. At Graph500-24 it is not.
+
+3. **Messages as a filtered source-side join** (`skip_dest_state`): only
+   participating sources are joined to edges, so the join input shrinks with
+   the frontier. Pecan's power method already joins only `edges ⋈ rank`, so
+   this is not a gap for reference PageRank; it is for frontier methods.
+
+4. **Bounded disk.** Aggregated messages are checkpointed to cut the peak,
+   old state is evicted after each round (`evict_all_but_latest_n(1)`), and
+   everything is purged at the end. Pecan does the same through its own
+   `GraphUtils.remove` (a zero-input extension relation the host owns), one
+   stage per round.
+
+   **Correction to `FABLE-ON-ASTRA.md`.** Section 3 and S5 say Pecan has no
+   checkpoint purge. That is wrong: Pecan removes each round's stage through
+   the host-owned `gf.utils.v1` relation (`crates/sail-session/src/extensions/graph_utils`).
+   It is PR 30's checkpointer that has no purge. S5's "purge" item is
+   therefore already done for Pecan and should be struck; the "layout" item
+   is the one that matters, and it is this document.
+
+Mechanism 1 is the three times. Mechanisms 2 to 4 are real but secondary.
+Sem's pointer to the 300 lines is exactly mechanism 1.
+
+## 3. What stands between the fork and mechanism 1
+
+Two things, one on each side of the protocol.
+
+**The write side is already expressible from the client.** Spark Connect
+carries `repartition(N, key)` and `sortWithinPartitions(key)`, and Sail
+plans them as `RepartitionExec(Hash)` and a per-partition sort. So Pecan's
+`materialize` can write bucketed, sorted files today with no host change.
+What must be checked, not assumed:
+
+- that Sail's distributed Parquet writer emits exactly one file per input
+  partition and that the file name carries the partition index (Sail uses
+  DataFusion's `DataSinkExec` for Parquet; DataFusion's demuxer names files
+  `{write_id}_{part_idx}.parquet` when no partition columns are given, and
+  splits a partition into several files above
+  `soft_max_rows_per_output_file`, 50 M rows by default). If the index is
+  not recoverable from the name, the bucket must be written as a column or
+  the write must go through a sink the fork controls.
+- that the hash Sail's shuffle applies for `Partitioning::Hash` is the one
+  the join's requirement is satisfied against. For the declaration to be
+  *correct* it only has to be consistent between the two sides being
+  joined, and both are written by the same shuffle; but it should be
+  verified with a two-sided join on a fixture where a mismatch would show.
+
+**The read side needs the declaring provider, and that is where the fork
+has to act.** The 300 lines port directly: DataFusion 55.1.0 has the same
+`DataSource`, `FileScanConfig`, `EquivalenceProperties` and
+`with_file_sort_order` API as 55.0.1. The provider must be reachable from a
+Connect client, and the natural place is a new relation verb in the Nutmeg
+extension beside `stage`, `run`, `nodes`, `edges`: `checkpointed(path, key,
+partitions)` returning the provider. That keeps it in `examples/extensions`,
+with no upstream surface.
+
+Then two host facts decide whether the declaration survives to execution:
+
+- **Serialization to workers.** Sail's task codec serializes a
+  `DataSourceExec` by recognizing its `DataSource` type
+  (`crates/sail-execution/src/proto/codec.rs`: `FileScanConfig` with the
+  Parquet, CSV, JSON, Arrow and Avro sources, `MemorySourceConfig`, and
+  Sail's own remote source). A wrapping `DataSource` from an extension is
+  not one of those, so a task containing it cannot be shipped. The
+  declaration is needed only on the driver, where the physical optimizer
+  and the job planner decide whether to insert a shuffle; the worker only
+  needs the plain file scan. So the fork needs one of: the extension
+  unwraps itself when the plan is serialized (the codec would have to ask
+  it, a host change), or the codec learns a generic "declared layout" node
+  that wraps any serializable scan with a partitioning and an ordering and
+  is dropped on decode. The second is small, general, and is the kind of
+  thing that later becomes a granular upstream PR. Sem's remark about
+  DataFusion 55's co-partitioning work is the same idea at the engine
+  level; if DataFusion grows a declared partitioning on `FileScanConfig`,
+  the node disappears.
+- **The job planner's left-join rule.** `ensure_partitioned_hash_join_if_build_side_emits_unmatched_rows`
+  (`crates/sail-execution/src/job_graph/planner.rs`) rewrites a
+  `CollectLeft` hash join whose join type is Left, LeftAnti, LeftSemi,
+  LeftMark or Full into a partitioned join with a fresh
+  `RepartitionExec(Hash)` on both children, unconditionally: its
+  `repartition` helper strips an existing repartition and adds a new one
+  without checking whether the child already satisfies the distribution.
+  Pecan's round ends with `vertices.join(messages, "id", "left")`, a Left
+  join. The rule applies only when the optimizer chose `CollectLeft`,
+  which it does when the build side is below the single-partition
+  threshold; on a large graph the mode is already `Partitioned` and the
+  rule does not fire. So the declaration works at scale and can be defeated
+  on small fixtures, which is exactly where a functional test would look.
+  The rule should check satisfaction before repartitioning. That is a
+  five-line, verifiable change and another natural upstream PR.
+
+## 4. The change, in order
+
+Everything below is fork work. Nothing goes upstream until it is measured.
+
+1. **Client write layout, no host change.** In `StagingRun.materialize`,
+   write `frame.repartition(N, key).sortWithinPartitions(key)` when the
+   caller names a key, and record the file inventory in the run. Verify
+   the one-file-per-bucket and name-carries-index properties on Sail with a
+   fixture; if they do not hold, write the bucket index as a column and
+   have the read side group files by it.
+2. **`checkpointed` relation in the Nutmeg extension.** Port
+   `HashPartitionedTable` and `HashPartitionedSource` (attribution kept,
+   Apache-2.0 both ways). Options: `path`, `key`, `partitions`. Refuse when
+   the file count is not `partitions` or the key column is absent.
+3. **Declared-layout node in the fork's codec.** A generic wrapper exec
+   that carries `(partitioning, ordering)` over a serializable scan and
+   encodes as its child. Test: a plan with two `checkpointed` scans and a
+   join on the key produces a job graph with one stage and no shuffle
+   (`EXPLAIN` on Sail shows no `ShuffleWriteExec` between them), and the
+   same plan without the wrapper shows one.
+4. **Fix the left-join rule** to skip children that already satisfy the
+   hash distribution. Test with the small fixture where `CollectLeft` is
+   chosen.
+5. **Pecan rounds on the layout.** Edges checkpointed once by `src`; state
+   by `id`; the round's two joins over `checkpointed` scans; the dangling
+   and convergence scalars folded into the state write as columns of a
+   one-row companion file so the round is one job plus the write.
+6. **Measure.** cit-Patents and Graph500-24, one host, one memory
+   envelope, same timer boundary (input handles to written result):
+   graphframes-rs CLI at `b4da56d`; Pecan before; Pecan after 5; PR 30.
+   Record wall time, peak PSS, bytes written, and the round count. The
+   claim to test is that Pecan-after is within the run-to-run spread of
+   graphframes-rs on Graph500-24, where per-round fixed cost is negligible,
+   and that the remaining gap on cit-Patents is mechanism 2.
+7. **Only then, the server-side loop.** If the gap on cit-Patents matters
+   for the use case, the graphframes-rs integration plan (controller in the
+   driver, one job per round through `JobRunner`) is the next step, with
+   the controller-placement question answered first, as its review asked.
+
+## 5. What would go upstream, distilled
+
+Small, separately verifiable, in the order the measurements justify them:
+
+- the job planner's left-join rule checking distribution satisfaction
+  before inserting a repartition (item 4);
+- a declared-layout node in the codec, or a `FileScanConfig` partitioning
+  declaration if DataFusion 55's co-partitioning work provides one (item 3);
+- `AggregateUDF` registration in the extension loader, which item 5 does
+  not need but frontier methods with custom combiners will.
+
+Nothing else in this document touches Sail's crates.
+
+## 6. What is not claimed
+
+No number here is a measurement of ours. Sem's three times is his
+measurement on his hardware against his naive variant. Whether Pecan-after
+matches graphframes-rs is decided by item 6 and reported with its envelope,
+in the campaign format, with every outcome retained.
