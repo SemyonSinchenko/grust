@@ -198,7 +198,7 @@ cit-Patents has 3,774,768 vertices and 16,518,948 directed edges.
 | Pecan WCC reference (min-label) | passed | 500 s | | 20 rounds |
 | Grenada WCC reference (min-label) | passed | 566 s | | 20 rounds |
 
-## 4. The new gate (`work/h2-keepalive-timeout`, `1f762aa64`)
+## 4. The new gate (`work/s0-wcc-certificate`, `666c619a6`)
 
 Built from the fork after the baseline matrices: `work/s0-tiered-accounting`
 plus the stage-order passthrough, the client decode limit, the `max-degree`
@@ -206,17 +206,20 @@ source policy, an `argentea` harness engine, per-iteration plan
 recording for the relational paths (`--record-plans`), so the scale-25
 relational receipts carry the physical plan of every expansion join, and a
 120 s h2 keepalive timeout on every Sail server (host default 10 s) to test
-the stream-loss hypothesis of section 3. The Argentea engine passed a
+the stream-loss hypothesis of section 3, and the corrected WCC certificate
+(a label must name a member of its component; numeric minimality is
+reported, not required). The Argentea engine passed a
 Capitola smoke before being queued: five methods (BFS reference, frontier,
 direction; SSSP reference, delta_star) on a 2000-vertex directed fixture in
 process-cluster mode, all validated against the independent reference, about
 7 s each, 1999 of 2000 reached.
 
-Matrix `gn-capacity-1f762aa6` (42 cells): the 12 scale-25 relational cells
+Matrix `gn-capacity-666c619a` (42 cells): the 12 scale-25 relational cells
 again, 8 scale-24 relational reference/frontier reruns, 12 Banda `asStaged`
 cells at scale 24 and 25, and 10 Argentea cells (30-round cap, 32
-partitions). Then `gn-capacity-scale26-1f762aa6` (23
-cells) on scale 26.
+partitions). Then the baseline's 7 unrun cells, the 12 cit-Patents ranking-kernel cells
+again on the new gate (`gn-ranking-666c619a`), and `gn-capacity-scale26-666c619a`
+(23 cells) on scale 26.
 
 _Pending._
 
