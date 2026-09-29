@@ -68,7 +68,7 @@ yet. That work (client-selectable staging order, the gRPC client decode
 limit, the `max-degree` traversal source, the `argentea` harness engine,
 per-iteration plan recording, the h2 keepalive knob) is on the fork's
 traversal-bench line and reaches this branch, together with matching updates
-to the design review and the tutorials, after the morrobay gate verifies it.
+to the design review and the tutorials, after our Linux benchmark gate verifies it.
 The map (`GRAPH-NUTS.md`) tracks that propagation pass.
 
 ## Where the plans and findings live
