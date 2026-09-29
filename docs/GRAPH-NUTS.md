@@ -552,7 +552,17 @@ maps it onto repositories.
    four-way Graph500-24 measurement (`GRAPHFRAMES-RS-PARITY.md` §4 item 6).
 8. Keep `sail-extensions-poc` as the promoted implementation branch and
    update the Graph Nuts page and its evidence manifest after each qualified
-   campaign.
+   campaign. **Propagation pass after the `63eaeb5fe` gate verifies:** the
+   2026-09-29 branches (`work/s2-stage-order`, `work/grpc-client-decode-limit`,
+   `work/s0-source-degree`, `work/s0-argentea-engine`) live on the
+   traversal-bench line, which has diverged from `work/extensions-datafusion-graphs`
+   (83 versus 2 commits apart, neither an ancestor). Cherry-pick them onto the
+   promoted branch and, in the same commits, update `design-review.md` (client
+   staging order and the sort-key bound under Nutmeg; the gRPC client decode
+   limit as a host fix under evidence), `examples/extensions/TUTORIAL.md` step 7
+   (`order="asStaged"`) and `benchmarks/TUTORIAL.md` (the `argentea` engine and
+   the `max-degree` source; the combination count). Nothing in those documents
+   was changed on 2026-09-29.
 9. Keep this file current: every new repository, branch, document, pull
    request or host that touches graph work gets a row here in the same
    commit that creates it.
