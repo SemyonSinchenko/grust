@@ -10,7 +10,24 @@ relational path (Pecan) and the worker-partitioned path (Argentea).
 
 This file is the current set of instructions for reviewers. It is kept in
 step with the fork: when the review target moves, this file moves with it.
-Last updated 2026-09-29.
+Last updated 2026-09-29 (Sedona entry added).
+
+## If you are here for Sedona
+
+The Sedona extension is the smaller of the two and the better place to see
+the mechanism itself: Sail resolves Sedona's spatial SQL functions through
+its own native function registry, without importing a spatial engine into
+the host. Read the "Sedona: reuse native functions without importing a
+spatial engine" section of the design review, then run step 6 of the
+tutorial ("Sedona review: spatial SQL and a shuffle"), which builds Sail
+with the extension, starts a local server, runs spatial SQL from a Spark
+Connect client and shows the functions surviving a shuffle. The questions
+worth your time are the host contracts in the design review (a bounded
+relation entry point, trusted registration with explicit compatibility,
+worker identity and complete expression fields, driver placement and retry
+behavior): they are what Sail would need to accept for any extension,
+Sedona included, and they are where a second opinion changes the design.
+Everything about graphs below can be skipped.
 
 ## What to clone
 
