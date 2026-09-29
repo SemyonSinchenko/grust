@@ -51,9 +51,13 @@ Both found by the first two source-0 cells, before any traversal ran.
   internal gRPC clients keep Tonic's 4 MiB decode default while its servers
   accept 128 MiB. The hub-source cells later showed where it bites: the
   traversal itself completes and writes its result, and the error is raised
-  in the distributed certificate (`traversal_certificate.certify`, the
-  all-edge inequality check over the 33.5M-row result joined with the 537M
-  edges), always with a message of about 8.23 MB. Scale 24 certifies fine.
+  in the distributed certificate (`traversal_certificate.certify`), at its
+  very first query, `vertices.count()` over the 33.5M-vertex frame, always
+  with a message of about 8.23 MB. The same count succeeded in the one cell
+  that passed, so the message is not the count's own data; what the session
+  carries by then differs (Pecan's retained checkpoints, Grenada's native
+  tables). Scale 24 certifies fine. The result files of the three uncertified
+  cells are retained, so they can be certified separately on the new gate.
   Fix on `work/grpc-client-decode-limit` (one hunk, upstream candidate,
   verification pending on the next matrix).
 

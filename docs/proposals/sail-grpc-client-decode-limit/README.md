@@ -34,8 +34,9 @@ length too large: found 8234561 bytes, the limit is: 4194304 bytes
 The hub-source rerun of the same matrix located the failure: the BFS itself
 completes and writes its result on every relational path (six iterations,
 1516 to 2764 s), and the message is raised inside the harness's distributed
-certificate query, the all-edge inequality check joining the 33.5M-row result
-with the 537M edges, with a message of 8.23 MB every time (8233665, 8234369,
+certificate, at its first query (`vertices.count()` over the 33.5M-vertex
+frame, after the traversal's checkpoints and native tables have accumulated
+in the session), with a message of 8.23 MB every time (8233665, 8234369,
 8234561, 8236609 bytes across four cells). That text is Tonic's
 decompressed-length branch
 (`tonic-0.14.6/src/codec/decode.rs:195`), so the message was one of the
