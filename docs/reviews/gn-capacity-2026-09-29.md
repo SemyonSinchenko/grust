@@ -60,7 +60,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 10:40 UTC (15 of 36 cells finished).
+is the state at 12:00 UTC (16 of 36 cells finished; two BFS cells remain, Banda reference and Grenada frontier at scale 25, then the 18 SSSP cells).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -78,6 +78,7 @@ is the state at 10:40 UTC (15 of 36 cells finished).
 | scale 24, Pecan BFS push_pull | passed | 844 s | | six iterations, 8,862,601 reached, the same result as Grenada's push-pull (775 s); certificate validated |
 | scale 24, Grenada BFS frontier | error | 786 s | 99.9 GiB | iteration 1 reached 407,203; iteration 2 ended with the `h2 protocol error` at the container limit (workers at 43.3 and 48.1 GiB, no `memory.max` event counted, no OOM kill) |
 | scale 25, Pecan BFS frontier | **passed** | 2729 s | 75.1 GiB PSS, container peak 99.7 GiB | the baseline's first scale-25 pass: frontiers 640,062 / 14,625,247 / 1,777,122 / 6,267 / 28 / 0 over six iterations (iteration 2 alone took 949 s), 17,048,727 of 33,554,432 reached, certificate validated with 5 witness rounds; the workers peaked at 34.5 and 39.7 GiB, so it passed within about 300 MiB of the container limit |
+| scale 25, Pecan BFS reference | error | 3144 s | 100 GiB | got through three iterations (frontiers 640,062 / 14,625,247 / 1,777,122, iteration 3 took 1197 s), then iteration 4, relaxing all 17M reached vertices, drove the container to its limit (3767 `max` events, no OOM kill; workers at 45.4 and 38.9 GiB) and the driver lost the stream |
 | scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
