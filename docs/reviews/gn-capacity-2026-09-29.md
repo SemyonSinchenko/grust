@@ -117,7 +117,13 @@ both lost the stream in their heaviest iteration (15M active vertices) at a
 90 GiB container reading with no `memory.max` events and the workers at
 32 GiB each, which points at the long-running stream rather than at memory
 (an h2 connection dropped mid-body, whether by an idle timeout or a peer
-error the worker never logged). The worker processes leave no log lines in the
+error the worker never logged). A concrete candidate from the source: every
+Sail gRPC server (`sail-common/src/server/builder.rs`) runs h2 keepalive
+pings every minute with a 10 s timeout. A peer whose tokio runtime is
+starved by a heavy stage (these cells run 32 tokio and 32 rayon threads on
+32 vCPUs at full load) can miss a ping's 10 s window, the server then
+closes the connection, and the reader sees exactly this error. To be tested
+on the new gate by lengthening the timeout. The worker processes leave no log lines in the
 driver's log (they never initialize logging), so the worker side is
 invisible; the working hypothesis is that a worker's own shuffle read hit the
 same 4 MiB client decode limit (a worker is a Flight client of its peer), its
