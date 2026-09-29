@@ -450,6 +450,13 @@ validation and scaling work. Paths are relative to the named repository.
 - `adversarial-site/graph/graphnuts` — published Graph Nuts page, with summary
   findings above expandable detailed matrices.
 
+### Announcements and posts
+
+- `grust/docs/SAIL-JEV.md` — draft blog post (2026-09-29) announcing Sail 0.7.2
+  as the first query engine with Jev (TypeSafe System One) built in: the five
+  SQL functions, how they run asynchronously and bounded inside the plan, and
+  why in-engine inference matters; the user publishes it through the site.
+
 ### Tutorials and operational entry points
 
 - `sail-extensions-poc/examples/extensions/TUTORIAL.md` — build and run the
