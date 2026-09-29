@@ -222,7 +222,15 @@ under a second at 16.5M edges. Pecan and Grenada are within a few percent
 of each other on every traversal, as expected since they run the same
 controller on the same materialized adjacency.
 
-## 4. The new gate (`work/s0-wcc-certificate`, `666c619a6`)
+## 4. The new gate (`work/s0-wcc-certificate`, `666c619a6`, first build failed)
+
+The first build of this gate (17:57 to 18:00 UTC) failed in its first
+step: the vendored `nutmeg-graph` library's own tests do not compile on the
+S0 line (`graph_tables/tests.rs` still read `tx.finish()?.staged_nodes`
+after S0 made `finish` return a `StageReport` with an `info` field). The
+S0 branch had been verified with the Python harness tests only. The test is
+fixed and the gate's Rust test and clippy steps are being run on Capitola
+before the second build.
 
 Built from the fork after the baseline matrices: `work/s0-tiered-accounting`
 plus the stage-order passthrough, the client decode limit, the `max-degree`
