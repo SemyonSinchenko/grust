@@ -115,7 +115,7 @@ separate claims.
 
 | Host | Role | State on 2026-09-28 |
 |---|---|---|
-| morrobay | 18-core, 128 GB Intel Xeon Mac; Linux gate through Colima; ran the 180-trial large campaign in a 56 GiB container | Available. Not a dedicated host, so its timings are observations, not publishable numbers. |
+| morrobay | 18-core, 128 GB Intel Xeon Mac; Linux gate through Colima (`colima-sail-gate`, 24 CPUs, 64 GiB); ran the 180-trial large campaign and the 216-cell traversal campaign in 56 GiB containers | Traversal campaign `gk-traversal-release-538b` finished 2026-09-29 00:01 UTC, 216 of 216 passed (harness `538b94cbb`, host and wheel `038c9b9597`, image `f3518d652f`), evidence at `~/src/sail-extensions-gates/graph-kernels-traversal-1f18/campaign`. Its independent audit (`traversal-validation/independent-audit/audit_campaign.py` from `b87fb27ac`) was started 2026-09-29 03:30 UTC into `…/audit/`. `summarize.py` is the PageRank/WCC verifier and flags every traversal cell falsely; that output is kept under `summary-pagerank-verifier-not-applicable/`. Not a dedicated host, so its timings are observations, not publishable numbers. |
 | capitola | Second physical host for Argentea two-host qualification with morrobay | Available for functional runs. |
 | quegee, grust, eigen, lakecat (AWS) | quegee was the only dedicated host publishable timings came from; the others were the Linux gate and second-opinion hosts | Stopped 2026-09-23 and cleared for termination; everything unique was taken off (`grust/LAKESAIL-AWS-QUERYGRAPH.md`). No publishable timing can be produced until a dedicated host exists again. |
 | c5d.4xlarge (Sem's) | Source of the cit-Patents and Graph500-24 results in PR 30 | Not ours; reproduce under our harness before citing. |
