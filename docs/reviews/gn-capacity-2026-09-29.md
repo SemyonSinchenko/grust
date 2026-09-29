@@ -164,6 +164,20 @@ the gate now records the cluster-mode physical plan of the expansion join
 per iteration (`work/s5-iteration-plans`); compare push-pull's pull-side
 joins with the reference join at the same frontier from the scale-25 receipts.
 
+### Ranking matrix on cit-Patents (running)
+
+`gn-ranking-b87fb27a-hub`, 30 cells on the baseline host and wheel with the
+S0 harness: PageRank and WCC, reference and optimized, on Pecan, Banda and
+Grenada under the certificate policy (no reference vector; an independent
+fixed-point residual for PageRank), plus BFS and SSSP from source 3569341.
+cit-Patents has 3,774,768 vertices and 16,518,948 directed edges.
+
+| Cell | Outcome | Time | Peak PSS | Note |
+|---|---|---|---|---|
+| Banda PageRank optimized (`pagerankDelta`) | passed | 92 s | 3.9 GiB | staging 25 s; fixed-point residual 2.6e-9. This is the call Sem reported as a crash on his budget: on an 80 GiB quota the canonical staging is admitted and the delta kernel runs in about a minute |
+| Pecan PageRank reference (power iteration) | passed | 729 s | | 20 iterations |
+| Grenada WCC optimized (randomized) | passed | 397 s | | 19 rounds |
+
 ## 4. The new gate (`work/h2-keepalive-timeout`, `1f762aa64`)
 
 Built from the fork after the baseline matrices: `work/s0-tiered-accounting`
