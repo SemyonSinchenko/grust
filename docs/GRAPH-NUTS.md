@@ -306,6 +306,7 @@ the session scratchpad, not under `~/src`.
 | `querygraph/sail` | `work/s2-stage-order` (`80a750067`, on `work/s0-tiered-accounting`) | pushed | The Spark client chooses the staging order: `Request.order`, `Nutmeg.stage(order=)`, `graph_cell.py --stage-order`, suite-level `stage_order`; `asStaged` skips the canonical sort the scale-25 refusal named. 48 extension and 196 harness tests pass. |
 | `querygraph/sail` | `work/grpc-client-decode-limit` (`9dc75bee8`, on `b87fb27ac`) | pushed; upstream PR candidate (`cargo check -p sail-execution` passes) | One hunk in `crates/sail-execution/src/rpc.rs`: the internal gRPC clients decode up to `GRPC_MAX_MESSAGE_LENGTH_DEFAULT` like the servers, instead of Tonic's 4 MiB default that failed the scale-25 relational cell. Manual verification: rerun that cell. |
 | `querygraph/sail` | `work/gn-gate-next` (`ac000b6e8`) | pushed integration branch | The two branches above merged; the source for the next morrobay gate build after the baseline matrices finish. `sail-large-graphs` checks it out. |
+| `querygraph/sail` | `work/s0-source-degree` (on `work/gn-gate-next`) | pushed | Harness: `--source max-degree` in the Graph500 and SNAP fixtures (degrees counted as chunks stream; lowest id among ties), `source_degree`/`zero_degree_vertices` in every manifest, `"source": "max-degree"` in matrices, `graph_cell.py` resolves it from the manifest and records request, degree and policy; summaries carry `reached`. 200 harness tests pass. For the next gate build after `ac000b6e8`. |
 | `querygraph/sail` | `pr-2522`, `session-factory-hook` | rescued from AWS | Tree-verified replays of the host branches (`grust/LAKESAIL-AWS-QUERYGRAPH.md` §3–4). |
 | `alexy/sail` | `csv-nanos-followup` (`e3037a5a`) | open upstream as lakehq/sail#2672 | Format-aware nanosecond widening for CSV schema inference; rebased onto merged #2522. Watch james-willis's draft #2657, which rewrites the same function. |
 | `lakehq/sail` | #2630 | merged | The session factory hook: an embedder chooses the session factory. Nutmeg's only required Sail change (`nutmeg/docs/sail-prs.md`). |
@@ -510,10 +511,11 @@ maps it onto repositories.
    new source sha) and run the scale-25 relational cells with the client
    decode limit raised, the Banda cells with `stage_order: asStaged`, then
    scale 26 and Argentea on the new wheel. Every refusal and timeout is a
-   result and is kept. Harness follow-up: the Graph500 fixture's `source`
-   defaults to 0, which is isolated; make the harness refuse a source of
-   degree 0 or pick the highest-degree vertex, and record the source's degree
-   and the reached count in the summary.
+   result and is kept. The harness follow-up for the isolated default source
+   is done in `work/s0-source-degree` (`max-degree` policy, degrees and
+   `reached` recorded); the running matrices still use the explicit hub
+   vertex from `pick_sources.py`, which the fixtures now record the degree of
+   only from that branch onward.
 2. **S1 and S2, in `sail-large-graphs/examples/extensions/vendor/nutmeg-graph`:**
    the client-side `order` passthrough is in `work/s2-stage-order`; still to
    do: keep `Int64` identity through `normalize_*`; stage `asStaged` by
