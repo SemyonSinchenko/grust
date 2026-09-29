@@ -231,7 +231,9 @@ after S0 made `finish` return a `StageReport` with an `info` field). The
 S0 branch had been verified with the Python harness tests only. The test was
 fixed (`work/gate-core-tests`, `2557feaf1`), the gate's Rust test and
 clippy steps pass on Capitola (85 nutmeg-graph tests), and the second build
-started at 18:08 UTC.
+passed all 17 steps between 18:08 and 18:44 UTC (host
+`sail-linux-x86_64-2557feaf18e4-release`, sha256 `ff33c08838…`; wheel
+sha256 `6fe0672a78…`). The 42-cell matrix started at 18:44 UTC.
 
 Built from the fork after the baseline matrices: `work/s0-tiered-accounting`
 plus the stage-order passthrough, the client decode limit, the `max-degree`
