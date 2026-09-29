@@ -222,15 +222,16 @@ under a second at 16.5M edges. Pecan and Grenada are within a few percent
 of each other on every traversal, as expected since they run the same
 controller on the same materialized adjacency.
 
-## 4. The new gate (`work/s0-wcc-certificate`, `666c619a6`, first build failed)
+## 4. The new gate (`work/gate-core-tests`, `2557feaf1`)
 
 The first build of this gate (17:57 to 18:00 UTC) failed in its first
 step: the vendored `nutmeg-graph` library's own tests do not compile on the
 S0 line (`graph_tables/tests.rs` still read `tx.finish()?.staged_nodes`
 after S0 made `finish` return a `StageReport` with an `info` field). The
-S0 branch had been verified with the Python harness tests only. The test is
-fixed and the gate's Rust test and clippy steps are being run on Capitola
-before the second build.
+S0 branch had been verified with the Python harness tests only. The test was
+fixed (`work/gate-core-tests`, `2557feaf1`), the gate's Rust test and
+clippy steps pass on Capitola (85 nutmeg-graph tests), and the second build
+started at 18:08 UTC.
 
 Built from the fork after the baseline matrices: `work/s0-tiered-accounting`
 plus the stage-order passthrough, the client decode limit, the `max-degree`
@@ -246,11 +247,11 @@ direction; SSSP reference, delta_star) on a 2000-vertex directed fixture in
 process-cluster mode, all validated against the independent reference, about
 7 s each, 1999 of 2000 reached.
 
-Matrix `gn-capacity-666c619a` (42 cells): the 12 scale-25 relational cells
+Matrix `gn-capacity-2557feaf` (42 cells): the 12 scale-25 relational cells
 again, 8 scale-24 relational reference/frontier reruns, 12 Banda `asStaged`
 cells at scale 24 and 25, and 10 Argentea cells (30-round cap, 32
 partitions). Then the baseline's 7 unrun cells, the 12 cit-Patents ranking-kernel cells
-again on the new gate (`gn-ranking-666c619a`), and `gn-capacity-scale26-666c619a`
+again on the new gate (`gn-ranking-2557feaf`), and `gn-capacity-scale26-2557feaf`
 (23 cells) on scale 26.
 
 _Pending._
