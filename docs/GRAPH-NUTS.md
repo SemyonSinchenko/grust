@@ -405,6 +405,11 @@ validation and scaling work. Paths are relative to the named repository.
 
 ### Scaling and benchmark evidence
 
+- `grust/docs/reviews/gn-capacity-2026-09-29.md` — the running record of the
+  2026-09-29 capacity campaign on morrobay: inputs and sources, the two scale-25
+  blockers of the baseline, the hub-source matrices, the new gate and its
+  matrices, findings so far. Filled in as the chain progresses.
+
 - `grust/docs/SCALING-NUTS.md` — current large-graph diagnosis
   and bounded-memory staging plan.
 - `grust/docs/FABLE-ON-ASTRA.md` — review of all four paths
