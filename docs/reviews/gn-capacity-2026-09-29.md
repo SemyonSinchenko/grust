@@ -114,10 +114,18 @@ oversubscribed by about 30 GiB. That inflates load times (the Pecan SSSP
 reference cell took 1103 s to load what other cells loaded in 300 to 500 s)
 and is itself a way for a peer to stall past a 10 s keepalive window, so the
 stream losses cannot be separated from it on this run; the reruns on the new
-gate need a host without the second VM, or the note that it was there. The
-user confirmed at 16:14 UTC that the container was not theirs and the
-default VM was stopped a third time; host swap was still draining (52 GB
-used) as the ranking matrix continued.
+gate need a host without the second VM, or the note that it was there. At
+16:14 UTC the default VM was stopped a third time. What restarts it is the
+host's own Eigen Times nightly (`~/Library/LaunchAgents/com.eigen.nightly.plist`
+running `~/bin/eigen-nightly.sh` hourly): it starts the default VM whenever
+it is down and runs the `eigen-runner` container at 01:00, 03:00, 13:00 and
+15:00 UTC for up to an hour each. The user chose to leave it in place, so
+the overlaps are marked rather than avoided: in this campaign so far, the
+baseline capacity cells from the seventh onward and the first ranking cells
+ran with the second VM up; from here on, a cell whose interval crosses one
+of those four hours ran alongside the nightly, and the record says so per
+matrix. The rest of the host (Activity Monitor, three login sessions) is
+the user's.
 
 ### The `h2 protocol error` failures
 
