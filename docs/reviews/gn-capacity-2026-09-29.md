@@ -60,7 +60,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 09:05 UTC (13 of 36 cells finished).
+is the state at 09:20 UTC (14 of 36 cells finished).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -76,6 +76,7 @@ is the state at 09:05 UTC (13 of 36 cells finished).
 | scale 24, Banda BFS reference (canonical) | refused | 60 s | | staging sort admission |
 | scale 24, Grenada BFS reference | error | 480 s | 50.8 GiB | iteration 1 reached 407,203; iteration 2 failed with `h2 protocol error: error reading a body from connection` at a 51 GiB container peak with no `memory.max` events at all, so this one is not memory |
 | scale 24, Pecan BFS push_pull | passed | 844 s | | six iterations, 8,862,601 reached, the same result as Grenada's push-pull (775 s); certificate validated |
+| scale 24, Grenada BFS frontier | error | 786 s | 99.9 GiB | iteration 1 reached 407,203; iteration 2 ended with the `h2 protocol error` at the container limit (workers at 43.3 and 48.1 GiB, no `memory.max` event counted, no OOM kill) |
 | scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
@@ -85,11 +86,13 @@ host (2.4 GB of host swap in use); it was idle and was stopped again at
 
 ### The `h2 protocol error` failures
 
-Three relational cells ended with `h2 protocol error: error reading a body
+Four relational cells ended with `h2 protocol error: error reading a body
 from connection` in the driver: Pecan frontier at scale 24 (60 GiB peak,
 iteration 2), Grenada reference at scale 24 (51 GiB, no `memory.max` events,
-iteration 2) and Grenada reference at scale 25 (100 GiB, iteration 3). The
-scale-24 ones are not memory. The worker processes leave no log lines in the
+iteration 2), Grenada frontier at scale 24 (99.9 GiB, iteration 2) and
+Grenada reference at scale 25 (100 GiB, iteration 3). At least the Grenada
+reference at scale 24 is not memory; the others sit near the limit, so both
+causes may be in play. The worker processes leave no log lines in the
 driver's log (they never initialize logging), so the worker side is
 invisible; the working hypothesis is that a worker's own shuffle read hit the
 same 4 MiB client decode limit (a worker is a Flight client of its peer), its
