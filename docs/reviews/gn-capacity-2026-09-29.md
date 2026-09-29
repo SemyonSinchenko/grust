@@ -152,22 +152,24 @@ the gate now records the cluster-mode physical plan of the expansion join
 per iteration (`work/s5-iteration-plans`); compare push-pull's pull-side
 joins with the reference join at the same frontier from the scale-25 receipts.
 
-## 4. The new gate (`work/s5-iteration-plans`, `edcf86824`)
+## 4. The new gate (`work/h2-keepalive-timeout`, `1f762aa64`)
 
 Built from the fork after the baseline matrices: `work/s0-tiered-accounting`
 plus the stage-order passthrough, the client decode limit, the `max-degree`
-source policy, an `argentea` harness engine, and per-iteration plan
+source policy, an `argentea` harness engine, per-iteration plan
 recording for the relational paths (`--record-plans`), so the scale-25
-relational receipts carry the physical plan of every expansion join. The Argentea engine passed a
+relational receipts carry the physical plan of every expansion join, and a
+120 s h2 keepalive timeout on every Sail server (host default 10 s) to test
+the stream-loss hypothesis of section 3. The Argentea engine passed a
 Capitola smoke before being queued: five methods (BFS reference, frontier,
 direction; SSSP reference, delta_star) on a 2000-vertex directed fixture in
 process-cluster mode, all validated against the independent reference, about
 7 s each, 1999 of 2000 reached.
 
-Matrix `gn-capacity-edcf8682` (42 cells): the 12 scale-25 relational cells
+Matrix `gn-capacity-1f762aa6` (42 cells): the 12 scale-25 relational cells
 again, 8 scale-24 relational reference/frontier reruns, 12 Banda `asStaged`
 cells at scale 24 and 25, and 10 Argentea cells (30-round cap, 32
-partitions). Then `gn-capacity-scale26-edcf8682` (23
+partitions). Then `gn-capacity-scale26-1f762aa6` (23
 cells) on scale 26.
 
 _Pending._
