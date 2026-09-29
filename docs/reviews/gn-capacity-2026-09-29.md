@@ -175,7 +175,7 @@ the gate now records the cluster-mode physical plan of the expansion join
 per iteration (`work/s5-iteration-plans`); compare push-pull's pull-side
 joins with the reference join at the same frontier from the scale-25 receipts.
 
-### Ranking matrix on cit-Patents (running)
+### Ranking matrix on cit-Patents (ranking kernels done, traversal cells running)
 
 `gn-ranking-b87fb27a-hub`, 30 cells on the baseline host and wheel with the
 S0 harness: PageRank and WCC, reference and optimized, on Pecan, Banda and
@@ -186,8 +186,17 @@ cit-Patents has 3,774,768 vertices and 16,518,948 directed edges.
 | Cell | Outcome | Time | Peak PSS | Note |
 |---|---|---|---|---|
 | Banda PageRank optimized (`pagerankDelta`) | passed | 92 s | 3.9 GiB | staging 25 s; fixed-point residual 2.6e-9. This is the call Sem reported as a crash on his budget: on an 80 GiB quota the canonical staging is admitted and the delta kernel runs in about a minute |
+| Banda PageRank reference (power iteration) | passed | 32 s | | faster than Banda's own delta kernel on this graph |
 | Pecan PageRank reference (power iteration) | passed | 729 s | | 20 iterations |
+| Grenada PageRank reference (power iteration) | passed | 480 s | | 20 iterations |
+| Pecan PageRank optimized (delta) | passed | 502 s | | 20 iterations |
+| Grenada PageRank optimized (delta) | passed | 489 s | | 20 iterations |
+| Banda WCC optimized (randomized) | passed | 39 s | | |
+| Pecan WCC optimized (randomized) | passed | 312 s | | 19 rounds |
 | Grenada WCC optimized (randomized) | passed | 397 s | | 19 rounds |
+| Banda WCC reference (min-label) | mismatch | 30 s | | the partition is edge-consistent (0 crossing edges), but 1731 of its labels are not the numeric minimum of their component: Banda's min-label kernel takes the minimum in canonical Utf8 order (`"10"` before `"9"`), which the harness documents for the reference-vector path and normalizes there, while the S0 certificate I wrote asserts numeric minimality. A certificate convention, not a wrong partition; the certificate is being corrected to require that a label names a member of its component |
+| Pecan WCC reference (min-label) | passed | 500 s | | 20 rounds |
+| Grenada WCC reference (min-label) | passed | 566 s | | 20 rounds |
 
 ## 4. The new gate (`work/h2-keepalive-timeout`, `1f762aa64`)
 
