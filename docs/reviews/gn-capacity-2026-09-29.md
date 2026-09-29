@@ -114,7 +114,10 @@ oversubscribed by about 30 GiB. That inflates load times (the Pecan SSSP
 reference cell took 1103 s to load what other cells loaded in 300 to 500 s)
 and is itself a way for a peer to stall past a 10 s keepalive window, so the
 stream losses cannot be separated from it on this run; the reruns on the new
-gate need a host without the second VM, or the note that it was there.
+gate need a host without the second VM, or the note that it was there. The
+user confirmed at 16:14 UTC that the container was not theirs and the
+default VM was stopped a third time; host swap was still draining (52 GB
+used) as the ranking matrix continued.
 
 ### The `h2 protocol error` failures
 
