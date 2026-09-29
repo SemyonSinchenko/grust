@@ -289,6 +289,18 @@ again on the new gate (`gn-ranking-2557feaf`), and `gn-capacity-scale26-2557feaf
 
 _Pending._
 
+### Reordered at 23:10 UTC
+
+The user set two directions: cells must not be cut off by timeouts (every
+queued matrix now allows 4 hours per cell, 8 at scale 26), and Argentea
+runs first. The 42-cell matrix on gate 2 was stopped after its three cells
+above (kept as evidence) rather than let its remaining reference cells run
+into the 90-minute cap. Gate 3, which carries every fix including the
+frontier-left joins, is building; then `chain-argentea.sh` runs the 10
+Argentea cells beside the 12 Banda `asStaged` cells at scales 24 and 25,
+then the 20 relational cells, then scale 26, the ranking rerun and the
+baseline's 7 unrun cells.
+
 ## 5. Findings so far
 
 0. The relational paths traverse Graph500 scale 25 on this envelope: Pecan's
