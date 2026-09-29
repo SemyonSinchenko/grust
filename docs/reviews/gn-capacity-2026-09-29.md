@@ -92,23 +92,25 @@ with the frontier as the left input), so at small scale the planner does not
 build on the adjacency. What the workers hold at scale 24 in process-cluster
 mode, where the join is partitioned and both inputs are shuffled, is not
 established by these receipts: the harness records no plan. Next step for S5:
-record the cluster-mode physical plan of the expansion join per iteration in
-the receipt, then compare push-pull's pull-side joins with the reference join
-at the same frontier.
+the gate now records the cluster-mode physical plan of the expansion join
+per iteration (`work/s5-iteration-plans`); compare push-pull's pull-side
+joins with the reference join at the same frontier from the scale-25 receipts.
 
-## 4. The new gate (`work/s0-argentea-engine`, `63eaeb5fe`)
+## 4. The new gate (`work/s5-iteration-plans`, `edcf86824`)
 
 Built from the fork after the baseline matrices: `work/s0-tiered-accounting`
 plus the stage-order passthrough, the client decode limit, the `max-degree`
-source policy and an `argentea` harness engine. The Argentea engine passed a
+source policy, an `argentea` harness engine, and per-iteration plan
+recording for the relational paths (`--record-plans`), so the scale-25
+relational receipts carry the physical plan of every expansion join. The Argentea engine passed a
 Capitola smoke before being queued: five methods (BFS reference, frontier,
 direction; SSSP reference, delta_star) on a 2000-vertex directed fixture in
 process-cluster mode, all validated against the independent reference, about
 7 s each, 1999 of 2000 reached.
 
-Matrix `gn-capacity-63eaeb5f` (34 cells): the 12 scale-25 relational cells
+Matrix `gn-capacity-edcf8682` (34 cells): the 12 scale-25 relational cells
 again, 12 Banda `asStaged` cells at scale 24 and 25, and 10 Argentea cells
-(30-round cap, 32 partitions). Then `gn-capacity-scale26-63eaeb5f` (23
+(30-round cap, 32 partitions). Then `gn-capacity-scale26-edcf8682` (23
 cells) on scale 26.
 
 _Pending._
