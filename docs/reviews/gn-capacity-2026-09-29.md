@@ -60,7 +60,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 09:20 UTC (14 of 36 cells finished).
+is the state at 10:40 UTC (15 of 36 cells finished).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -77,6 +77,7 @@ is the state at 09:20 UTC (14 of 36 cells finished).
 | scale 24, Grenada BFS reference | error | 480 s | 50.8 GiB | iteration 1 reached 407,203; iteration 2 failed with `h2 protocol error: error reading a body from connection` at a 51 GiB container peak with no `memory.max` events at all, so this one is not memory |
 | scale 24, Pecan BFS push_pull | passed | 844 s | | six iterations, 8,862,601 reached, the same result as Grenada's push-pull (775 s); certificate validated |
 | scale 24, Grenada BFS frontier | error | 786 s | 99.9 GiB | iteration 1 reached 407,203; iteration 2 ended with the `h2 protocol error` at the container limit (workers at 43.3 and 48.1 GiB, no `memory.max` event counted, no OOM kill) |
+| scale 25, Pecan BFS frontier | **passed** | 2729 s | 75.1 GiB PSS, container peak 99.7 GiB | the baseline's first scale-25 pass: frontiers 640,062 / 14,625,247 / 1,777,122 / 6,267 / 28 / 0 over six iterations (iteration 2 alone took 949 s), 17,048,727 of 33,554,432 reached, certificate validated with 5 witness rounds; the workers peaked at 34.5 and 39.7 GiB, so it passed within about 300 MiB of the container limit |
 | scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
@@ -142,6 +143,12 @@ cells) on scale 26.
 _Pending._
 
 ## 5. Findings so far
+
+0. The relational paths can traverse Graph500 scale 25 on this envelope, but
+   barely: Pecan's frontier BFS reached 17.0M vertices in 45 minutes with the
+   container within 300 MiB of its 100 GiB limit, while the reference variant
+   (all reached vertices relaxed each round) and both push-pull paths failed
+   at scale 25 for the two reasons in section 2 and section 3.
 
 1. A benchmark fixture's default source has to be checked for degree zero;
    the harness now refuses to let that pass silently.
