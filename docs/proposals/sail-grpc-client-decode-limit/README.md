@@ -57,8 +57,9 @@ in the gate build below.
 Rerun the failing cell on a host built with the change and the same inputs.
 This is queued on morrobay as the `capacity-bfs-relational` and
 `capacity-sssp-relational` suites of `gn-capacity-ac000b6e.json` (twelve
-scale-25 relational cells) on the `work/gn-gate-next` gate, which merges this
-branch with `work/s2-stage-order`; the chain in
+scale-25 relational cells) on the gate built from `work/s0-source-degree`
+(`c00a36434`), which contains `work/gn-gate-next`, the merge of this branch
+with `work/s2-stage-order`; the chain in
 `~/src/sail-extensions-gates/graph-nuts-gate-next/chain.log` runs it after the
 baseline matrices. The verification is complete when those cells no longer
 fail with the message above. Their outcome will be recorded in
