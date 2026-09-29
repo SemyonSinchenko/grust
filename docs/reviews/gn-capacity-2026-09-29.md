@@ -175,7 +175,7 @@ the gate now records the cluster-mode physical plan of the expansion join
 per iteration (`work/s5-iteration-plans`); compare push-pull's pull-side
 joins with the reference join at the same frontier from the scale-25 receipts.
 
-### Ranking matrix on cit-Patents (ranking kernels done, traversal cells running)
+### Ranking matrix on cit-Patents (complete: 29 passed, 1 certificate mismatch)
 
 `gn-ranking-b87fb27a-hub`, 30 cells on the baseline host and wheel with the
 S0 harness: PageRank and WCC, reference and optimized, on Pecan, Banda and
@@ -197,6 +197,30 @@ cit-Patents has 3,774,768 vertices and 16,518,948 directed edges.
 | Banda WCC reference (min-label) | mismatch | 30 s | | the partition is edge-consistent (0 crossing edges), but 1731 of its labels are not the numeric minimum of their component: Banda's min-label kernel takes the minimum in canonical Utf8 order (`"10"` before `"9"`), which the harness documents for the reference-vector path and normalizes there, while the S0 certificate I wrote asserts numeric minimality. A certificate convention, not a wrong partition; the certificate is being corrected to require that a label names a member of its component |
 | Pecan WCC reference (min-label) | passed | 500 s | | 20 rounds |
 | Grenada WCC reference (min-label) | passed | 566 s | | 20 rounds |
+
+Peak PSS was 2.8 to 4.0 GiB for every ranking cell, on every path. Four
+ranking cells overlapped the 15:00 UTC nightly hour (Grenada WCC both
+variants, Banda delta PageRank, Pecan power PageRank).
+
+Traversal cells (directed, from patent 3569341; every cell reached the same
+126,298 patents and passed the certificate; peak PSS 2.4 to 4.0 GiB):
+
+| Kernel | Banda | Pecan | Grenada |
+|---|---|---|---|
+| BFS reference | 31 s | 164 s, 14 levels | 160 s, 14 levels |
+| BFS frontier | 30 s | 125 s | 133 s |
+| BFS push-pull / direction | 33 s | 114 s | 113 s |
+| SSSP reference (Bellman-Ford) | 30 s | 184 s, 14 rounds | 183 s |
+| SSSP frontier (Dijkstra) | 30 s | 128 s | 128 s |
+| SSSP delta-star | 31 s | 209 s, 14 buckets | 204 s |
+
+On a graph this size the relational reference and frontier variants
+complete without incident, so the stream losses of the Graph500 cells are
+tied to long, saturated stages, not to those variants as such. Banda's
+30 s is almost entirely staging and projection: its kernels run in well
+under a second at 16.5M edges. Pecan and Grenada are within a few percent
+of each other on every traversal, as expected since they run the same
+controller on the same materialized adjacency.
 
 ## 4. The new gate (`work/s0-wcc-certificate`, `666c619a6`)
 
