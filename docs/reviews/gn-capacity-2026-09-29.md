@@ -68,7 +68,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 14:35 UTC (25 of 36 cells finished; the BFS suite is complete, SSSP is running).
+is the state at 14:50 UTC (26 of 36 cells finished; the BFS suite is complete, SSSP is running).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -97,6 +97,7 @@ for delta-star; source 13507776):
 |---|---|---|---|---|
 | scale 24, Banda SSSP reference, frontier and delta_star (canonical) | refused | 57 to 61 s | | staging sort admission |
 | scale 24, Grenada SSSP delta_star | error | 1086 s | 47.8 GiB | one bucket done (84 s); the second bucket's job ran 8 minutes and ended with the `h2 protocol error` at 48 GiB with no `memory.max` events (workers at 15.0 and 21.3 GiB): not memory, a long stage |
+| scale 24, Pecan SSSP frontier | error | 811 s | 48.4 GiB | iteration 1 relaxed to 407,203; iteration 2 ran 5 minutes and ended with the `h2 protocol error` at 48 GiB with no `memory.max` events (workers at 18.6 and 18.2 GiB) |
 | scale 25, Grenada SSSP reference | error | 2010 s | 90 GiB | iteration 1 relaxed to 640,062; iteration 2 ended with the `h2 protocol error` at a 90 GiB container peak with no `memory.max` events (workers at 32 GiB each) |
 | scale 25, Pecan SSSP reference | error | 2663 s | 90 GiB | iteration 2 reached 15,202,839 (1437 s); iteration 3 ended with the `h2 protocol error` at 90 GiB, again with no `memory.max` events (workers at 33.6 and 31.6 GiB) |
 
@@ -107,8 +108,8 @@ host (2.4 GB of host swap in use); it was idle and was stopped again at
 
 ### The `h2 protocol error` failures
 
-Four relational cells ended with `h2 protocol error: error reading a body
-from connection` in the driver: Pecan frontier at scale 24 (60 GiB peak,
+Eight relational cells so far ended with `h2 protocol error: error reading a
+body from connection` in the driver, four of them in BFS: Pecan frontier at scale 24 (60 GiB peak,
 iteration 2), Grenada reference at scale 24 (51 GiB, no `memory.max` events,
 iteration 2), Grenada frontier at scale 24 (99.9 GiB, iteration 2) and
 Grenada reference at scale 25 (100 GiB, iteration 3). At least the Grenada
