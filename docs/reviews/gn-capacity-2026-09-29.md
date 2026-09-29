@@ -68,7 +68,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 16:45 UTC (30 of 36 cells finished; the BFS suite is complete, SSSP is running).
+is the state at 15:35 UTC: the matrix stopped itself after cell 29 (`orchestration/cleanup failed; stopped before launching another cell`, the harness's refusal to launch a cell after a container cleanup step failed, on the swapped host), so 7 cells never ran: Pecan and Grenada SSSP frontier and delta_star at scale 25, Pecan delta_star at scale 24, Banda reference and delta_star at scale 25. They are queued as a `--resume` run before the scale-26 chain.
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
