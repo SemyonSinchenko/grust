@@ -129,9 +129,10 @@ direction; SSSP reference, delta_star) on a 2000-vertex directed fixture in
 process-cluster mode, all validated against the independent reference, about
 7 s each, 1999 of 2000 reached.
 
-Matrix `gn-capacity-edcf8682` (34 cells): the 12 scale-25 relational cells
-again, 12 Banda `asStaged` cells at scale 24 and 25, and 10 Argentea cells
-(30-round cap, 32 partitions). Then `gn-capacity-scale26-edcf8682` (23
+Matrix `gn-capacity-edcf8682` (42 cells): the 12 scale-25 relational cells
+again, 8 scale-24 relational reference/frontier reruns, 12 Banda `asStaged`
+cells at scale 24 and 25, and 10 Argentea cells (30-round cap, 32
+partitions). Then `gn-capacity-scale26-edcf8682` (23
 cells) on scale 26.
 
 _Pending._
