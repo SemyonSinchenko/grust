@@ -60,7 +60,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 06:45 UTC (4 of 36 cells finished).
+is the state at 07:00 UTC (6 of 36 cells finished).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -68,11 +68,33 @@ is the state at 06:45 UTC (4 of 36 cells finished).
 | scale 25, Grenada BFS push_pull | error | 1516 s | 38.6 GiB | six real BFS iterations from the hub, then `decoded message length too large: found 8233665 bytes` (the same message size as the source-0 run, so it does not depend on the frontier) |
 | scale 24, Pecan BFS frontier | error | 465 s | 55.4 GiB | iteration 1 reached 407,203 active vertices; during iteration 2 the driver lost a worker connection (`h2 protocol error: error reading a body from connection`, worker 2 `ConnectionReset`); no OOM kill (cgroup peak 60 GiB of 100, workers at 27.4 and 23.7 GiB RSS); cause not identified from the driver log, which carries no worker output |
 | scale 24, Grenada BFS push_pull | passed | 775 s | | six iterations from the hub, 8,862,601 of 16,777,216 vertices reached (the giant component), certificate validated |
+| scale 24, Banda BFS frontier (canonical) | refused | 58 s | 13.8 GiB | staging sort admission, as at scale 25 |
+| scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
 come back up at about 05:02 UTC beside the 110 GiB gate VM on the 128 GB
 host (2.4 GB of host swap in use); it was idle and was stopped again at
 06:25 UTC. Whether the worker loss is related is not known.
+
+### Pecan's second iteration at scale 24
+
+Both Pecan BFS cells so far (frontier and reference) failed in iteration 2,
+the expansion of the hub's 407,203 first-level neighbors, with the two worker
+processes at 47 GiB each (reference, OOM-killed) or 27 and 24 GiB (frontier,
+connection lost at 60 GiB). Grenada's push-pull BFS on the same materialized
+adjacency passed at a 25 GiB container peak. The relational expansion is
+`adjacency.join(active, adjacency.src == active.id)` over the materialized
+undirected adjacency (536,870,912 rows at scale 24, both directions). A local
+explain on Capitola (`scratchpad/join-side/explain.py`, single-process mode,
+1.6M-edge adjacency, 1-row frontier) shows DataFusion choosing the frontier as
+the hash-join build side in either join order (`HashJoinExec: mode=CollectLeft`
+with the frontier as the left input), so at small scale the planner does not
+build on the adjacency. What the workers hold at scale 24 in process-cluster
+mode, where the join is partitioned and both inputs are shuffled, is not
+established by these receipts: the harness records no plan. Next step for S5:
+record the cluster-mode physical plan of the expansion join per iteration in
+the receipt, then compare push-pull's pull-side joins with the reference join
+at the same frontier.
 
 ## 4. The new gate (`work/s0-argentea-engine`, `63eaeb5fe`)
 

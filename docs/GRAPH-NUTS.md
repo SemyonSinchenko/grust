@@ -536,7 +536,13 @@ maps it onto repositories.
    edge; Graph500-24 PageRank, WCC, BFS and Dijkstra on Banda in 24 GB.
 4. **S4, in `grust` then Nutmeg:** file-backed CSR. Gate: Graph500-25 on a
    16 GB pool.
-5. **S5, in `sail-extensions-poc` Pecan:** purge through a `Command.extension`
+5. **S5, in `sail-extensions-poc` Pecan:** first, from the 2026-09-29 campaign:
+   Pecan's BFS reference and frontier variants fail in iteration 2 at scale 24
+   (workers at 47 GiB each, OOM-killed at the 100 GiB container limit) while
+   Grenada's push-pull passes at 25 GiB on the same adjacency; a local explain
+   shows the planner building on the frontier, so record the cluster-mode plan
+   per iteration and find what the partitioned join holds (`docs/reviews/gn-capacity-2026-09-29.md`).
+   Then: purge through a `Command.extension`
    verb now and a session temp-directory request to Sail later; a cached
    sorted edge view; mass-normalized tolerance; Sem's delta messaging as a
    third PageRank method; the four-way comparison with PR 30 on Graph500-24
