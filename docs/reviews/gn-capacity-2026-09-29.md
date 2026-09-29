@@ -60,14 +60,14 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 06:25 UTC (4 of 36 cells).
+is the state at 06:45 UTC (4 of 36 cells finished).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
 | scale 25, Banda BFS push_pull (canonical) | refused | 112 s | 25.6 GiB | the staging sort's admitted working space, as in section 2 |
 | scale 25, Grenada BFS push_pull | error | 1516 s | 38.6 GiB | six real BFS iterations from the hub, then `decoded message length too large: found 8233665 bytes` (the same message size as the source-0 run, so it does not depend on the frontier) |
 | scale 24, Pecan BFS frontier | error | 465 s | 55.4 GiB | iteration 1 reached 407,203 active vertices; during iteration 2 the driver lost a worker connection (`h2 protocol error: error reading a body from connection`, worker 2 `ConnectionReset`); no OOM kill (cgroup peak 60 GiB of 100, workers at 27.4 and 23.7 GiB RSS); cause not identified from the driver log, which carries no worker output |
-| scale 24, Grenada BFS push_pull | running | | | |
+| scale 24, Grenada BFS push_pull | passed | 775 s | | six iterations from the hub, 8,862,601 of 16,777,216 vertices reached (the giant component), certificate validated |
 
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
 come back up at about 05:02 UTC beside the 110 GiB gate VM on the 128 GB
