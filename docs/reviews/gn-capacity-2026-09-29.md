@@ -242,7 +242,9 @@ worker every failing cell showed and the O(|E|) build side Sem warned
 about. The single-process explain on Capitola had shown `CollectLeft` with
 the frontier chosen as the build side, so the trap is specific to the
 partitioned plan at scale. The fix is to write the frontier as the left
-input; it is on `work/s5-frontier-build-side` for the next gate.
+input: `work/s5-frontier-build-side` (`ffcfbd569`) does that for every
+expansion join, and gate 3, queued behind the scale-26 chain, reruns the 24
+relational traversal cells at scales 24 and 25 with it.
 
 The first build of this gate (17:57 to 18:00 UTC) failed in its first
 step: the vendored `nutmeg-graph` library's own tests do not compile on the
