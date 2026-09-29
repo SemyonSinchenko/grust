@@ -68,7 +68,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 14:15 UTC (22 of 36 cells finished; the BFS suite is complete, SSSP is running).
+is the state at 14:35 UTC (25 of 36 cells finished; the BFS suite is complete, SSSP is running).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -95,7 +95,8 @@ for delta-star; source 13507776):
 
 | Cell | Outcome | Time | Peak | What happened |
 |---|---|---|---|---|
-| scale 24, Banda SSSP reference and frontier (canonical) | refused | 57 to 59 s | | staging sort admission |
+| scale 24, Banda SSSP reference, frontier and delta_star (canonical) | refused | 57 to 61 s | | staging sort admission |
+| scale 24, Grenada SSSP delta_star | error | 1086 s | 47.8 GiB | one bucket done (84 s); the second bucket's job ran 8 minutes and ended with the `h2 protocol error` at 48 GiB with no `memory.max` events (workers at 15.0 and 21.3 GiB): not memory, a long stage |
 | scale 25, Grenada SSSP reference | error | 2010 s | 90 GiB | iteration 1 relaxed to 640,062; iteration 2 ended with the `h2 protocol error` at a 90 GiB container peak with no `memory.max` events (workers at 32 GiB each) |
 | scale 25, Pecan SSSP reference | error | 2663 s | 90 GiB | iteration 2 reached 15,202,839 (1437 s); iteration 3 ended with the `h2 protocol error` at 90 GiB, again with no `memory.max` events (workers at 33.6 and 31.6 GiB) |
 
