@@ -224,6 +224,26 @@ controller on the same materialized adjacency.
 
 ## 4. The new gate (`work/gate-core-tests`, `2557feaf1`)
 
+### First rerun cell: Pecan BFS reference, scale 25
+
+| Outcome | Time | Peak | What happened |
+|---|---|---|---|
+| timeout | 5400 s | 100 GiB (workers 43.7 and 47.0 GiB; 4,882 `memory.max` events, no OOM kill) | frontiers 640,062 / 14,625,247 / 1,777,122 / 6,267 in 712 / 1729 / 3216 / 4568 s, then iteration 5 (the empty-frontier check) ran into the cell timeout. No stream loss: on the baseline this cell died with the `h2 protocol error` at 3144 s in iteration 4. One cell, but the first one that ran past the point where the baseline lost its stream, with the 120 s keepalive window and nothing else changed on that path |
+
+The recorded plan of every iteration is the answer to section 3's memory
+question. In process-cluster mode the expansion join is
+`HashJoinExec: mode=Partitioned` with both inputs repartitioned by hash
+(`Hash([#7], 32)` on the adjacency's `src`, `Hash([#4], 32)` on the
+frontier's `id`), and the build side is the left input, which Pecan writes
+as the adjacency: `adjacency.join(active, adjacency.src == active.id)`.
+Per partition each worker builds a hash table over its share of the
+1,073,741,824 undirected adjacency rows, which is the 44 to 47 GiB per
+worker every failing cell showed and the O(|E|) build side Sem warned
+about. The single-process explain on Capitola had shown `CollectLeft` with
+the frontier chosen as the build side, so the trap is specific to the
+partitioned plan at scale. The fix is to write the frontier as the left
+input; it is on `work/s5-frontier-build-side` for the next gate.
+
 The first build of this gate (17:57 to 18:00 UTC) failed in its first
 step: the vendored `nutmeg-graph` library's own tests do not compile on the
 S0 line (`graph_tables/tests.rs` still read `tx.finish()?.staged_nodes`

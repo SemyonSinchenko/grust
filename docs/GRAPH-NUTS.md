@@ -558,11 +558,12 @@ maps it onto repositories.
 5. **S5, in `sail-extensions-poc` Pecan:** first, from the 2026-09-29 campaign:
    Pecan's BFS reference and frontier variants fail in iteration 2 at scale 24
    (workers at 47 GiB each, OOM-killed at the 100 GiB container limit) while
-   Grenada's push-pull passes at 25 GiB on the same adjacency; a local explain
-   shows the planner building on the frontier; `work/s5-iteration-plans` now
-   records the cluster-mode plan per iteration, and the next matrix runs with
-   `--record-plans`, so the scale-25 receipts will say what the partitioned
-   join holds (`docs/reviews/gn-capacity-2026-09-29.md`).
+   Grenada's push-pull passes at 25 GiB on the same adjacency; the recorded
+   cluster-mode plans (2026-09-29, first rerun cell) show a `Partitioned`
+   hash join built on the left input, which Pecan writes as the adjacency:
+   the O(|E|) build side. `work/s5-frontier-build-side` puts the frontier on
+   the left; verify with the recorded plans on the next gate
+   (`docs/reviews/gn-capacity-2026-09-29.md`).
    Then: purge through a `Command.extension`
    verb now and a session temp-directory request to Sail later; a cached
    sorted edge view; mass-normalized tolerance; Sem's delta messaging as a
