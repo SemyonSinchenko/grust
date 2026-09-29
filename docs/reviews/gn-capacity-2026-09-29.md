@@ -105,10 +105,16 @@ for delta-star; source 13507776):
 | scale 25, Grenada SSSP reference | error | 2010 s | 90 GiB | iteration 1 relaxed to 640,062; iteration 2 ended with the `h2 protocol error` at a 90 GiB container peak with no `memory.max` events (workers at 32 GiB each) |
 | scale 25, Pecan SSSP reference | error | 2663 s | 90 GiB | iteration 2 reached 15,202,839 (1437 s); iteration 3 ended with the `h2 protocol error` at 90 GiB, again with no `memory.max` events (workers at 33.6 and 31.6 GiB) |
 
-Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
-come back up at about 05:02 UTC beside the 110 GiB gate VM on the 128 GB
-host (2.4 GB of host swap in use); it was idle and was stopped again at
-06:25 UTC. Whether the worker loss is related is not known.
+Confounder: the default Colima VM (12 CPUs, 48 GiB) came back up at about
+05:02 UTC beside the 110 GiB gate VM on the 128 GB host and was stopped at
+06:25 UTC; it came back again at about 07:00 UTC and at 15:31 UTC was
+running someone's `eigen-runner` container, with the host 46.8 GB into its
+48 GB swap. Every cell from the seventh onward ran with the host memory
+oversubscribed by about 30 GiB. That inflates load times (the Pecan SSSP
+reference cell took 1103 s to load what other cells loaded in 300 to 500 s)
+and is itself a way for a peer to stall past a 10 s keepalive window, so the
+stream losses cannot be separated from it on this run; the reruns on the new
+gate need a host without the second VM, or the note that it was there.
 
 ### The `h2 protocol error` failures
 
