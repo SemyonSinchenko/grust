@@ -230,6 +230,15 @@ controller on the same materialized adjacency.
 |---|---|---|---|
 | timeout | 5400 s | 100 GiB (workers 43.7 and 47.0 GiB; 4,882 `memory.max` events, no OOM kill) | frontiers 640,062 / 14,625,247 / 1,777,122 / 6,267 in 712 / 1729 / 3216 / 4568 s, then iteration 5 (the empty-frontier check) ran into the cell timeout. No stream loss: on the baseline this cell died with the `h2 protocol error` at 3144 s in iteration 4. One cell, but the first one that ran past the point where the baseline lost its stream, with the 120 s keepalive window and nothing else changed on that path |
 
+### Decode limit verified: Grenada BFS push-pull, scale 25
+
+| Outcome | Time | What happened |
+|---|---|---|
+| **passed** | 1593 s | six iterations, 17,048,727 reached, and the certificate completed. On the baseline the same cell finished its traversal in 1516 s and then failed the certificate's first query with `decoded message length too large: found 8233665 bytes, the limit is: 4194304 bytes`. The only change on that path is the client decode limit (`work/grpc-client-decode-limit`), so the fix is verified and the upstream candidate can go out |
+
+Pecan BFS frontier at scale 25 also passed on this gate (2746 s, same reach
+and certificate as its baseline run).
+
 The recorded plan of every iteration is the answer to section 3's memory
 question. In process-cluster mode the expansion join is
 `HashJoinExec: mode=Partitioned` with both inputs repartitioned by hash

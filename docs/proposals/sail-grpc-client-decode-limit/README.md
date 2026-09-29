@@ -5,7 +5,7 @@ exercised in the `querygraph/sail` fork first, then cut to the smallest
 manually verifiable change. The fork branch is `work/grpc-client-decode-limit`
 (commit `9dc75bee8` on `b87fb27ac`); `0001-raise-client-decode-limit.patch` is
 the reviewable copy. It has not been opened upstream; that is the user's call
-after the verification below completes.
+now that the verification below has completed.
 
 ## What fails
 
@@ -72,4 +72,12 @@ fail with the message above. Their outcome will be recorded in
 `GRAPH-NUTS.md` and the capacity findings record; until then this README says
 "pending".
 
-Status: verification pending.
+Status: **verified** on 2026-09-29 at 22:55 UTC. On the gate built from
+`2557feaf1` (which contains this branch), cell
+`capacity-bfs-relational-r1-scale25-nutmeg-datafusion-bfs-push_pull` of
+`gn-capacity-2557feaf` passed: six BFS iterations, 17,048,727 vertices
+reached, certificate completed, 1593 s. The identical cell on the `b87fb27ac`
+baseline finished its traversal in 1516 s and failed the certificate's first
+query with the 4 MiB message. Receipt:
+`~/src/sail-extensions-gates/graph-nuts-gate-next/capacity/cells/capacity-bfs-relational-r1-scale25-nutmeg-datafusion-bfs-push_pull/artifacts/receipt.json`
+on morrobay. Ready to be opened upstream as a one-hunk PR after your review.
