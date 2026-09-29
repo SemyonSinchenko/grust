@@ -46,12 +46,16 @@ Both found by the first two source-0 cells, before any traversal ran.
   short Utf8 ids. The library already offers `order = asStaged`, but the Sail
   extension hard-coded canonical and its request schema rejected the option.
   Fix on `work/s2-stage-order`; the next matrix runs Banda `asStaged`.
-- **Relational cells die on the first iteration.** `decoded message length
-  too large: found 8234561 bytes, the limit is: 4194304 bytes`: Sail's
+- **Relational results cannot be certified at scale 25.** `decoded message
+  length too large: found 8234561 bytes, the limit is: 4194304 bytes`: Sail's
   internal gRPC clients keep Tonic's 4 MiB decode default while its servers
-  accept 128 MiB. Scale 24 (1024 files) passed the same path. Fix on
-  `work/grpc-client-decode-limit` (one hunk, upstream candidate, verification
-  pending on the next matrix).
+  accept 128 MiB. The hub-source cells later showed where it bites: the
+  traversal itself completes and writes its result, and the error is raised
+  in the distributed certificate (`traversal_certificate.certify`, the
+  all-edge inequality check over the 33.5M-row result joined with the 537M
+  edges), always with a message of about 8.23 MB. Scale 24 certifies fine.
+  Fix on `work/grpc-client-decode-limit` (one hunk, upstream candidate,
+  verification pending on the next matrix).
 
 ## 3. Baseline matrices with the hub source (running)
 
@@ -60,16 +64,16 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 12:00 UTC (16 of 36 cells finished; two BFS cells remain, Banda reference and Grenada frontier at scale 25, then the 18 SSSP cells).
+is the state at 12:30 UTC (17 of 36 cells finished; one BFS cell remains, Banda reference at scale 25, then the 18 SSSP cells).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
 | scale 25, Banda BFS push_pull (canonical) | refused | 112 s | 25.6 GiB | the staging sort's admitted working space, as in section 2 |
-| scale 25, Grenada BFS push_pull | error | 1516 s | 38.6 GiB | six real BFS iterations from the hub, then `decoded message length too large: found 8233665 bytes` (the same message size as the source-0 run, so it does not depend on the frontier) |
+| scale 25, Grenada BFS push_pull | traversal done, certificate failed | 1516 s | 38.6 GiB | six BFS iterations from the hub to an empty frontier and the result written; the certificate then hit `decoded message length too large: found 8233665 bytes`, so the traversal time stands but the result is unverified |
 | scale 24, Pecan BFS frontier | error | 465 s | 55.4 GiB | iteration 1 reached 407,203 active vertices; during iteration 2 the driver lost a worker connection (`h2 protocol error: error reading a body from connection`, worker 2 `ConnectionReset`); no OOM kill (cgroup peak 60 GiB of 100, workers at 27.4 and 23.7 GiB RSS); cause not identified from the driver log, which carries no worker output |
 | scale 24, Grenada BFS push_pull | passed | 775 s | | six iterations from the hub, 8,862,601 of 16,777,216 vertices reached (the giant component), certificate validated |
 | scale 24, Banda BFS frontier (canonical) | refused | 58 s | 13.8 GiB | staging sort admission, as at scale 25 |
-| scale 25, Pecan BFS push_pull | error | 1610 s | | six real iterations, then the 4 MiB client limit with an 8,234,369-byte message, the same size as Grenada's, so the message is tied to the scale-25 input, not the path or the frontier |
+| scale 25, Pecan BFS push_pull | traversal done, certificate failed | 1610 s | 39.6 GiB | six iterations to an empty frontier and the result written; the certificate hit the 4 MiB limit (8,234,369 bytes); unverified |
 | scale 25, Banda BFS frontier (canonical) | refused | 125 s | | staging sort admission |
 | scale 24, Banda BFS push_pull (canonical) | refused | 56 s | | staging sort admission |
 | scale 25, Grenada BFS reference | error | 2730 s | 100 GiB | iteration 1 reached 640,062, iteration 2 reached 14,625,247 (932 s); iteration 3, relaxing all 15M reached vertices, drove the container to its 100 GiB limit (1610 `max` events, no OOM kill) with the workers at 42.8 and 43.3 GiB, and the driver lost the stream (`h2 protocol error`) |
@@ -78,6 +82,7 @@ is the state at 12:00 UTC (16 of 36 cells finished; two BFS cells remain, Banda 
 | scale 24, Pecan BFS push_pull | passed | 844 s | | six iterations, 8,862,601 reached, the same result as Grenada's push-pull (775 s); certificate validated |
 | scale 24, Grenada BFS frontier | error | 786 s | 99.9 GiB | iteration 1 reached 407,203; iteration 2 ended with the `h2 protocol error` at the container limit (workers at 43.3 and 48.1 GiB, no `memory.max` event counted, no OOM kill) |
 | scale 25, Pecan BFS frontier | **passed** | 2729 s | 75.1 GiB PSS, container peak 99.7 GiB | the baseline's first scale-25 pass: frontiers 640,062 / 14,625,247 / 1,777,122 / 6,267 / 28 / 0 over six iterations (iteration 2 alone took 949 s), 17,048,727 of 33,554,432 reached, certificate validated with 5 witness rounds; the workers peaked at 34.5 and 39.7 GiB, so it passed within about 300 MiB of the container limit |
+| scale 25, Grenada BFS frontier | traversal done, certificate failed | 2764 s | 75.2 GiB | six iterations to an empty frontier and the result written, 35 s slower than Pecan's frontier; the certificate hit the 4 MiB limit (8,236,609 bytes); unverified |
 | scale 25, Pecan BFS reference | error | 3144 s | 100 GiB | got through three iterations (frontiers 640,062 / 14,625,247 / 1,777,122, iteration 3 took 1197 s), then iteration 4, relaxing all 17M reached vertices, drove the container to its limit (3767 `max` events, no OOM kill; workers at 45.4 and 38.9 GiB) and the driver lost the stream |
 | scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
@@ -145,11 +150,14 @@ _Pending._
 
 ## 5. Findings so far
 
-0. The relational paths can traverse Graph500 scale 25 on this envelope, but
-   barely: Pecan's frontier BFS reached 17.0M vertices in 45 minutes with the
-   container within 300 MiB of its 100 GiB limit, while the reference variant
-   (all reached vertices relaxed each round) and both push-pull paths failed
-   at scale 25 for the two reasons in section 2 and section 3.
+0. The relational paths traverse Graph500 scale 25 on this envelope: Pecan's
+   and Grenada's push-pull BFS finished in 1516 and 1610 s at about 39 GiB
+   PSS, the frontier variants in 2729 and 2764 s at 75 GiB (Pecan's within
+   300 MiB of the 100 GiB container limit), all six iterations to an empty
+   frontier. Only Pecan's frontier result was certified; the other three
+   results are unverified because the certificate query itself hits the 4 MiB
+   client limit at this scale. The reference variant (all reached vertices
+   relaxed each round) fails on memory at scale 25 on both paths.
 
 1. A benchmark fixture's default source has to be checked for degree zero;
    the harness now refuses to let that pass silently.

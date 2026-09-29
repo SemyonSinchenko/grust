@@ -24,15 +24,20 @@ Observed on morrobay on 2026-09-29 (gate VM 32 CPUs / 110 GiB, container
 32 partitions and two workers), cell
 `capacity-bfs-r1-scale25-nutmeg-datafusion-bfs-push_pull` of
 `gn-capacity-b87fb27a`: a Graph500 scale-25 graph (33,554,432 vertices,
-536,870,912 edges in 2048 Parquet files) failed on its first relational BFS
-iteration after 331 s with
+536,870,912 edges in 2048 Parquet files) failed after 331 s with
 
 ```
 pyspark.errors.exceptions.connect.SparkRuntimeException: Error, decoded message
 length too large: found 8234561 bytes, the limit is: 4194304 bytes
 ```
 
-That text is Tonic's decompressed-length branch
+The hub-source rerun of the same matrix located the failure: the BFS itself
+completes and writes its result on every relational path (six iterations,
+1516 to 2764 s), and the message is raised inside the harness's distributed
+certificate query, the all-edge inequality check joining the 33.5M-row result
+with the 537M edges, with a message of 8.23 MB every time (8233665, 8234369,
+8234561, 8236609 bytes across four cells). That text is Tonic's
+decompressed-length branch
 (`tonic-0.14.6/src/codec/decode.rs:195`), so the message was one of the
 zstd- or gzip-compressed responses Sail's servers send with
 `send_compressed`. The same cell at scale 24 (1024 files) passed. Which
