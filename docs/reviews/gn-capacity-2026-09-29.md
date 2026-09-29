@@ -68,7 +68,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 12:30 UTC (17 of 36 cells finished; one BFS cell remains, Banda reference at scale 25, then the 18 SSSP cells).
+is the state at 14:15 UTC (22 of 36 cells finished; the BFS suite is complete, SSSP is running).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -90,6 +90,15 @@ is the state at 12:30 UTC (17 of 36 cells finished; one BFS cell remains, Banda 
 | scale 25, Pecan BFS reference | error | 3144 s | 100 GiB | got through three iterations (frontiers 640,062 / 14,625,247 / 1,777,122, iteration 3 took 1197 s), then iteration 4, relaxing all 17M reached vertices, drove the container to its limit (3767 `max` events, no OOM kill; workers at 45.4 and 38.9 GiB) and the driver lost the stream |
 | scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
+SSSP suite (weights are the generator's float32 values in [0, 1]; delta 0.1
+for delta-star; source 13507776):
+
+| Cell | Outcome | Time | Peak | What happened |
+|---|---|---|---|---|
+| scale 24, Banda SSSP reference and frontier (canonical) | refused | 57 to 59 s | | staging sort admission |
+| scale 25, Grenada SSSP reference | error | 2010 s | 90 GiB | iteration 1 relaxed to 640,062; iteration 2 ended with the `h2 protocol error` at a 90 GiB container peak with no `memory.max` events (workers at 32 GiB each) |
+| scale 25, Pecan SSSP reference | error | 2663 s | 90 GiB | iteration 2 reached 15,202,839 (1437 s); iteration 3 ended with the `h2 protocol error` at 90 GiB, again with no `memory.max` events (workers at 33.6 and 31.6 GiB) |
+
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
 come back up at about 05:02 UTC beside the 110 GiB gate VM on the 128 GB
 host (2.4 GB of host swap in use); it was idle and was stopped again at
@@ -103,7 +112,12 @@ iteration 2), Grenada reference at scale 24 (51 GiB, no `memory.max` events,
 iteration 2), Grenada frontier at scale 24 (99.9 GiB, iteration 2) and
 Grenada reference at scale 25 (100 GiB, iteration 3). At least the Grenada
 reference at scale 24 is not memory; the others sit near the limit, so both
-causes may be in play. The worker processes leave no log lines in the
+causes may be in play. The two scale-25 SSSP reference cells add a pattern:
+both lost the stream in their heaviest iteration (15M active vertices) at a
+90 GiB container reading with no `memory.max` events and the workers at
+32 GiB each, which points at the long-running stream rather than at memory
+(an h2 connection dropped mid-body, whether by an idle timeout or a peer
+error the worker never logged). The worker processes leave no log lines in the
 driver's log (they never initialize logging), so the worker side is
 invisible; the working hypothesis is that a worker's own shuffle read hit the
 same 4 MiB client decode limit (a worker is a Flight client of its peer), its
