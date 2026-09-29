@@ -60,7 +60,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 08:05 UTC (10 of 36 cells finished).
+is the state at 08:25 UTC (12 of 36 cells finished).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -73,12 +73,29 @@ is the state at 08:05 UTC (10 of 36 cells finished).
 | scale 25, Banda BFS frontier (canonical) | refused | 125 s | | staging sort admission |
 | scale 24, Banda BFS push_pull (canonical) | refused | 56 s | | staging sort admission |
 | scale 25, Grenada BFS reference | error | 2730 s | 100 GiB | iteration 1 reached 640,062, iteration 2 reached 14,625,247 (932 s); iteration 3, relaxing all 15M reached vertices, drove the container to its 100 GiB limit (1610 `max` events, no OOM kill) with the workers at 42.8 and 43.3 GiB, and the driver lost the stream (`h2 protocol error`) |
+| scale 24, Banda BFS reference (canonical) | refused | 60 s | | staging sort admission |
+| scale 24, Grenada BFS reference | error | 480 s | 50.8 GiB | iteration 1 reached 407,203; iteration 2 failed with `h2 protocol error: error reading a body from connection` at a 51 GiB container peak with no `memory.max` events at all, so this one is not memory |
 | scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
 come back up at about 05:02 UTC beside the 110 GiB gate VM on the 128 GB
 host (2.4 GB of host swap in use); it was idle and was stopped again at
 06:25 UTC. Whether the worker loss is related is not known.
+
+### The `h2 protocol error` failures
+
+Three relational cells ended with `h2 protocol error: error reading a body
+from connection` in the driver: Pecan frontier at scale 24 (60 GiB peak,
+iteration 2), Grenada reference at scale 24 (51 GiB, no `memory.max` events,
+iteration 2) and Grenada reference at scale 25 (100 GiB, iteration 3). The
+scale-24 ones are not memory. The worker processes leave no log lines in the
+driver's log (they never initialize logging), so the worker side is
+invisible; the working hypothesis is that a worker's own shuffle read hit the
+same 4 MiB client decode limit (a worker is a Flight client of its peer), its
+task stream ended abruptly, and the driver reported the broken body instead
+of the limit message. The next matrix reruns exactly these cells (scale-24
+relational reference and frontier, BFS and SSSP, both engines) with the
+client limit raised; if they pass, that is the cause.
 
 ### Pecan's second iteration at scale 24
 
