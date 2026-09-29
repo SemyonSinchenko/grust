@@ -338,6 +338,12 @@ validation and scaling work. Paths are relative to the named repository.
 
 ### Sail extension design and implementation
 
+- `grust/docs/REVIEW-EXTENSIONS.md` — the current reviewer instructions for the
+  Sail extensions: which ref to clone (`sail-extensions` branch for the latest,
+  `sail-extensions-1` tag for the fixed first review), what to read and run,
+  what is on the branch and what is still to be propagated. Kept current with
+  every move of the review target, in the same commit.
+
 - `sail-extensions-poc/docs/development/extensions/design-review.md` —
   standalone extension architecture review.
 - `sail-extensions-poc/docs/development/extensions/design-review.pdf` — PDF
@@ -577,4 +583,6 @@ maps it onto repositories.
    was changed on 2026-09-29.
 9. Keep this file current: every new repository, branch, document, pull
    request or host that touches graph work gets a row here in the same
-   commit that creates it.
+   commit that creates it. Keep `REVIEW-EXTENSIONS.md` current the same way:
+   any move of `sail-extensions`, any new review tag, and the propagation pass
+   update it in the same commit.
