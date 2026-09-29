@@ -60,7 +60,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 07:00 UTC (6 of 36 cells finished).
+is the state at 08:05 UTC (10 of 36 cells finished).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -69,6 +69,10 @@ is the state at 07:00 UTC (6 of 36 cells finished).
 | scale 24, Pecan BFS frontier | error | 465 s | 55.4 GiB | iteration 1 reached 407,203 active vertices; during iteration 2 the driver lost a worker connection (`h2 protocol error: error reading a body from connection`, worker 2 `ConnectionReset`); no OOM kill (cgroup peak 60 GiB of 100, workers at 27.4 and 23.7 GiB RSS); cause not identified from the driver log, which carries no worker output |
 | scale 24, Grenada BFS push_pull | passed | 775 s | | six iterations from the hub, 8,862,601 of 16,777,216 vertices reached (the giant component), certificate validated |
 | scale 24, Banda BFS frontier (canonical) | refused | 58 s | 13.8 GiB | staging sort admission, as at scale 25 |
+| scale 25, Pecan BFS push_pull | error | 1610 s | | six real iterations, then the 4 MiB client limit with an 8,234,369-byte message, the same size as Grenada's, so the message is tied to the scale-25 input, not the path or the frontier |
+| scale 25, Banda BFS frontier (canonical) | refused | 125 s | | staging sort admission |
+| scale 24, Banda BFS push_pull (canonical) | refused | 56 s | | staging sort admission |
+| scale 25, Grenada BFS reference | error | 2730 s | 100 GiB | iteration 1 reached 640,062, iteration 2 reached 14,625,247 (932 s); iteration 3, relaxing all 15M reached vertices, drove the container to its 100 GiB limit (1610 `max` events, no OOM kill) with the workers at 42.8 and 43.3 GiB, and the driver lost the stream (`h2 protocol error`) |
 | scale 24, Pecan BFS reference | error | 793 s | 99.9 GiB | iteration 1 reached 407,203; during iteration 2 the container hit its 100 GiB limit and the kernel OOM-killed a worker (`memory.events oom_kill 1`); the two workers were at 47.2 and 46.3 GiB RSS |
 
 Confounder for these four cells: the default Colima VM (12 CPUs, 48 GiB) had
