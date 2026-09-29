@@ -301,6 +301,23 @@ Argentea cells beside the 12 Banda `asStaged` cells at scales 24 and 25,
 then the 20 relational cells, then scale 26, the ranking rerun and the
 baseline's 7 unrun cells.
 
+### Two hosts: Capitola and Morrobay (23:50 UTC)
+
+The user asked for Argentea across two physical machines. Setup, all from
+gate 3 (`ffcfbd569`): an x86_64 macOS Sail host cross-built on Capitola
+(sha256 `fc1d87dcce…`, 804 MB, `sail 0.7.1`) and an x86_64 Nutmeg wheel
+(sha256 `e3d9683172…`), the same bytes installed on both hosts (Capitola
+runs them under Rosetta, Morrobay natively); one venv per host from the same
+lock with the same CPython 3.12.13; clean checkouts of `ffcfbd569` on both;
+MinIO on Morrobay as the shared object store, reached by both over
+Tailscale; the driver and one worker on Capitola, the second worker on
+Morrobay launched over ssh by the qualifier's supervisor. The qualifier's
+own two-host BFS fixture passed (`smoke-bfs/receipt.json`: hosts
+`Capitola.local` twice and `morrobay.local`, native audit clean). Scale 24
+is on the object store; scale 22 is being prepared with the `max-degree`
+source. Next: `argentea_two_host_capacity.py` on scale 22, then 24, against
+the same runs on one host.
+
 ## 5. Findings so far
 
 0. The relational paths traverse Graph500 scale 25 on this envelope: Pecan's
