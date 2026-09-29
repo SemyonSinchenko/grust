@@ -68,7 +68,7 @@ SSSP reference/frontier/delta_star, Pecan, Banda and Grenada, scale 24 and
 25) and `gn-ranking-b87fb27a-hub` (30 cells on cit-Patents: PageRank and WCC
 reference/optimized under the certificate policy, plus the traversal cells).
 Results are filled in from `capacity_findings.py` as cells finish; this table
-is the state at 15:35 UTC (28 of 36 cells finished; the BFS suite is complete, SSSP is running).
+is the state at 16:45 UTC (30 of 36 cells finished; the BFS suite is complete, SSSP is running).
 
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
@@ -100,6 +100,8 @@ for delta-star; source 13507776):
 | scale 24, Pecan SSSP frontier | error | 811 s | 48.4 GiB | iteration 1 relaxed to 407,203; iteration 2 ran 5 minutes and ended with the `h2 protocol error` at 48 GiB with no `memory.max` events (workers at 18.6 and 18.2 GiB) |
 | scale 24, Grenada SSSP reference | error | 682 s | 50.3 GiB | iteration 1 relaxed to 407,203; iteration 2 ran 4 minutes and ended with the `h2 protocol error` at 50 GiB, no `memory.max` events (workers at 19.2 and 19.4 GiB) |
 | scale 24, Grenada SSSP frontier | error | 730 s | 53.2 GiB | iteration 1 relaxed to 407,203; iteration 2 ran 5 minutes and ended with the `h2 protocol error` at 53 GiB, no `memory.max` events (workers at 21.9 and 19.5 GiB) |
+| scale 24, Pecan SSSP reference | error | 1699 s | 27.4 GiB | loading alone took 1103 s (three to four times the other scale-24 cells), iteration 1 relaxed to 407,203, and iteration 2 ended with the `h2 protocol error` at only 27 GiB (workers at 5.5 and 12.2 GiB): the lowest-memory stream loss yet |
+| scale 25, Banda SSSP frontier (canonical) | refused | 173 s | | staging sort admission |
 | scale 25, Grenada SSSP reference | error | 2010 s | 90 GiB | iteration 1 relaxed to 640,062; iteration 2 ended with the `h2 protocol error` at a 90 GiB container peak with no `memory.max` events (workers at 32 GiB each) |
 | scale 25, Pecan SSSP reference | error | 2663 s | 90 GiB | iteration 2 reached 15,202,839 (1437 s); iteration 3 ended with the `h2 protocol error` at 90 GiB, again with no `memory.max` events (workers at 33.6 and 31.6 GiB) |
 
@@ -110,7 +112,7 @@ host (2.4 GB of host swap in use); it was idle and was stopped again at
 
 ### The `h2 protocol error` failures
 
-Ten relational cells so far ended with `h2 protocol error: error reading a
+Eleven relational cells so far ended with `h2 protocol error: error reading a
 body from connection` in the driver, four of them in BFS: Pecan frontier at scale 24 (60 GiB peak,
 iteration 2), Grenada reference at scale 24 (51 GiB, no `memory.max` events,
 iteration 2), Grenada frontier at scale 24 (99.9 GiB, iteration 2) and
