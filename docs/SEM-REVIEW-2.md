@@ -342,6 +342,20 @@ was recorded at `b4da56d`).
 
 ### Stage F. Investigate Banda ingest
 
+Sem's standing objection (his first review, `FABLE-ON-ASTRA.md` section 8,
+and again on 2026-09-30: what he saw benchmarking his tool, "the conversion
+to CSR eats everything") matches the cit-Patents receipts: about 28 s of
+staging and projection around a 1.4 to 3.3 s kernel. Whether that is the
+conversion or our conversion is the first control, before any change: a
+native-only CSR build from the same `edges.parquet` (Int64 ids, no Sail
+tables, no FFI crossing, no canonical sort), timed on the gate with the
+same boundaries. Degree count, prefix sum and fill over 16.5M edges are
+expected on the order of a second; that measured number is the floor, and
+the gap between it and 28 s is what the candidates below have to close.
+The crossover test of `FABLE-ON-ASTRA.md` section 8 stands: if the ingest
+does not come under the relational path's first-round cost on graph500-24,
+that is evidence for Sem's position and the decision guide says so.
+
 Evaluate Int64 identity and dense u32 vertex targets from `FABLE-ON-ASTRA.md`
 as separate candidates. Preserve usize/u64 arc offsets: a graph may fit u32
 vertex IDs while symmetrized arc count exceeds u32. Use checked conversions
