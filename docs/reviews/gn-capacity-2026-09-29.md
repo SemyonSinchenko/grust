@@ -155,6 +155,20 @@ of the limit message. The next matrix reruns exactly these cells (scale-24
 relational reference and frontier, BFS and SSSP, both engines) with the
 client limit raised; if they pass, that is the cause.
 
+Addendum (2026-09-30, 04:15 UTC): a second, separate mechanism produces the
+same error text. Sail's driver removes a worker whose task slots have all
+been vacant for `cluster.worker_max_idle_time_secs` (default 60) together
+with the shuffle output it holds, and the harness runs extension jobs with
+`SAIL_CLUSTER__TASK_MAX_ATTEMPTS=1`, so the next stage that reads from the
+removed worker fails with the body error instead of recomputing. The gate-3
+Argentea scale-24 frontier cell shows this exactly (worker 1 stopped at
+3.8 minutes, worker 3 started ten minutes later, failure at 41 minutes).
+The baseline's eleven relational cells show no mid-run worker replacement,
+so they stay with the keepalive hypothesis, which the gate-3 relational
+rerun tests; all gate-3 matrices from 04:16 UTC also run with the idle
+removal disabled for the cell (86400 s), so a cell can no longer lose a
+worker to a quiet minute.
+
 ### Pecan's second iteration at scale 24
 
 Both Pecan BFS cells so far (frontier and reference) failed in iteration 2,
@@ -333,6 +347,7 @@ The 10 Argentea cells (two worker processes on 32 cores, 32 partitions,
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
 | scale 24, Argentea BFS reference | **passed** | 1213 s | 65.1 GiB (cgroup peak 70.5 GiB) | the first Argentea result on Graph500 scale 24 on the Linux gate: native plan ready at 142 s, 6 BFS levels, 8,862,601 reached, the same count as Banda and the relational cells; certificate validated with 5 witness rounds, max edge slack 0, parent tree checked. The 30-round cap unrolled 64 phases of which 31 ran, 22 of them empty (about a second each on one host). No stream loss, no timeout; 7 stale-task warnings |
+| scale 24, Argentea BFS frontier | error | 2472 s | 22.3 GiB | **lost a worker to Sail's idle probe.** At 03:34:57 UTC, 3.8 minutes into ingest, the driver stopped worker 1 ("idle for too long": `cluster.worker_max_idle_time_secs`, default 60, fires when the driver sees every task slot vacant and no local stream for a minute; the worker aborted 91 task handles on the way down). Ten minutes later the plan needed a second worker again and the driver started worker 3; Argentea initialized 12 partitions on it, and at 04:11 the retry-disabled extension job (`SAIL_CLUSTER__TASK_MAX_ATTEMPTS=1`) failed with `h2 protocol error: error reading a body from connection`: the stage read shuffle output that had lived on worker 1. No other recorded cell (baseline, gate 2 or gate 3) shows a mid-run worker replacement, so the baseline's eleven relational `h2` losses are a different mechanism; this one is deterministic once a worker idles for a minute between stages of a long job. The matrix was relaunched at 04:16 UTC as `gn-argentea-first2-gate3.json` (host output `argentea-first2-gate3/`) with `SAIL_CLUSTER__WORKER_MAX_IDLE_TIME_SECS=86400` exported into every cell container beside the 900 s stream timeout, and the same environment goes into the Banda remainder (`gn-banda-rest-gate3.json`, 8 cells), the relational rerun, scale 26 and the ranking rerun. The interrupted third cell (scale-25 push-pull, 3 minutes in) reruns in the new matrix; the passed reference cell reruns as a repeat |
 
 Read beside the same cell elsewhere on the same input and source:
 
