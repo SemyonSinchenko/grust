@@ -48,6 +48,14 @@ Translated from his messages of 2026-09-30:
 - On spill: his runs spill too ("120 GB peak disk for WCC on graph500-28"),
   so "if similar numbers do not come out in Sail, with a small constant
   correction for Sail's overhead, then the problem is not only spill."
+- On the input snapshot: "Pecan rewrites the inputs to Parquet? Why? The
+  LDBC graphs are already available as Parquet files; I once asked the
+  DuckLab people to make them, and they did." (Answered in Stage B7 and
+  in Stage A's inputs.)
+- On Banda: "I told you about this, and it matches what I saw when I
+  benchmarked my tool: the conversion to CSR eats everything." (Stage F.)
+- On the timer: "why on earth include validation in wall time." (Stage A,
+  item 4.)
 
 His results (`SemyonSinchenko/graphframes-rs`, branch
 `new-benchmark-results` at `ba2fdd8f51fa7fafdca15012d2741f5f8d80c024`,
@@ -220,7 +228,10 @@ publish absolute timing results only on a qualified dedicated host.
 ### Stage A. Establish matched contracts and a local/process-cluster control
 
 1. Pin graphframes-rs source, image, toolchain and binary in a separate detached
-   build with its own target and receipt. Define common input manifests,
+   build with its own target and receipt. Use the LDBC Graphalytics
+   graphs in the Parquet form Sem had DuckLab produce as the shared inputs
+   for both sides, once he says where they are; that removes the vertex
+   and edge count differences of section 2 at the source. Define common input manifests,
    direction, duplicates/isolates, traversal source and requested outputs.
    For WCC, supplement the existing large-graph certificate with an independent
    reference partition or connectivity witness: equal labels along edges alone
@@ -413,7 +424,9 @@ For Sem:
 3. His graph500-24 has 8.87M vertices and 260M edges, ours 16.8M vertices
    (8.86M reached from the hub) and 268M edge tuples. Is his input
    deduplicated and stripped of isolated vertices, and can he share the
-   generator command so both sides read the same bytes?
+   generator command so both sides read the same bytes? Better: where are
+   the DuckLab Parquet conversions of the LDBC graphs he mentioned, so
+   both sides read those?
 4. Which graphframes-rs APIs support an explicit per-round Sail submission
    adapter with the agreed algorithm, output and ownership contracts?
 
