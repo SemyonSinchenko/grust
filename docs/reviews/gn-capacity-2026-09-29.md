@@ -324,6 +324,34 @@ scale-24 BFS reference, 02:26 UTC.
 | scale 24, Banda BFS push-pull (direction), `asStaged` | passed | 1213 s | | same reach and certificate; the direction-switching kernel builds both an outgoing and an incoming CSR, hence 1.7 times the reference variant's 704 s |
 | scale 25, Banda BFS push-pull (direction), `asStaged` | error | 1641 s | 60.0 GiB | staging passed in 114 s (536,870,912 edges retained as 19.8 GiB of Utf8-id rows, unsorted); the projection then refused: `procedure memory budget exceeded (limit 85899345920)`, with the process at 60 GiB. So at scale 25 Banda's wall is now the projection's admitted bound inside the 80 GiB quota, the direction-switching kernel needing both an outgoing and an incoming CSR from Utf8 ids; S3's dense `u32` projection is the fix, S1's `Int64` identity halves the staged rows first |
 
+### Gate 3, Argentea-first matrix (running since 02:26 UTC, 2026-09-30)
+
+The 10 Argentea cells (two worker processes on 32 cores, 32 partitions,
+64 task slots per worker, 30-round cap, task-stream creation timeout 900 s,
+100 GiB container), then the 8 remaining Banda `asStaged` cells.
+
+| Cell | Outcome | Time | Peak PSS | What happened |
+|---|---|---|---|---|
+| scale 24, Argentea BFS reference | **passed** | 1213 s | 65.1 GiB (cgroup peak 70.5 GiB) | the first Argentea result on Graph500 scale 24 on the Linux gate: native plan ready at 142 s, 6 BFS levels, 8,862,601 reached, the same count as Banda and the relational cells; certificate validated with 5 witness rounds, max edge slack 0, parent tree checked. The 30-round cap unrolled 64 phases of which 31 ran, 22 of them empty (about a second each on one host). No stream loss, no timeout; 7 stale-task warnings |
+
+Read beside the same cell elsewhere on the same input and source:
+
+| Path, host | Time | Peak PSS |
+|---|---|---|
+| Argentea, Linux gate, 32 cores, two workers | 1213 s | 65.1 GiB |
+| Argentea, Capitola alone, x86_64 under Rosetta, 8 threads, two workers, 8-round cap | 1409 s | not sampled (macOS) |
+| Banda reference, `asStaged`, Linux gate, one process | 704 s | 31.3 GiB |
+| Pecan / Grenada push-pull, Linux gate (baseline) | 775 / 844 s | about 39 GiB |
+
+So at scale 24 on one host Argentea is 1.7 times Banda's time at twice
+Banda's memory, and four times the cores over Capitola's run buy 14%:
+the unrolled job's time is not in the kernels but in the per-phase shuffle
+and materialization of the frontier and adjacency between Sail stages,
+which is the same cost that dominated the two-host scale-22 runs. A distributed placement experiment should hold the workload, protocol and
+resource envelope fixed and measure time and memory as resources are added.
+The S1/S3 projection work applies to Argentea's adjacency build as much as
+to Banda's.
+
 ### Two hosts: Capitola and Morrobay (23:50 UTC)
 
 The user asked for Argentea across two physical machines. Setup, all from
