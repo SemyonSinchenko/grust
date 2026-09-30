@@ -347,7 +347,16 @@ the two runs is where the shuffles and the inputs go: across a Tailscale
 link between a WeWork network and a home network (about 7 ms round trip)
 and through MinIO on Morrobay, with Morrobay itself carrying the gate VM
 and the nightly VM. That is the honest state of "distributed" today: it
-works, and on this network it does not pay. The two-host run with the
+works, and on this network it does not pay. The driver log locates the
+time: of the 153 Spark jobs in the run, 152 took at most 255 s in all; the
+one native job that unrolls init, the 31 rounds and the result stage spanned
+2244 s, with every one of its 1,598 pipelined tasks on both workers
+"running" for the whole span (they wait on each other's shuffle output).
+During its first two minutes the object-store client logged 41
+"error while reading response body ... retrying" events reading the
+input from MinIO over Tailscale. The next two-host run puts the input on
+local disk on both hosts to separate the cross-host shuffles from the
+object store. The two-host run with the
 8-round cap and Banda single-process on the same input follow, then scale
 24 across the two hosts.
 
