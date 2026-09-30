@@ -1,6 +1,6 @@
 # Focused Sail stream and resource experiments
 
-Recorded UTC: 2026-09-30T20:24:40.387287+00:00
+Recorded UTC: 2026-09-30T21:17:50.110015+00:00
 
 Work in progress. This report separates the completed evidence from the compact
 aggregation implementation and instrumented Linux replay still being qualified.
@@ -55,6 +55,42 @@ The same deliberately induced failure stays generic at `info`. This filter is
 now included in the prepared no-OOM replay; the earlier hyper-only controls did
 not exercise this Tonic logger. See [verified control](tonic-keepalive-control/receipt.json)
 and [server log](tonic-keepalive-control/tonic-debug-keepalive-verified.log).
+
+## Instrumented replay: interim observations and limits
+
+The second scale-24 replay remains active. The completed observation at
+20:51:32 UTC retained the same driver and two worker identities, 63.74 GiB
+cgroup memory, zero OOM events and sampler phase `execute`; no final receipt
+existed. Its bounded new server-log window contained no timestamped error
+matches. These observations do not establish algorithm progress or a final
+outcome. [Observation and identity summary](logging02-monitor/one-shot-2051-summary.json).
+
+A [host-memory comparison](logging02-monitor/host-memory-comparison.json)
+shows that host paging was already substantial before this run. Between
+20:03:47 and 20:45:12 UTC, used swap fell from 35,658.50 to 23,259.50 reported
+MiB, while physical compressor occupancy grew from 18.18 to 49.08 GiB.
+Swap-in and swap-out counters advanced by 117,575,606 and 114,476,972 pages.
+These compressor-related page counts are not measured physical disk traffic;
+the host-wide activity is not attributed to one workload. A container's zero
+swap setting and guest steal counter do not describe host paging of the VM.
+No performance ratio is qualified by this replay.
+
+The [sampler audit](sampler-observation-audit/receipt.json) finds 427 unique
+complete scans in sparse captured tails, with durations from 72.469 ms to
+42.082 seconds. The configured 50 ms is a wait after scanning and bookkeeping,
+not a guaranteed cadence; transition rows skip that wait. This is neither a
+full-run distribution nor a CPU-overhead measurement. Preserve actual scan
+windows and distinguish sampled process peaks from the kernel's cgroup peak.
+
+The [runtime source audit](scheduler-starvation-source-audit/source-audit.json)
+confirms that task polling and worker gRPC share the primary Tokio runtime,
+but also identifies blocking-pool preparation, separate object-store I/O and
+DataFusion's cooperative scan wrappers. Synchronous work within one poll is
+not preempted by cooperation; its duration here is unmeasured. Captured
+[received PING acknowledgements](scheduler-starvation-source-audit/monitor-ping-audit.json)
+also continue during the observer timeout interval. Their missing process and
+connection IDs prevent attribution to a particular peer. Scheduler starvation
+and host-pressure explanations remain hypotheses, not observed stream causes.
 
 ## Concrete aggregation allocation cost
 
@@ -402,6 +438,10 @@ An exact-arithmetic three-vertex control refutes equating ten-step delta
 PageRank with ten-step power PageRank. It also identifies missing write-commit
 semantics, nonpool memory and explicit job submission requirements. The source
 review and control are separate from the pending Linux replay.
+The subsequent `7bb00a2` answers have also been reviewed: the input pointer
+and library entry point are identified, while the cross-input isolate claim,
+per-action distributed embedding and wide-index fallback still need the
+qualifications recorded in that response.
 
 The [official Graphalytics Parquet catalog](https://ldbcouncil.org/benchmarks/graphalytics/datasets/)
 has now been identified, including its 51 listed vertex/edge pairs and a bounded

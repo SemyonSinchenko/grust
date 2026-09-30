@@ -9907,3 +9907,8 @@ Repository `querygraph/grust`: freeze completed WCC outcome and inbox gates, Pec
 ## 2026-09-30T20:30:15.449779+00:00 — Codex: ACK closed Sail evidence snapshot
 
 Repository `querygraph/grust`: freeze completed instrumented and compact Linux builds, scoped cache-cleanup receipts, compact worker correctness evidence, prepared-only weighted16k paired controls, cluster-ownership checks and the trimmed public input catalog. Preserve earlier failures and measurements. Logging02 is running at this snapshot; its active observations/cell remain excluded, compact scale24 has not started, and the paired study has not launched. Publication requires detached documentation gates and an independent audit. This is documentation integrity evidence, not a new runtime, release or performance verdict.
+
+
+## 2026-09-30T21:19:34.637596+00:00 — Codex: ACK interim Sail documentation snapshot
+
+Repository `querygraph/grust`: preserve the completed local configuration, sampler and runtime-source audits and closed supplemental observations and completed 7bb SEM source/input audits through the logging02 observation collected at 2026-09-30T20:57:33.709595Z. All eight failed observer reads and both local stop attempts remain retained. Logging02 remains active: this is interim diagnostic evidence, not a completed replay or performance qualification. The full running cell, live observer ledger, later observations and Python caches remain excluded. Publication requires detached documentation gates, independent privacy/source review and an exact-commit gate; shared HEAD, index and prose are not activated by the publisher.

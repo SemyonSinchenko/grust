@@ -1,6 +1,6 @@
 # Review of Sem's second review
 
-Recorded UTC: 2026-09-30T18:06:46.497110+00:00
+Recorded UTC: 2026-09-30T21:17:30.731869+00:00
 
 Reviewed [SEM-REVIEW-2.md](../../SEM-REVIEW-2.md) at Grust
 `0e6a0cbc3b9cf818d6b2edf6e5c8e6bf428cb623`, against Sail
@@ -349,3 +349,67 @@ and both two-worker smoke checks have passed. Their receipts are included in thi
 matched compact control has not started. Prepared configurations are not
 benchmark results, and the differently loaded smoke runs do not establish a
 performance ratio.
+
+## Review of Sem's answers at `7bb00a2`
+
+The new answers identify the input catalog and library entry point and report
+Sem's confirmation of the published timing boundary. The five implementation
+answers above remain in force. Source checks and remaining qualifications are
+recorded in the [CLI/library/representation audit](sem-review2/latest-7bb-source-audit/)
+and [input-claim control](sem-review2/latest-7bb-input-control/receipt.json).
+
+**Input counts:** keeping the full `0..2^24-1` ID domain is established by our
+manifest. The exact number of its isolated vertices is not established by the
+cross-dataset ratio in section 2. Our 8,862,601 reached vertices divided by
+LDBC's 8,870,942 vertices gives about 99.906%, but those are different inputs.
+The five-vertex control has a 100% cross-graph ratio while two of its own
+unreached vertices form another edge and none are isolated. This refutes the
+inference, not the large graph's result. The retained certificate supports the
+reported reach under our input contract. Count distinct endpoints and inspect
+unreached components on that same input before quantifying its isolates or
+giant-component share. Our manifest records 2,798 self-loops but explicitly
+says duplicates were not counted; the 8,055,936-edge difference cannot yet be
+decomposed into duplicate/self-loop removal across differently seeded inputs.
+Use the same pinned LDBC files for the pilot and retain these historical
+inputs as distinct. Reachable URLs and reported object sizes do not supply
+immutable file hashes, schemas or the graph contract.
+
+**CLI and join settings:** use the exact source, actual invocation and receipt
+together. Defaults in `main.rs` and a stable toolchain channel alone do not pin
+a run. Record the binary/toolchain identities, WCC selection and effective
+settings. The configured sort-merge preference is not a physical-plan trace.
+Sail's permitted hash-join pilot can measure the same logical task with a
+disclosed physical strategy; record actual joins, sort/exchange work and spill.
+A separate strategy ablation is needed to attribute a difference to the join.
+Sem's confirmation supports the launch-to-exit timing interpretation already
+checked in the source; it does not turn validation-subtracted estimates into
+matched observations.
+
+**Library embedding:** `GraphFrame` identifies the entry point (the source
+method is `pagerank()`). The library still calls DataFusion count/write/read
+operations internally; its hash-partitioned writer directly executes a
+physical plan and spawns local writers. A Sail adapter needs explicit action
+submission, worker placement, cancellation and ownership integration. Keep
+Stage E's distributed prototype requirement. Identifying the library does not
+establish that its existing execution path submits work through Sail.
+
+**Integer representation:** retain signed i64 vertex IDs at the interfaces.
+A checked local u32 index into an i64 ID map preserves that contract; its bound
+is mapped cardinality, not the magnitude of the original IDs. An i64-only
+storage control can separately measure representation cost, with mapping and
+construction included at the declared boundary. Preserve exact round trips and
+wide arc offsets. The current Banda projection uses u32 targets and offsets,
+rejects oversized graphs and has no wide fallback; Argentea uses i64 targets
+and usize offsets. A checked wider fallback is still an implementation task,
+not an existing qualification. Keep compact and wide measurements explicitly
+identified under the selected comparison protocol.
+
+**Write-cost scaling:** the supplied observation covers one shared-host 16M-row
+case; 64M and 268M remain proposed controls. The new larger-size experiment is
+useful. Pin row schema/width, compression, input layout, output partition or
+bucket count, cache boundary and total resources, then retain paired order,
+every outcome, physical exchanges, output bytes/file counts and memory. Check
+output equality and whether the produced layout actually removes the intended
+read-side shuffle/sort. Measure the complete write/read tradeoff as well as
+write cost. Ratios under load and a metadata-only layout claim cannot establish
+a universal scaling curve or a validated physical layout.
