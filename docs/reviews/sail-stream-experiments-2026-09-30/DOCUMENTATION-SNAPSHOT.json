@@ -1,22 +1,21 @@
 {
-  "recorded_utc": "2026-09-30T21:19:34.949929+00:00",
+  "recorded_utc": "2026-09-30T22:17:00.000665+00:00",
   "repository": "querygraph/grust",
-  "base_commit": "7bb00a299db9a24c35a47022614d6f572309b9a2",
+  "base_commit": "7387b985f242164281c7d94a1560bbfcfa8d8fe5",
   "branch": "work/sail-graph-review",
-  "scope": "Interim logging02 observations and completed source/configuration/sampler audits, including the review of Fable SEM answers at 7bb00a2. Replay remains active, no final replay result or performance qualification; compact replay and paired measurements have not started. Documentation integrity only.",
+  "scope": "Closed logging02 worker OOM evidence and local official-input/WCC-reference preparation; logging03 launch/admission only. Documentation integrity, not a completed compact replay, engine comparison or scaling result.",
   "pending_excluded_subtrees": [
-    "full running logging02 actual-cell output",
-    "logging02-monitor/serialized-monitor-results.jsonl",
-    "future or in-flight logging02 observations after the frozen cutoff",
+    "running logging03 full cell and logging03-monitor",
+    "future paired16k measurements",
     "__pycache__ and generated fixtures",
-    "private full third-party article/website/API originals"
+    "private original Parquet, binary reference files/executables, full SSH/kernel output and third-party pages"
   ],
-  "excluded_file_count": 12,
+  "excluded_file_count": 0,
   "files": [
     {
       "path": "codex-to-codex.md",
-      "sha256": "5ff0d74e43b1445acc99ad57f7d496d6a2bf4c7be895120ff00f158f39186590",
-      "bytes": 621061
+      "sha256": "3ad5fe037d56b0205d8083746d0a4d867613c5becf79a030d3cf3d042170bc41",
+      "bytes": 621926
     },
     {
       "path": "docs/STREAM-LOSS-STATUS.md",
@@ -180,13 +179,13 @@
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/RESULTS.md",
-      "sha256": "f5c9279f507dfa7f5bc82f6b456eb40c2cd7a7984b5eedc3b43faec30ba7bad7",
-      "bytes": 28983
+      "sha256": "13849f208d0ac352de1227f93cca3053e866709332772b9661f8bb7f4445ebc3",
+      "bytes": 30814
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/SEM-REVIEW-2-RESPONSE.md",
-      "sha256": "6dd535f461a62b1393a4395d49470a9ba179000ba1dd5b788287c73b268bd0e1",
-      "bytes": 27729
+      "sha256": "884787aa8fd6c73931eac6dc464f844f10972e13a50c4f5aa50334ab506b1947",
+      "bytes": 28976
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/STRUCT-MIN-ALLOCATION.md",
@@ -959,6 +958,126 @@
       "bytes": 5619
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/HANDOFF.json",
+      "sha256": "fe0951133e828cde9378d51e1e00e602897957f8d97807d7da1e9dd0e2a5b161",
+      "bytes": 2096
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/README.md",
+      "sha256": "3407f58ecbbe0d2b7b53792ead478795c46ab85fd6e42ec9458bf7bf3451df40",
+      "bytes": 3436
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/audit_cell.py",
+      "sha256": "c8d59db362136879bbd3a6efe8f527311849e3e0be18ddb64e6da996bdfcd318",
+      "bytes": 19648
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/candidate-frozen-v2.json",
+      "sha256": "bd20d0aeb52d1f1b1dd4c03099e49d4a14b0894f7818bdfe25d1aedb2e44cf39",
+      "bytes": 1017
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/candidate-frozen.json",
+      "sha256": "00e91107c9cf54cc551e6976000e8229f5f4e5ba877372fa7db4fd67fb265025",
+      "bytes": 833
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/compact561-attempt01.json",
+      "sha256": "9e6bad387c97c49d9399795f5c3cb6d538539b5d996759a2072023680120f12f",
+      "bytes": 6265
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/compact561-smoke-verification-v2.json",
+      "sha256": "63510705f052b9cf97a00341702e620705f7dba6efd0aa13637e65d33d34a6b6",
+      "bytes": 6886
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/compact561-smoke-verification.json",
+      "sha256": "60c81d60b6ced426acf368db3503e13de8296bc79bda93d1a53b6dfb7e0c382c",
+      "bytes": 6354
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-1-v2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-2-v2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-gate-v2.json",
+      "sha256": "bc55cdea5e1460cc1b8e1397a6598d0724e4e24414c8df450d1e745877d9569a",
+      "bytes": 2970
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-gate.json",
+      "sha256": "bb263f159790fb5e78649aec82f878651555aa0b6a4f7896a478658eb3f0a1b3",
+      "bytes": 2955
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-tests-v2.log",
+      "sha256": "bba37abcc9291b172f318acd08f8232d854ca117819d641bf4373be2567247e2",
+      "bytes": 2087
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/detached-tests.log",
+      "sha256": "95763c2b09a32e439436517918b72577b270721a719c26ef10338ff0234d46d9",
+      "bytes": 2087
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/development-tests-attempt01.log",
+      "sha256": "750e7469bd946aa17cb33d087640e786fb8b2c7a2d546e95669074bcfce3dde1",
+      "bytes": 2087
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/independent-audit.json",
+      "sha256": "eedb55b78016828cc5a01bbb6c4fca1cb7d0b790dde4272732737a4b0e429579",
+      "bytes": 3843
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/logging01-verification-v2.json",
+      "sha256": "ad253d21034529fc0923835fc5f3136cb28c5f28d84435275700ad046a13c873",
+      "bytes": 11490
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/logging01-verification.json",
+      "sha256": "b6024263163caad7353c83eecd375cbe204edf66b45dabb44bda81ced02670bf",
+      "bytes": 10988
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/logging02-verification.json",
+      "sha256": "ae2d7217dddef7ce682bfa1954501108b14cc8c3237f89eb3be11768d3239e25",
+      "bytes": 10709
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/prepare_profiles.py",
+      "sha256": "3c6f1fdf9e3ed32e96142eeb9b8e8b7bbaf4f9368189070e7769c68dd5dca0fb",
+      "bytes": 2877
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/profiles.json",
+      "sha256": "dfe38f1cb23f8b689ec7cf839e6016fa037e013396d80fbdc6dce4f65d89eb76",
+      "bytes": 5617
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/test_audit_cell.py",
+      "sha256": "af5a7fc6c36d047d58456a4d100b928d01277b77e4eb722b226816c896269dab",
+      "bytes": 6607
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/cluster-ownership-control/independent-audit.json",
       "sha256": "3a8785611d4b5e50cb2a4a5b083aa5b83214c99861660b728c7c64f41905cae1",
       "bytes": 3988
@@ -972,6 +1091,11 @@
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/cluster-ownership-control/receipt.json",
       "sha256": "61c859aa2946bbf5ba0b6141de5a7a8329a29818cd0ac167b899fde9f0585311",
       "bytes": 11001
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/collect_host_closure.py",
+      "sha256": "0ae1715b03e23198b86544560c21f15b9b33edef450aec7fdabac2e36a4b5c2a",
+      "bytes": 10815
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/compact-min-candidate/attempt-02/candidate.patch",
@@ -1422,6 +1546,146 @@
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-independent-audit.json",
       "sha256": "dbf9b5cb828962aaeed9659d307e92180482295c1a74f59785e5d6ad4083ac18",
       "bytes": 746
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-activation.json",
+      "sha256": "75fda5f99558d1c9cef82d602d22fa545d0b93b86749392a3e1025d430bca21b",
+      "bytes": 588
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/audit-pin.json",
+      "sha256": "308980b723ae1003ca41e47954fcee361f5709424c83b810f6aac085180d0b21",
+      "bytes": 137
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/base-preparation.json",
+      "sha256": "786dbadbb44ca4befc2848f40f2b2a305583fc01f721b84c64f1d9c736c8710d",
+      "bytes": 697
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/candidate-after-receipt.json",
+      "sha256": "39ae37cf3f8c5f042f2c4f2d264461c85df1e837ad659056e52d5850feb073de",
+      "bytes": 879
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/candidate-gate.log",
+      "sha256": "b2c3e1410a56d56cb2fefb041c68fcf5d18187dc904a72c044484c4f89bc9d00",
+      "bytes": 520
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/collection.json",
+      "sha256": "16ade36fd079bc18da6414a9e43e9ec9730811f461ef4a367b7d15940c0ee442",
+      "bytes": 4988
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/commit-and-gate.log",
+      "sha256": "3a327b8382e73c368006d69488c5e02dfd314af81c0677afb6e730c1173611ce",
+      "bytes": 14650
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/commit-message.txt",
+      "sha256": "792041b127b76a20a44a64cbe3dc6a6d0062034a5acef1a6e4246832e0ae0d7a",
+      "bytes": 331
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/commit_and_gate.sh",
+      "sha256": "ce42babfdc87538c5ba792aabf66c73d95607fae5cb7592adb87d0291e2c9a08",
+      "bytes": 1234
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/delivery.json",
+      "sha256": "9846e7950c9bc2dbae15ab4c95bd89b5ffb4bf09bd2f5f8b49b45dd38fa71236",
+      "bytes": 2906
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/exact-after-receipt.json",
+      "sha256": "70729585b694d7eaae2128a7e77ecdbb1e13a96aa22ce7ea04b8d78be6bb9bbb",
+      "bytes": 875
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/exact-gate.log",
+      "sha256": "03cbed5f39b4ef8afd3ca5edd514a3670de9479f330a8c1cb2ce55bf5eeaac03",
+      "bytes": 520
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/frozen.json",
+      "sha256": "148fcb33a5efba62752db0109703dc6e40244214b36652d333660f7a51667af2",
+      "bytes": 29332
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/guard.py",
+      "sha256": "194c95634fa42062dedc1250ee52a568cc774ecf8b78d872416f2b8fbe0c382e",
+      "bytes": 3629
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/independent-audit.json",
+      "sha256": "3e0348a7d0704fdba1b6d0fab8810ccf4e62ec8d107228a70d77075351244738",
+      "bytes": 4511
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/independent-documentation-gate.log",
+      "sha256": "c52a945a8e9e00d102472dbb4e40b4b55d11954e8b5f64cac8d528fb6c40a782",
+      "bytes": 520
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/independent-privacy-scan.json",
+      "sha256": "2efee64f19bd0119f5214d0733da2a80a8026c78a0441a52d17ca198e8a431a4",
+      "bytes": 496
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/independent_audit.py",
+      "sha256": "95ef9aba9234614c6f6b5783328fc23a0eb3081be9712f2141f25aa622dd94d0",
+      "bytes": 15328
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/independent_scan.py",
+      "sha256": "19dd1e224738a661ec55ca279d5b1a064b7df9418280bcba3bd4194dc68f923c",
+      "bytes": 2687
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/orchestration-syntax.json",
+      "sha256": "223702844142c242fc6d0fbd29390940f862892c26ca2990c9562ccacce7e8df",
+      "bytes": 541
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/preliminary-gate.log",
+      "sha256": "4fde84656adffad41b29f9ee80e3d8f7b0f0e06ef1cf544373308fb7ecc48d14",
+      "bytes": 520
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/preparation.json",
+      "sha256": "706c7fc63250d38943dd76f74102eea66381b3cb9560087efa39d60aaf65f53c",
+      "bytes": 38268
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/prepare_snapshot.py",
+      "sha256": "c556008a3f4be13021082ec5d35e37af9f22335b03160ed24f1c019336c8b0a3",
+      "bytes": 9675
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/publish.log",
+      "sha256": "28eeae57bda6fea6b082ac793c854aff343f6ffa6c8977f89635c1783152d39a",
+      "bytes": 432
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/publish.py",
+      "sha256": "5190ad409f46511a30b77b16db140e8145b6cb74811d081f46b2514c597ae983",
+      "bytes": 3339
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/push.stderr",
+      "sha256": "b1270ed29447f7a1adfac8a7d2d1b9ee9f690669ca21e17223a3628f6dab83e6",
+      "bytes": 205
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/push.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-publication/shared-after-publication.json",
+      "sha256": "5a1a86c2979825fa30369fbcc47c4bac6bd9c3bbca58f03f32254286f9e4d4a5",
+      "bytes": 1668
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-interim-stopped-publication/collection.json",
@@ -2212,6 +2476,36 @@
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/history-neutrality/prepared-v2-receipt.json",
       "sha256": "2933375f4c648aecbbc760e2724486ca3fa477f37c70cca7b06410d0ae4eef09",
       "bytes": 8744
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-closure-collector-review/receipt.json",
+      "sha256": "b776768efec1c95f92c86e1a271e6db33870a2f75bb94752e35a4c9159c31c61",
+      "bytes": 3056
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-closure-collector-review/retention.json",
+      "sha256": "85ce0542b28c4321529663dbae482c3be9a277b702300a3b9e56a33aec0932b7",
+      "bytes": 1891
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-closure-collector-review/test-final.log",
+      "sha256": "5e93ec0e8e610d7e582dfcda5c88eb65d698ae595b9f1d34719f759f1bd27bc3",
+      "bytes": 1471
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-closure-collector-review/test.log",
+      "sha256": "356c38afdbef3bff86959ec4624f9612457248edbe273a073a5f411ba7909a7a",
+      "bytes": 1471
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-closure-collector-review/test_collector.py",
+      "sha256": "331d562daefad4bcc0e59839882a1aadd6a69e5c8c4425a79343363f5808de78",
+      "bytes": 7624
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-closure-collector-review/test_collector_portable.py",
+      "sha256": "275190f5af1ab44eff29b1258b164114548b9667639a58a80a578a7564a56a37",
+      "bytes": 7583
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-16k/HANDOFF.json",
@@ -6509,6 +6803,81 @@
       "bytes": 2823
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/cell/container.log",
+      "sha256": "45b93eb765982872ecbef5b25a54b9892df7168ca590b2647f845ddcf3fc49cb",
+      "bytes": 261
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/cell/orchestration.json",
+      "sha256": "b09d0f4b122f35c4d1ef0ba1e47a3a0cadf412b7ad74ca945266a83a7fde5a5b",
+      "bytes": 3848
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/collection.json",
+      "sha256": "7ab73b6c9dcc7e068b9d9fa1170db0121327b35810825baed24ae32f5ff25a87",
+      "bytes": 1129
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/configuration.json",
+      "sha256": "520b244165096bd2bb17a45d22effe50210d8bcf4bca5e546364f273cba36ff0",
+      "bytes": 3037
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/diagnostics/memory-samples.jsonl",
+      "sha256": "13a2ad72c4f2ad7b97dedbcf554f34ceed3b5fcb94b0adfa5edbe582cabb42ba",
+      "bytes": 5461247
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/diagnostics/receipt.json",
+      "sha256": "758466343a93955a579681d39d4e6acb07d9475a0d23da1020929fe031751ade",
+      "bytes": 216433
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/diagnostics/server-settings.json",
+      "sha256": "18688fb5f728030eba0610f10bb4b83d34591bffd2b4570472619d0bbc21624e",
+      "bytes": 287
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/diagnostics/server.log",
+      "sha256": "cdd6f367bd47fd69062bf7527433bceba8023784c861c8821651c3d4f84a8b67",
+      "bytes": 12376738
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/diagnostics.tar",
+      "sha256": "a04d953ffe1c50d6b86f0130c126c230c4c69467d55a39e0822e9917a43d4939",
+      "bytes": 18063360
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/host-before.json",
+      "sha256": "a6af907c7b7f387fa75a9049962b118959f5a8eda441232f85a8166a0feabc61",
+      "bytes": 82978
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/plan.json",
+      "sha256": "ba61c2bee4091ba5e6acf2515eca99dbd37a00e8bc84da77cb1d1e4b21dc2859",
+      "bytes": 1967
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/preflight-1790798627903341000/container.log",
+      "sha256": "0c1432ca1143165f74f6420714d484abdb7d12ce371e3f9369aa57b9624fc13f",
+      "bytes": 17
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/preflight-1790798627903341000/orchestration.json",
+      "sha256": "e2a9d0e7726fec3ae109462aa93adbd316aea401a4bb648749132f7b91e310d2",
+      "bytes": 2923
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/process-identity-01.json",
+      "sha256": "36e3c226bad62c873726bdd843e2ddd79865016c577b0ad08a97dcfc86d1d077",
+      "bytes": 3059
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02/result.json",
+      "sha256": "6d0aae6f246608e7828c4bb8fe4daf7fab53073e383d76c1dcf9456067e498ec",
+      "bytes": 5239
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-admission.json",
       "sha256": "69f26e025d613752c3705010f35af8d1fb2a13507f9d1394875d793d0fcd0839",
       "bytes": 12636
@@ -6519,9 +6888,64 @@
       "bytes": 215874
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-collection.json",
+      "sha256": "9017b75a18b3ba58189032dd9ad8051adb639c4fb6bbd4d009893b48b3ee48a1",
+      "bytes": 541
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-dry-plan.json",
       "sha256": "89dc58f33870162f824e9cef0ee1c9fdd5bb95b1d2127ae2c123cb4454075a94",
       "bytes": 2176
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/README.md",
+      "sha256": "2f5ea6a4668263474fadf8795f5763307523ace4579eeebe66a82a1b46575969",
+      "bytes": 6129
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/analysis.json",
+      "sha256": "43f45964f5f4aad0938a0954b32a09fa8eadaae3e3a84d3be59d3faf838e3cc2",
+      "bytes": 6420
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/artifact-manifest.json",
+      "sha256": "1d99ec5e5a00c88d1e6afbcc94739d7fc011e8c199501f2fbff9e28a54d5f6a8",
+      "bytes": 1044
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/audit.py",
+      "sha256": "5baa5e123ed7d281aa5b03c4bd6fa871b9ef648f2428e20c01fd36e76ec56d15",
+      "bytes": 11551
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/input-manifest.json",
+      "sha256": "48b37167753447e650bd4e1f2e32c91ea4b9de370ef9225c8830026386de3501",
+      "bytes": 4599
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/kernel-target-events.json",
+      "sha256": "c020235fd57d7c9c07f77643d7c501e6f6a8546c1311af80ea3513dd20f206fe",
+      "bytes": 22624
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/sample-boundaries.json",
+      "sha256": "4843398e01fe4265ac8377d00b6db69944b90f05331bf6f70168886370d52e3a",
+      "bytes": 6155
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/server-target-events.json",
+      "sha256": "81fa2ccc5734bc861ecdd494404ab825ff894caa77dc91842a38f934fbeffa3e",
+      "bytes": 3059
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-first-fault-audit/verification.json",
+      "sha256": "5e717a1bd103d0524912d1b74eddfa72f73cd3a37e59047395469c36d9227e22",
+      "bytes": 376
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-host-closure.json",
+      "sha256": "b2567c3e3cfd94c3ec0c1ea7631e526a28f053310548a987d2fcb5fe1244a658",
+      "bytes": 92965
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/README.md",
@@ -6552,6 +6976,11 @@
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/executable-identity-20260930T201136793716Z.json",
       "sha256": "43c2c5d2f3eec40763005d88881b837d7c4296d392b49480c040d2107425170b",
       "bytes": 3083
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/existing-2153-process-memory-split.json",
+      "sha256": "b21666957fee579fca00deb920c9a911b72fd7ff329e0fdbccc7980cdcc07248",
+      "bytes": 3408
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/host-before.json",
@@ -6764,6 +7193,66 @@
       "bytes": 61954
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T210147496848Z.json",
+      "sha256": "cda17540211d889797e164e78cd7c018d248a68ffb761e4186436fdb25c4943e",
+      "bytes": 61959
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T210653470432Z.json",
+      "sha256": "2edd19424378114628fd5a034bd16fc147e05775651640232ca91bcb7e361e78",
+      "bytes": 58930
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T211210552105Z.json",
+      "sha256": "e0303bd942213a3f7dfd37e25e46c100f0ef02ea975c0d9342b5551bd8bbee28",
+      "bytes": 61953
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T211717741165Z.json",
+      "sha256": "f20788f6fd15f16aac1581758347285124e3ebd253886a3d3c7097c9d226783b",
+      "bytes": 58927
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T212231035590Z.json",
+      "sha256": "c0d886cf79fac1d80d1d536993631c7b8581add6608c8e3078acd8a157cc799a",
+      "bytes": 61990
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T212739819829Z.json",
+      "sha256": "0a6d9fefb0e0a969a43c3a7003e46bc5dd46cd8ab48f12b455179e69056d74a1",
+      "bytes": 61995
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T213249878548Z.json",
+      "sha256": "ea5d310f8dbc7c412fde043c9cad1ae296cb8710092dbfadc7756e517adb99aa",
+      "bytes": 61999
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T213758142310Z.json",
+      "sha256": "4e9516f18278b5571e8aeead8b21738fa1a1afbb530a195f8016b703562cc5e7",
+      "bytes": 61994
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T214309410225Z.json",
+      "sha256": "36e8f44b4e9d932bfe0a7450a0d58ecee14ead740ac3a269043ffd60407ed762",
+      "bytes": 62000
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T214824608414Z.json",
+      "sha256": "7620bb6db0bd88c417a63abbbdbd083a449ff88b01bb80c14969198511885628",
+      "bytes": 61999
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T215338275713Z.json",
+      "sha256": "b88c631976ff50bcc7664a88aab1cb2b168d1321a72ef4a87796cf0b2b087b1f",
+      "bytes": 61999
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observation-20260930T215856123740Z.json",
+      "sha256": "b7261cccfd57e57328da941f760f6f5c9be8161d74452ac7873e0f9d36b947b8",
+      "bytes": 4697
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/observe.py",
       "sha256": "2cf8e948cac30b4cb5d1f959e41997636f8abb4098303ff6d2aa41305a55f251",
       "bytes": 4990
@@ -6809,6 +7298,106 @@
       "bytes": 563
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-monitor-results.jsonl",
+      "sha256": "36f4014ee1eae227adc4af97affd3e5b4d1d4d859f102f6e01b30d51ca8050a7",
+      "bytes": 1057
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-read02-2102-summary.json",
+      "sha256": "89b85a1a7b7714218711bc29b13c18eafd4942ba18380329ce7b1fe72bd7260c",
+      "bytes": 1956
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-read03-2107-summary-corrected.json",
+      "sha256": "7f9d7ab3c921fc2e6fbed4c11a59d52083a334d6fef971f1bf519178686d35d1",
+      "bytes": 2682
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-read03-2107-summary.json",
+      "sha256": "37c21d6652e1d536ad008deb897145edb3aa3ba0e367bfd87bf7d178ebdb0d04",
+      "bytes": 1917
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-2143-authorization.json",
+      "sha256": "a45a434c34a92bf6f0bee3b698543d7069b1e22f11cb03262e2010d4c89d6eb0",
+      "bytes": 710
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-2143-read01-summary.json",
+      "sha256": "04c74a7a16176f696607e0e33ae21b6eaff53d83cb6c50e45e7c0ce7788c6728",
+      "bytes": 2132
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-2143-read02-summary.json",
+      "sha256": "c84cc0d65b28eb13aab65b5a273a9a81d9a2f5f96b2e151a31859da7017c7ebf",
+      "bytes": 2134
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-2143-read03-summary.json",
+      "sha256": "68b6df23a308f3f833246c70094caffa69e07224ad7ef916e9ea059ca3bbdb08",
+      "bytes": 2134
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-2143-read04-summary.json",
+      "sha256": "ed99580c4c7fd578de2dd7218674a6bc18ba93a67d1efc5e77ea05a468f3b977",
+      "bytes": 1833
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-2143-stopped-receipt.json",
+      "sha256": "51e460be0faec677b4ccb84463318ada1e8530b31cc2ca11f775cb02200bff1f",
+      "bytes": 2603
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read-authorization.json",
+      "sha256": "61ae4ca3dbeab1a28b5a9fb19ee5c778c5b4e4c86bae5231e13dc9de07808f56",
+      "bytes": 651
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read-final-receipt.json",
+      "sha256": "65d0b1eef4f8d2e8ef5b2bac69053caebc50b910a2f84f3ee8b1065bdcf4f6c5",
+      "bytes": 3788
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read01-2113-summary.json",
+      "sha256": "ae46e503b26b3408493d2f6a0005ece81dcf8269726088f3238844a0efd6b58d",
+      "bytes": 2132
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read02-2118-summary.json",
+      "sha256": "44558c58ae4c6ad1d242b3d47c0166551bcd55bc36497df127d646ee60512ef1",
+      "bytes": 2016
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read03-2123-summary.json",
+      "sha256": "8b1760f1424b132b7842a3bc81670b8d5aeb190c5da84ffee906f5185fe9328b",
+      "bytes": 2131
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read04-2128-summary.json",
+      "sha256": "cf7de0870010338acbe2344060977fc489ed31c2693e9ad91ddf18383d92fe67",
+      "bytes": 2131
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read05-2133-summary.json",
+      "sha256": "8e54b89f2feec2a87f19799ed09caad6c9aede95d7cbd56641839720c2aad069",
+      "bytes": 2131
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-six-read06-2138-summary.json",
+      "sha256": "14f432b2f98c2a9b68e645ce04e4444da54d2a7addc74de8b0eba7bdc82d1e07",
+      "bytes": 2212
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-monitor/serialized-three-read-receipt.json",
+      "sha256": "000c567db9d90976d3530ed5a7509bd2f33ebd204a9cfbb9c2ec010952eabd4a",
+      "bytes": 1990
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-observations/20260930T200557942868Z.json",
+      "sha256": "ca0532369174e924557083f683ad6bee0066e7791c4fda1e69dd8f977815a863",
+      "bytes": 12815
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging02-plan-receipt.json",
       "sha256": "de68f29fc40bae0ff83694fa816b69149f5e8ba872955bf183be5201b3ecee42",
       "bytes": 471
@@ -6829,9 +7418,19 @@
       "bytes": 3037
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging03-admission01.json",
+      "sha256": "6a3498c619be6c5ec7b49531f9b22c8b8dbdc6947c6f3dcb61e1dc3e98fbdec9",
+      "bytes": 12598
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging03-compact.json",
       "sha256": "b28132996612b11edb77bb02019288e4a562db5e4d22c4430a6a8815a220aea0",
       "bytes": 2995
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging03-launch.json",
+      "sha256": "8f79a7237f7049840805015b5ab28cbebfa8c497cc56d4559740a718c00151c1",
+      "bytes": 1467
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/logging03-prelaunch-audit/audit.py",
@@ -8369,6 +8968,181 @@
       "bytes": 31670
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/attempt01/attempt-download.json",
+      "sha256": "7c3ab3144090501a87fd932ef74761b1e26fe21ea1f309dca0a0cad1c2fe9846",
+      "bytes": 2590
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/attempt01/attempt-identity.json",
+      "sha256": "1d79d66d92af2480b22b2d0c40ccf25a2d303871c69379cae3e2bc143100ff34",
+      "bytes": 747
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/attempt01/attempt-validation.json",
+      "sha256": "075387720cb16cf7cc470b7db128806d50ca15545bde31a756bf37338fd5c80b",
+      "bytes": 3215
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/attempt01/command.log",
+      "sha256": "cfb21c9c43df4999910b681abc1f8b00fe1d19930c52be063a2a499b4268724d",
+      "bytes": 210
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/independent-audit.json",
+      "sha256": "23575c59b004490e53c4aa4c10eabeb9eba5d795ab633b1cbcc21cd5e8cd0887",
+      "bytes": 920
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/independent_audit.py",
+      "sha256": "c2793c1bbfc0878f8bf76529ea62a7bbaa3587c632783e87f69ac09c010c13c5",
+      "bytes": 4730
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/offline-controls.log",
+      "sha256": "1e60b13aec8f73fc1aa33e9806bcc697d4c9478f806450b65c8949ca369bceb0",
+      "bytes": 562
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/probe.py",
+      "sha256": "6aac572a4b222dd0c0f796fc1b893f28bb6646e3f22cb5b13f98b2aa4698e0ce",
+      "bytes": 15981
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/receipt.json",
+      "sha256": "56bb99e72d5b1c16bebc74e847d77d680131d58f5e03e6f10fb2f85b1123221e",
+      "bytes": 4154
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-input-verification/test_probe.py",
+      "sha256": "50dc983826b655f1435feda0ecff741a61c900675a4cd51467f7d9bd351b176e",
+      "bytes": 3836
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/FINAL-FREEZE.json",
+      "sha256": "a0b2eb0650fcdbd7f7dc9113e0c88bacad6238e8269674c89938eea825eedcd2",
+      "bytes": 4883
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/HANDOFF.json",
+      "sha256": "2888bad64c7f205b1b822d020cfe665baa5ff13a6963d2afa72ae3fadad69380",
+      "bytes": 6831
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/README.md",
+      "sha256": "13d3c7fe365fc2bcef1259a3798743d10855e6a542a7efb4cf3d49de4ac7ce93",
+      "bytes": 3746
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build01/build-receipt.json",
+      "sha256": "32b801e95ff5fc9c5133de0850518080938623cacc39e3816aba224e1ba89adc",
+      "bytes": 2272
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build01/build_reference.py",
+      "sha256": "d35461f8b141b3a20bd599a26d8b5c801b084fdfb5d387e19bd45d93036aeee4",
+      "bytes": 2942
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build01/compiler.log",
+      "sha256": "abc672820730ffd54d8db60319760850dd5dd7f31b5103da42da83acf93cc85a",
+      "bytes": 267
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build01-launch.log",
+      "sha256": "cfaef6ee7af6ce7171f1c8ab4858343ebaee71c13bab5e7d008ae680f6ec4a83",
+      "bytes": 1178
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build02/build-receipt.json",
+      "sha256": "d0b72936419218a6b594566263168778af7af9e297be5e0d1940535694a25175",
+      "bytes": 2860
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build02/compiler.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build02/controls.json",
+      "sha256": "84f02f17208a569fcd8aa2e0f6cf10a5f6c010abba865fc8151c4c58fadc5faf",
+      "bytes": 52748
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build02/controls.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build02-launch.log",
+      "sha256": "767ac41d58a02eea9476b4f27ae6feda8d9aaad34ec0e4312def73101750f740",
+      "bytes": 246
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/build_reference.py",
+      "sha256": "2ef09b8e87fdb96d9eed90d0b7799ee43bf0a7230ce2511f8d8655615f15698f",
+      "bytes": 3144
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/candidate-frozen-v2.json",
+      "sha256": "e352c74ee26637a17fa64a81a447286162f2bd5bead39ab21b6a0e25fd4f4859",
+      "bytes": 980
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/candidate-frozen.json",
+      "sha256": "51ad69111ddcb5efddca7afa9eb126dede59f295244a9dc10344345bce821375",
+      "bytes": 831
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/independent-preparation-audit.json",
+      "sha256": "1e8493140d3b62a5cda8808e022298f9ae7a7222454c1279dafbf8a7e3796ba1",
+      "bytes": 4239
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/kernel-gate.json",
+      "sha256": "c87969e2bcd33a2c7df5765ce2c52fc605e52584fce5f57ebfd269db67def00b",
+      "bytes": 1028
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/run01/kernel.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/run01/kernel.stdout",
+      "sha256": "6d309c97f6f5662d72a50209397507a790cddad01128b5a63346e65c30639c57",
+      "bytes": 345
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/run01/receipt.json",
+      "sha256": "e2352369dfbb8dd3c09fbdb665e9987d0f162f6ce5ef834d146fd21f89897e9f",
+      "bytes": 6580
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/run01-launch.json",
+      "sha256": "9c6908f0e1cfabcab28467c5255eb75f114b93210e1ad5dc35dda228c91d9042",
+      "bytes": 2215
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/run01-launch.log",
+      "sha256": "3e69ddb2d0758601d0e0305587077b9393f219185274c890c5482bba5dcdadf6",
+      "bytes": 204
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/run_reference.py",
+      "sha256": "2545b0b2d86782816d394f7096abb7491b25c490798cea26d7640cc93d32c78f",
+      "bytes": 11237
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/test_reference.py",
+      "sha256": "9b8930c5ef2f7195ae6f3a5e21ce17aaed6fab3a5bd690783379a0ba360f2250",
+      "bytes": 5355
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/cit-patents-wcc-reference/wcc_reference.cpp",
+      "sha256": "cf8d1dce9a02a733fd5d250d5a3afc74b8c2c92850c838f49bfd86fe23d97806",
+      "bytes": 7477
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/sem-review2/correction-receipt.json",
       "sha256": "2e8e6e071248e8820475d11b8095a679dc6c6c1c24edbf68649800e9892c52dc",
       "bytes": 1748
@@ -9884,7 +10658,7 @@
       "bytes": 720
     }
   ],
-  "source_copy_guard": "Selected source bytes/sizes/modes matched before and after copying. Prior tracked evidence is unchanged except current root RESULTS and SEM response copied verbatim and one isolated coordination append. No candidate-only prose differences.",
+  "source_copy_guard": "Selected source bytes/sizes/modes matched before and after copying; prior evidence unchanged except current root RESULTS/SEM response and one isolated coordination append. No candidate-only prose differences.",
   "publication_link_correction": {
     "recorded_utc": "2026-09-30T18:59:06.302498+00:00",
     "path": "docs/reviews/sail-graphs-2026-09-30/REVIEW.md",
@@ -9895,7 +10669,7 @@
     "work/proposal-v5",
     "work/sail-graph-review"
   ],
-  "excluded_file_count_scope": "Explicit exclusions encountered in newly selected follow-up directories only; inherited exclusions remain separate; future/unselected/private files not exhaustively enumerated.",
+  "excluded_file_count_scope": "Explicit cache exclusions in new selected directories only; private and unselected sources are not exhaustively enumerated.",
   "generated_fixture_exclusions": [
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/wcc-outcome-audit/hardened-c8/matched-resume-invalid_json",
@@ -10418,9 +11192,8 @@
   ],
   "generated_fixture_exclusion_policy": "Only generated local test fixtures/scratch outputs are excluded. Their source files remain intact in shared evidence, including deliberately malformed bytes. Top-level scripts, exact source identities, attempt/final audit receipts and all captured outcome result JSON remain published; these exclusions remove no observed engine failures.",
   "frozen_observation_cutoff": {
-    "file": "logging02-monitor/observation-20260930T205638787925Z.json",
-    "remote_finished_utc": "2026-09-30T20:57:33.058643+00:00",
-    "local_finished_utc": "2026-09-30T20:57:33.709595+00:00"
+    "file": "logging02-monitor/observation-20260930T215856123740Z.json",
+    "state": "Logging02 observer series stopped after confirmed remote exit; no observer remains. Full closed cell and original sampler/log are now included."
   },
-  "observation_history_note": "The observer README is dated through the stopped-loop/one-shot state at 20:52. The later closed 20:55 serialized authorization and 20:57 observation are also retained; their still-running ledger is excluded."
+  "observation_history_note": "Earlier observer README/summaries retain their original dated interim scope. All later completed logging02 observations, failure receipts and the now-closed ledger are retained; final classification comes from the collected cell and first-fault audit."
 }

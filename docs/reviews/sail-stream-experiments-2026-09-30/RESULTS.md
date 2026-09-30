@@ -1,12 +1,12 @@
 # Focused Sail stream and resource experiments
 
-Recorded UTC: 2026-09-30T21:17:50.110015+00:00
+Recorded UTC: 2026-09-30T22:16:59.996293+00:00
 
-Work in progress. This report separates the completed evidence from the compact
-aggregation implementation and instrumented Linux replay still being qualified.
+Work in progress. The compact aggregation has passed component and small-worker
+checks. Its large matched replay is running; paired measurements remain pending.
 The prior review is [REVIEW.md](../sail-graphs-2026-09-30/REVIEW.md).
 
-## Stream loss: one replay explained, earlier failures still open
+## Stream loss: OOM in two replays, earlier failures still open
 
 The logged scale-24 Pecan BFS frontier replay hit its 100 GiB container limit.
 Docker reports `OOMKilled=true`, and `memory.events` gained one `oom_kill`.
@@ -51,19 +51,30 @@ runtime diagnostic patch now retains bounded error sources, tonic status,
 process, task and peer identity before error conversion. An additional actual
 Tonic server control proved that `tonic::transport::server=debug` exposes
 `http2 error: keep-alive timed out: operation timed out` without hyper tracing.
-The same deliberately induced failure stays generic at `info`. This filter is
-now included in the prepared no-OOM replay; the earlier hyper-only controls did
+The same deliberately induced failure stays generic at `info`. This filter
+was included in the instrumented SSSP replay; the earlier hyper-only controls did
 not exercise this Tonic logger. See [verified control](tonic-keepalive-control/receipt.json)
 and [server log](tonic-keepalive-control/tonic-debug-keepalive-verified.log).
 
-## Instrumented replay: interim observations and limits
+## Instrumented SSSP replay: confirmed worker OOM
 
-The second scale-24 replay remains active. The completed observation at
-20:51:32 UTC retained the same driver and two worker identities, 63.74 GiB
-cgroup memory, zero OOM events and sampler phase `execute`; no final receipt
-existed. Its bounded new server-log window contained no timestamped error
-matches. These observations do not establish algorithm progress or a final
-outcome. [Observation and identity summary](logging02-monitor/one-shot-2051-summary.json).
+The second scale-24 replay ended with `oom` / producer `error` at
+21:58:04 UTC. The same-boot kernel records kill both workers in the exact
+container cgroup: host PID183784 (worker 1), then PID183782 (worker 2).
+Their namespace/start-time identities were recorded live. Terminal counters
+show two OOM kills and a peak of 107,374,235,648 bytes against the 100 GiB cap.
+The client reported an h2 body-read error during iteration 2's Parquet write.
+This diagnoses this replay; earlier zero-OOM failures remain unexplained.
+[Kernel capture](logging02-host-closure.json),
+[producer receipt](logging02/diagnostics/receipt.json), and
+[collected-evidence integrity audit](closed-cell-audit/logging02-verification.json).
+The [closed first-fault audit](logging02-first-fault-audit/README.md) records the
+kill/disappearance/Flight-error sequence and its clock and cleanup boundaries.
+
+The matched compact-host replay is now running after
+[fresh admission](logging03-admission01.json). Input manifest, controller,
+native package, resources, logging and timeouts match; the host changes from
+`2894a962` to `56194b1`. Its final outcome remains pending.
 
 A [host-memory comparison](logging02-monitor/host-memory-comparison.json)
 shows that host paging was already substantial before this run. Between
@@ -79,8 +90,10 @@ The [sampler audit](sampler-observation-audit/receipt.json) finds 427 unique
 complete scans in sparse captured tails, with durations from 72.469 ms to
 42.082 seconds. The configured 50 ms is a wait after scanning and bookkeeping,
 not a guaranteed cadence; transition rows skip that wait. This is neither a
-full-run distribution nor a CPU-overhead measurement. Preserve actual scan
-windows and distinguish sampled process peaks from the kernel's cgroup peak.
+full-run distribution nor a CPU-overhead measurement. The later closed audit
+finds 6,836 original scans, with a maximum duration of 62.490 seconds; its peak
+process-memory row spans both worker kills. Preserve actual scan windows and
+distinguish sampled process peaks from the kernel's cgroup peak.
 
 The [runtime source audit](scheduler-starvation-source-audit/source-audit.json)
 confirms that task polling and worker gRPC share the primary Tokio runtime,
@@ -145,7 +158,7 @@ three changed crates, 149 execution, 328 function and 13 planner tests, and 46 P
 unit tests. The in-process worker codec test serializes and executes a physical
 aggregate plan through the production worker decoding path and checks the
 concrete compact accumulator. The subsequent Linux two-worker smoke passed,
-as recorded below; the scale-24 replay remains pending.
+as recorded below; the compact scale-24 replay remains pending.
 [Exact gate](compact-min-committed/receipt.json). Other `min` types
 retain the original planner implementation and its metadata optimizations.
 
@@ -389,8 +402,8 @@ baseline caches. It left 35.25 GiB free, below the desired 40 GiB. The subsequen
 [logging02 admission check](logging02-admission.json) verified the runtime,
 clean controller source, original native binary and more than 30 GiB free with
 no running Docker containers. This is point-in-time admission, not a promise
-that the whole run fits. The instrumented scale-24 SSSP replay is running;
-the matched compact replay has not started.
+that the whole run fits. The instrumented scale-24 SSSP replay ended in OOM;
+the matched compact replay is running after its own fresh admission.
 
 ## B1 opt-in checkpoint experiment
 
@@ -437,7 +450,7 @@ local/process-cluster comparison and answers all five implementation questions.
 An exact-arithmetic three-vertex control refutes equating ten-step delta
 PageRank with ten-step power PageRank. It also identifies missing write-commit
 semantics, nonpool memory and explicit job submission requirements. The source
-review and control are separate from the pending Linux replay.
+review and control are separate from the large Linux outcome controls.
 The subsequent `7bb00a2` answers have also been reviewed: the input pointer
 and library entry point are identified, while the cross-input isolate claim,
 per-action distributed embedding and wide-index fallback still need the
@@ -446,7 +459,20 @@ qualifications recorded in that response.
 The [official Graphalytics Parquet catalog](https://ldbcouncil.org/benchmarks/graphalytics/datasets/)
 has now been identified, including its 51 listed vertex/edge pairs and a bounded
 inspection of four tiny examples. [Input pointer and remaining identity checks](sem-review2/input-catalog/README.md).
-No large input was downloaded or established as byte-identical to either run.
+The subsequent [cit-Patents preparation](sem-review2/cit-patents-input-verification/receipt.json)
+pins the official vertex/edge files by SHA-256 and validates all 3,774,768
+vertices and 16,518,947 edges. A separate full-row
+[audit](sem-review2/cit-patents-input-verification/independent-audit.json) confirms
+unique non-null vertex IDs and non-null endpoints within that vertex set.
+No self-loops or weight column were found; duplicate edges were not counted.
+The private original files total 73,899,325 bytes. This is newly verified input
+for a shared pilot, not proof of either historical run's bytes or a completed
+benchmark comparison. Larger input pairs remain unverified.
+The [local WCC reference](sem-review2/cit-patents-wcc-reference/run01/receipt.json)
+finds 3,627 components; the largest contains 3,764,117 vertices. Its private
+canonical membership output is hashed for the pilot. The tested union-find
+construction supplies connectivity; full readback checks domain and edge-label
+consistency, not a second independent full-graph algorithm.
 
 [CLUSTER-PREPARATION.md](CLUSTER-PREPARATION.md) traces the remaining single-node
 and distributed costs and defines an eight-cell qualification matrix. It

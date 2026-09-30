@@ -1,6 +1,6 @@
 # Review of Sem's second review
 
-Recorded UTC: 2026-09-30T21:17:30.731869+00:00
+Recorded UTC: 2026-09-30T22:12:39.164319+00:00
 
 Reviewed [SEM-REVIEW-2.md](../../SEM-REVIEW-2.md) at Grust
 `0e6a0cbc3b9cf818d6b2edf6e5c8e6bf428cb623`, against Sail
@@ -224,12 +224,13 @@ from a five-second ingest goal plus its own 1.4–10.6-second kernel range.
    host with the same original controller first, then pin the qualified choice
    for Stage A. Retain the original control. The compact tuple MIN does not
    implement `min_by`; its qualification is a separate experiment. No completion
-   date or end-to-end gain is assumed while the Linux builds/replays are pending.
+   date or end-to-end gain is assumed. Linux builds and small-worker checks have
+   passed; large-control qualification remains in progress.
 
 ## Order that preserves the evidence
 
-1. Finish the existing instrumented replay and classify the first failure;
-   retain the original no-OOM question separately from the confirmed OOM replay.
+1. The instrumented replay has ended with both workers OOM-killed. Retain the
+   original no-OOM question separately from these confirmed OOM replays.
 2. Qualify the compact accumulator on the same controller/input, measuring the
    complete process envelope. Continue the bounded native allocation fixes.
 3. Define shared algorithm/output contracts and validators; run a tiny semantic
@@ -316,11 +317,25 @@ above still apply. A subsequent bounded lookup identified the
 and its 51 vertex/edge pairs; Sem's own article links that catalog. Its published
 Graph500-24 counts are 8,870,942 vertices and 260,379,520 edges, matching the
 external result's reported counts. This identifies the input pointer, not the
-exact files used in either benchmark. Four tiny example files were inspected;
-no large Parquet inputs were downloaded. [Source and schema evidence](sem-review2/input-catalog/README.md).
+exact files used in either benchmark. The initial catalog check inspected four
+tiny example files. [Source and schema evidence](sem-review2/input-catalog/README.md).
 
-The selected large files' hashes, schemas and immutable manifest remain to be
-verified. The catalog's documentation revision does not pin the data bytes,
+The subsequent [cit-Patents preparation](sem-review2/cit-patents-input-verification/receipt.json)
+downloaded and hashed the official pair (73,899,325 bytes). Full streaming
+validation found 3,774,768 unique non-null signed-i64 vertices and 16,518,947
+edges, with no null or missing endpoints and no self-loops. The files contain
+no weight column; duplicate edges were not counted. A separate
+[bitmap-based audit](sem-review2/cit-patents-input-verification/independent-audit.json)
+rehashed the original bytes and independently confirmed those row checks.
+The originals remain private and unchanged; public receipts pin both files.
+This prepares one shared input, not a historical-byte match or a Stage A result.
+The subsequent [exact WCC reference](sem-review2/cit-patents-wcc-reference/README.md)
+records 3,627 components and a largest component of 3,764,117 vertices, preserving
+the full declared domain. Its tested union-find produces canonical membership;
+the full output/all-edge readback is not an independent second WCC algorithm.
+The hashed private result is an oracle for the pilot, not an engine comparison.
+The larger selected pairs still need equivalent verification.
+The catalog's documentation revision does not pin the data bytes,
 and DuckDB writer metadata does not independently establish DuckLab authorship.
 Both implementations should consume the same pinned vertex/edge bytes and
 direction, duplicate, isolate and source contract. That can resolve the input
@@ -345,8 +360,10 @@ with scoped unit/local-SQL validation; distributed qualification and measured
 benefit remain pending. No default change or speedup is claimed.
 
 Current status is recorded in [RESULTS.md](RESULTS.md): both Linux host builds
-and both two-worker smoke checks have passed. Their receipts are included in this follow-up documentation snapshot. The instrumented scale-24 replay is running, and its
-matched compact control has not started. Prepared configurations are not
+and both two-worker smoke checks have passed. Their receipts are included in this follow-up documentation snapshot. The instrumented scale-24 replay subsequently ended
+in confirmed OOM kills of both workers; its matched compact control is running.
+[Closed replay evidence](RESULTS.md#instrumented-sssp-replay-confirmed-worker-oom).
+Prepared configurations are not
 benchmark results, and the differently loaded smoke runs do not establish a
 performance ratio.
 

@@ -9912,3 +9912,8 @@ Repository `querygraph/grust`: freeze completed instrumented and compact Linux b
 ## 2026-09-30T21:19:34.637596+00:00 — Codex: ACK interim Sail documentation snapshot
 
 Repository `querygraph/grust`: preserve the completed local configuration, sampler and runtime-source audits and closed supplemental observations and completed 7bb SEM source/input audits through the logging02 observation collected at 2026-09-30T20:57:33.709595Z. All eight failed observer reads and both local stop attempts remain retained. Logging02 remains active: this is interim diagnostic evidence, not a completed replay or performance qualification. The full running cell, live observer ledger, later observations and Python caches remain excluded. Publication requires detached documentation gates, independent privacy/source review and an exact-commit gate; shared HEAD, index and prose are not activated by the publisher.
+
+
+## 2026-09-30T22:13:16.730839+00:00 — Codex: ACK closed Sail SSSP replay and input reference
+
+Repository `querygraph/grust`: retain the completed logging02 SSSP replay, exact-cgroup kernel kills of both mapped workers, first-fault chronology and all observer/collection failures. Preserve the new official cit-Patents input hashes and exact WCC reference, including failed build attempts and correctness controls. Logging03 has started after matched fresh admission; only its fixed launch/admission records enter this snapshot. Its running cell/monitor and later matched measurements are excluded. Documentation gates and independent review must pass on the detached candidate and exact commit before atomic publication. No runtime release, historical zero-OOM diagnosis, operator allocation-site attribution or end-to-end performance qualification is claimed.
