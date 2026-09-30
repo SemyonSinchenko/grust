@@ -238,7 +238,14 @@ publish absolute timing results only on a qualified dedicated host.
    support fixed-ten power merely by setting the iteration cap to ten; add an
    explicit finite-step mode and oracle if that is the chosen contract.
 4. Record algorithm-ready, result-exported and result-verified boundaries,
-   setup and per-round time, jobs/stages/tasks, plan bytes/planning time,
+   setup and per-round time. Input validation is not algorithm work and is
+   not in the external tool's timer (Sem, 2026-09-30: "why include
+   validation in wall time"): report Pecan's snapshot and validation
+   actions as their own phase and exclude them from the compared wall
+   time, and give the library a trusted-input entry (Stage B7) so the
+   compared run does not perform them at all. Excluding them changes no
+   conclusion on cit-Patents (rounds alone are 284, 461 and 671 s), but
+   it is the only boundary under which the numbers are comparable. Also, jobs/stages/tasks, plan bytes/planning time,
    exchanges, writer time, scalar actions, pool/spill counters and whole-process
    memory. Freeze warmup and ABBA order and retain every outcome. Estimate the
    campaign from the pilot: two inputs times three external, five local and
