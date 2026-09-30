@@ -311,12 +311,20 @@ or WCC/stream-loss attribution follows from this component result.
 
 Reviewed Grust `1084eb6`, which adds Sem's three later comments and proposes
 the DuckLab Parquet conversions of LDBC Graphalytics inputs. The five answers
-above still apply. The conversion's location/version and file inventory have
-not yet been supplied or verified here; matching names or formats alone does
-not establish identical inputs. Both implementations should consume the same
-pinned vertex/edge bytes and the same direction, duplicate, isolate and source
-contract. This can remove the input-count discrepancy once that manifest is
-verified; it does not remove the PageRank/output-contract differences.
+above still apply. A subsequent bounded lookup identified the
+[official Parquet catalog](https://ldbcouncil.org/benchmarks/graphalytics/datasets/)
+and its 51 vertex/edge pairs; Sem's own article links that catalog. Its published
+Graph500-24 counts are 8,870,942 vertices and 260,379,520 edges, matching the
+external result's reported counts. This identifies the input pointer, not the
+exact files used in either benchmark. Four tiny example files were inspected;
+no large Parquet inputs were downloaded. [Source and schema evidence](sem-review2/input-catalog/README.md).
+
+The selected large files' hashes, schemas and immutable manifest remain to be
+verified. The catalog's documentation revision does not pin the data bytes,
+and DuckDB writer metadata does not independently establish DuckLab authorship.
+Both implementations should consume the same pinned vertex/edge bytes and
+direction, duplicate, isolate and source contract. That can resolve the input
+discrepancy; it does not remove the PageRank/output-contract differences.
 
 I support a separate entry point for already materialized, immutable,
 prevalidated input. It can avoid Pecan's initial rewrite when the caller already
@@ -329,15 +337,15 @@ and verify schema/manifest identity. Checkpoint layout declarations remain a
 separate contract: simply reusing a Parquet file does not prove keyed partitioning.
 
 This review and its completed evidence were committed and pushed in Grust
-`51644023a02185679527304682ed41055ae1c4aa`. Subsequent status is recorded in
-[RESULTS.md](RESULTS.md): the instrumented289 Linux build and real-worker smoke
-have passed, and WCC outcome/inbox corrections have passed their scoped gates
-and been delivered to fork branches. Compact561's Linux build, its worker
-check and the scale-24 diagnostic/compact replays remain pending. Prepared
-configurations are not benchmark results. B1 is delivered as a separate opt-in
-candidate with scoped unit/local-SQL validation; distributed qualification
-remains pending, and no default change or speedup is claimed. The combined
-follow-up snapshot `200d1cf8` is pushed to `work/stream-review-followup` after
-its exact detached combined gate and independent source audit. The production
-WCC representative control has also passed on the Linux process workers.
-These later receipts will be published in a follow-up documentation commit.
+`51644023a02185679527304682ed41055ae1c4aa`, followed by the completed WCC/B1 and
+worker-plan evidence at `f4443ba76c18c922698a060183c02ca65ce939c7`. The combined
+code snapshot `200d1cf8` is pushed to `work/stream-review-followup` after its
+exact detached combined gate and independent source audit. B1 remains opt-in
+with scoped unit/local-SQL validation; distributed qualification and measured
+benefit remain pending. No default change or speedup is claimed.
+
+Current status is recorded in [RESULTS.md](RESULTS.md): both Linux host builds
+and both two-worker smoke checks have passed. Their receipts are included in this follow-up documentation snapshot. The instrumented scale-24 replay is running, and its
+matched compact control has not started. Prepared configurations are not
+benchmark results, and the differently loaded smoke runs do not establish a
+performance ratio.

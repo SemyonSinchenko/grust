@@ -21,6 +21,11 @@ Their relative wall-time contribution is unmeasured. None is established as
 the cause of the existing stream losses. The Done relay and duplicated SSSP
 overflow join are being handled separately and are excluded from these proposals.
 
+Subsequent implementation and qualification are recorded in
+[RESULTS.md](RESULTS.md). The final section adds a separate control against
+follow-up source `200d1cf8`; the original source references below remain pinned
+to the baseline named above.
+
 ## 1. Bound and measure adjacency construction memory per worker
 
 Argentea buffers every owned vertex and arc before building adjacency.
@@ -313,3 +318,36 @@ the first small paired fixture did not improve elapsed time. Removing a repeated
 action from the plan is not sufficient evidence of a net speedup. Its larger
 isolated control is prepared separately, preserving the original runtime so the
 compact accumulator does not confound that comparison.
+
+
+## Follow-up: partition ceiling and high-degree ownership
+
+Recorded UTC: 2026-09-30T20:17:41.470343+00:00. This section reviews source `200d1cf8` and the
+[bounded control](cluster-ownership-control/receipt.json), not a new cluster run.
+All five actual Python option validators accept 64 partitions and reject 65.
+The native BFS, SSSP, WCC and delta-PageRank request validators also cap partitions
+at 64 by source inspection; the fixed-round PageRank adapter and core operation
+allow more. This is an Argentea API/admission boundary, not a general Sail
+cluster limit. Raising only the Python constant would leave other checks and
+the quadratic control protocol unchanged.
+
+`Operation::owner` uses the Euclidean remainder of the signed vertex ID modulo
+P; the clients route arcs by their source's owner. The BFS emission cursor visits
+an owned source's adjacency in one cursor. Balanced vertex counts therefore do not establish balanced edge
+storage or active work. The exact ownership model uses 65,536 vertices, center
+0 and 65,535 undirected star edges. At P=64 every owner has 1,024 vertices, but
+owner 0 holds 66,558 of 131,070 directed arcs (50.78%). Its first frontier emits
+all 65,535 active arcs from that one owner. The sum/max active-work ratio is 1
+at every tested P, from 1 through 64. These are arithmetic counts following the
+pinned source rule, not native execution times or a Graph500 skew measurement.
+
+This supplies a counterexample to unconditional near-linear scaling under
+whole-vertex ownership. More workers or a different hash cannot split one
+high-degree vertex's outgoing work. Record maximum and per-owner arc counts,
+active-edge counts, memory and finish times before scaling. Include a skewed
+fixture as well as the proposed Graph500 cells. If a heavy owner is the barrier,
+prototype splitting its edge ranges across owners with explicit replicated
+vertex state and exact reduction/completion rules; charge the extra state and
+communication. That requires a protocol change and new correctness controls,
+not just a higher partition cap. Local parallelism within an owner is a separate
+option whose benefit remains limited to that owner's host resources.

@@ -1,6 +1,6 @@
 # Focused Sail stream and resource experiments
 
-Recorded UTC: 2026-09-30T19:49:36.308368+00:00
+Recorded UTC: 2026-09-30T20:24:40.387287+00:00
 
 Work in progress. This report separates the completed evidence from the compact
 aggregation implementation and instrumented Linux replay still being qualified.
@@ -108,8 +108,9 @@ The exact committed gate passed formatting, strict all-target Clippy for all
 three changed crates, 149 execution, 328 function and 13 planner tests, and 46 Pecan
 unit tests. The in-process worker codec test serializes and executes a physical
 aggregate plan through the production worker decoding path and checks the
-concrete compact accumulator. A separate Linux worker replay remains
-pending. [Exact gate](compact-min-committed/receipt.json). Other `min` types
+concrete compact accumulator. The subsequent Linux two-worker smoke passed,
+as recorded below; the scale-24 replay remains pending.
+[Exact gate](compact-min-committed/receipt.json). Other `min` types
 retain the original planner implementation and its metadata optimizations.
 
 ## Qualified implementation snapshot
@@ -314,8 +315,10 @@ including its native tests and scoped Clippy checks. Exported Sail 0.7.1 binary
 SHA-256 is `40a78182a420152e8e3651f9cdb38a4196eaf8bc7aead092d10e258a17ac3497`.
 The original source, binary, wheel and build-cache seed guards passed unchanged.
 [Build receipt](linux-builds/integration289/final/rebuild-receipt.json).
-The compact `56194b1` host build remains in progress; no new cluster result is
-implied by a successful build.
+The compact `56194b1` host build also passed with its seed guards unchanged.
+Exported binary SHA-256 is
+`5b7f506c19afd76a28b84c1459397b4ab30ff4cfc761f4195789425b963facec`.
+[Build and cache-retention handoff](linux-builds/BUILD-HANDOFF.json).
 
 The small actual-worker checks use the same original controller, native wheel,
 16k weighted input and independent Dijkstra/parent checks. A separate
@@ -334,7 +337,24 @@ were no OOM events or cleanup leftovers. All 24 recorded plans contain grouped
 `min(struct(...))`. [Verified worker receipt](worker-smoke-instrumented289-cpu16-23/verification.json).
 A late supplemental cgroup observation found the container already removed;
 that failure is retained. Final Docker and cgroup records verify the limits.
-The compact worker check and scale-24 replays remain pending.
+The compact561 worker check subsequently **passed** the same 24-iteration,
+16,384-vertex Dijkstra/parent validation with identical input and original
+controller/native identities. Independent review correlates all 237 tuple-MIN
+task plans with successful worker statuses. There were no recorded OOM events
+or cleanup leftovers. A late supplemental PID capture missed the already
+removed container; that failed observation is retained without a host-PID
+mapping claim. [Verified compact worker receipt](worker-smoke-compact561-cpu16-23/verification.json).
+The compact smoke ran after compilation ended, so its time and memory are not
+compared with the earlier concurrent-build smoke.
+
+After both builds passed, guarded cleanup removed only their task-owned host
+build caches, preserving exported binaries, wheels, source, venv and original
+baseline caches. It left 35.25 GiB free, below the desired 40 GiB. The subsequent
+[logging02 admission check](logging02-admission.json) verified the runtime,
+clean controller source, original native binary and more than 30 GiB free with
+no running Docker containers. This is point-in-time admission, not a promise
+that the whole run fits. The instrumented scale-24 SSSP replay is running;
+the matched compact replay has not started.
 
 ## B1 opt-in checkpoint experiment
 
@@ -383,6 +403,11 @@ PageRank with ten-step power PageRank. It also identifies missing write-commit
 semantics, nonpool memory and explicit job submission requirements. The source
 review and control are separate from the pending Linux replay.
 
+The [official Graphalytics Parquet catalog](https://ldbcouncil.org/benchmarks/graphalytics/datasets/)
+has now been identified, including its 51 listed vertex/edge pairs and a bounded
+inspection of four tiny examples. [Input pointer and remaining identity checks](sem-review2/input-catalog/README.md).
+No large input was downloaded or established as byte-identical to either run.
+
 [CLUSTER-PREPARATION.md](CLUSTER-PREPARATION.md) traces the remaining single-node
 and distributed costs and defines an eight-cell qualification matrix. It
 separates placement with fixed total resources, strong scaling, and weak scaling.
@@ -390,6 +415,13 @@ The first barriers are simultaneous raw/CSR storage, active-round full-label
 copies, quadratic control traffic, unrolled plan size, and Grenada's repeated
 checkpoint write/read and lost partitioning contracts. The compact aggregation
 addresses another per-worker memory cost before it is amplified across workers.
+
+A further [admission and ownership control](cluster-ownership-control/receipt.json)
+confirms the five Python clients' 64-partition ceiling. A source-derived star
+model shows that equal vertex counts can coexist with more than half the arcs
+and the complete first-frontier expansion on one owner. The cluster plan adds
+skewed-input qualification and treats splitting heavy vertices' edge ranges as
+a protocol design task. This is not a measured cluster scaling result.
 
 Near-linear cluster scaling has not been demonstrated. A homogeneous dedicated
 cluster, per-worker hard limits, exact answers and partition/transport counters

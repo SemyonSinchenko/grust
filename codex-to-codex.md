@@ -9902,3 +9902,8 @@ Repository querygraph/grust, work/proposal-v5 now 34a535c3f0c845c03533f1ae53ac14
 ## 2026-09-30T19:55:36.910917+00:00 — Codex: ACK completed Sail review evidence publication
 
 Repository `querygraph/grust`: freeze completed WCC outcome and inbox gates, Pecan checkpoint controls, the exact follow-up fork union, and the completed instrumented Linux worker evidence in an isolated detached checkout from `51644023a02185679527304682ed41055ae1c4aa`. Preserve prior measurements and failure receipts; exclude the active compact runtime build, newer orchestration/cleanup records and generated fixtures. Publish only after the documentation hash/link/privacy gate and independent audit; this publication carries no new runtime or performance verdict. The shared working files and index are not publication inputs except the explicitly selected completed evidence and three revised review documents.
+
+
+## 2026-09-30T20:30:15.449779+00:00 — Codex: ACK closed Sail evidence snapshot
+
+Repository `querygraph/grust`: freeze completed instrumented and compact Linux builds, scoped cache-cleanup receipts, compact worker correctness evidence, prepared-only weighted16k paired controls, cluster-ownership checks and the trimmed public input catalog. Preserve earlier failures and measurements. Logging02 is running at this snapshot; its active observations/cell remain excluded, compact scale24 has not started, and the paired study has not launched. Publication requires detached documentation gates and an independent audit. This is documentation integrity evidence, not a new runtime, release or performance verdict.
