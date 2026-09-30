@@ -307,6 +307,9 @@ baseline's 7 unrun cells.
 |---|---|---|---|---|
 | scale 24, Banda BFS reference, `asStaged` | **passed** | 704 s | 31.3 GiB | Banda stages Graph500 scale 24 once the canonical sort is skipped: staging 48.5 s, 268,435,456 edges retained as 9.73 GiB of Utf8-id rows with every sort tier at zero (the S0 receipt), one projection built and reused; 8,862,601 reached, certificate validated with 5 witness rounds. The first Banda result on Graph500 at this scale. Its 704 s are within 10% of the relational push-pull cells (775 and 844 s) rather than the 4 to 20x of cit-Patents: at 268M edges the projection from Utf8 ids to a CSR dominates, which is what S1 (Int64 identity) and S3 (dense u32 projection) are for |
 
+| scale 24, Banda BFS frontier, `asStaged` | passed | 742 s | | same reach and certificate |
+| scale 25, Banda BFS push-pull (direction), `asStaged` | error | 1641 s | 60.0 GiB | staging passed in 114 s (536,870,912 edges retained as 19.8 GiB of Utf8-id rows, unsorted); the projection then refused: `procedure memory budget exceeded (limit 85899345920)`, with the process at 60 GiB. So at scale 25 Banda's wall is now the projection's admitted bound inside the 80 GiB quota, the direction-switching kernel needing both an outgoing and an incoming CSR from Utf8 ids; S3's dense `u32` projection is the fix, S1's `Int64` identity halves the staged rows first |
+
 ### Two hosts: Capitola and Morrobay (23:50 UTC)
 
 The user asked for Argentea across two physical machines. Setup, all from
