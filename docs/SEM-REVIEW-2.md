@@ -57,6 +57,38 @@ Translated from his messages of 2026-09-30:
 - On the timer: "why on earth include validation in wall time." (Stage A,
   item 4.)
 
+Sem's answers to section 6's questions (2026-09-30, translated):
+
+- Timer: "yes, I ran it honestly": c5d.4xlarge, Ubuntu, stable Rust
+  toolchain, entry point `benches/python/main.py`; the published numbers
+  are that boundary.
+- Settings: "everything goes through the CLI; let Astra look at `main.rs`,
+  it is all pinned there." Sort-merge join is always on: "my philosophy is
+  that we must be able to process a graph even when neither the vertices
+  nor the edges fit in memory." For Sail's pilot he allows pinning the hash
+  join, since on every graph500 the vertex set is small (tens of millions),
+  "especially while you cannot yet write the edges so that the read needs
+  no sort inside the merge join."
+- Inputs: `benches/python/datasets.py` has everything: the LDBC
+  Graphalytics graphs as Parquet from
+  `https://datasets.ldbcouncil.org/graphalytics-parquet/{name}-v.parquet`
+  and `{name}-e.parquet`.
+- Stage E's API question: "I did not understand it. graphframes-rs exists
+  as a CLI now; as a library it is `lib.rs`, `GraphFrame`, `g.page_rank()`
+  and so on. Let Astra look at `main.rs` rather than have me retell it."
+- On the u32 vertex targets in Stage F: "u32 is literally not serious; that
+  the vertices of this benchmark fit u32 means nothing. In the real world
+  ids are always i64 (`monotonically_increasing_id` returns i64 anyway). I
+  would set a hard condition: you are building for big data, and cheating
+  on benchmarks is not worth it."
+- On the vertex counts: "did Astra make a mistake somewhere? These are
+  Kronecker graphs whose giant component is 99.9% of the vertices; that
+  only half of your vertices are reachable from the hub should raise
+  suspicion. Anyway, LDBC has 8.87M vertices." Answered in section 2.
+- On the write-cost gap in Stage D: "did Astra try this at a larger data
+  size? It would be good to understand how that difference scales."
+  Answered in Stage D.
+
 His results (`SemyonSinchenko/graphframes-rs`, branch
 `new-benchmark-results` at `ba2fdd8f51fa7fafdca15012d2741f5f8d80c024`,
 `benches/results`; c5d.4xlarge, 16 vCPUs, 32 GiB,
@@ -114,7 +146,16 @@ does not establish zero spill: record actual spill counters and pool pressure.
 The hosts, resource envelopes, timing boundaries and graph manifests differ.
 The external cit-Patents README lists 16,518,947 edges; ours lists 16,518,948.
 Its Graph500-24 lists 8,870,942 vertices and 260,379,520 edges; ours includes
-16,777,216 vertices and 268,435,456 input edge tuples. External shortest paths
+16,777,216 vertices and 268,435,456 input edge tuples. The vertex difference
+is not a mistake on either side: the Graph500 Kronecker generator at scale 24
+addresses 2^24 ids of which roughly half receive no edge, LDBC Graphalytics
+keeps only the vertices that occur in an edge, and our generator keeps all
+2^24 ids. Our hub traversal reaches 8,862,601 vertices, which is 99.9% of
+LDBC's 8,870,942, so the giant component is where Sem says it is; the
+"other half" is isolated ids, not unreached ones. The edge difference is the
+generator's duplicate tuples and self-loops, which LDBC removes. Our
+generator also uses its own seeds, so the two graphs are the same family and
+not the same bytes; Stage A reads LDBC's files on both sides. External shortest paths
 use directed edges and a catalog-derived landmark; the scale-24 Sail cells use
 an explicit hub and undirected edges, and certify parent/hops as well as
 distance. External finite-step PageRank uses thresholded delta propagation
@@ -228,10 +269,17 @@ publish absolute timing results only on a qualified dedicated host.
 ### Stage A. Establish matched contracts and a local/process-cluster control
 
 1. Pin graphframes-rs source, image, toolchain and binary in a separate detached
-   build with its own target and receipt. Use the LDBC Graphalytics
-   graphs in the Parquet form Sem had DuckLab produce as the shared inputs
-   for both sides, once he says where they are; that removes the vertex
-   and edge count differences of section 2 at the source. Define common input manifests,
+   build with its own target and receipt. Inputs for both sides are the
+   LDBC Graphalytics Parquet files his `datasets.py` downloads
+   (`https://datasets.ldbcouncil.org/graphalytics-parquet/{name}-v.parquet`
+   and `-e.parquet`; checked reachable 2026-09-30: cit-Patents 3.7 and
+   66.8 MB, graph500-22 2.4 and 185 MB, graph500-24 8.7 and 798 MB,
+   graph500-25 16.7 and 1628 MB, graph500-26 32.2 and 3288 MB), which
+   removes the vertex and edge differences of section 2 at the source.
+   His settings are pinned in `main.rs` (Astra reads it; no retelling):
+   sort-merge join on for him, hash join permitted for Sail's pilot at his
+   suggestion. His timer boundary is confirmed: process launch to exit,
+   input read and final write included. Define common input manifests,
    direction, duplicates/isolates, traversal source and requested outputs.
    For WCC, supplement the existing large-graph certificate with an independent
    reference partition or connectivity witness: equal labels along edges alone
@@ -322,6 +370,13 @@ native quota larger than the driver's pool can reject extension binding.
 
 ### Stage D. Stop re-shuffling the edges (the declared layout, write side)
 
+Sem asks how the write-cost gap scales. The only observation is the parity
+work's (Capitola, local mode, one frame of 16M rows, single runs, times
+varying up to threefold under load): `partitionBy` 11.6 to 12.5 s against a
+plain write of 1.5 to 5.8 s. Nothing larger was measured, by anyone. First
+control here: the same plain-against-bucketed write at 16M, 64M and 268M
+rows on the gate, paired, so the gap is a curve and not one point.
+
 The read side is finished (`work/declared-layout`). What remains is
 section 14 of the parity document, reordered by what the campaign showed:
 
@@ -337,6 +392,10 @@ keep the checkpoint-write overhead within 50% of its matched plain-write
 control. Verify distribution declarations and physical exchanges explicitly.
 
 ### Stage E. Evaluate an explicit server-side iterative controller
+
+Sem's answer settles the API question: graphframes-rs is a CLI (`main.rs`)
+over a library (`lib.rs`, `GraphFrame`, methods such as `page_rank`), so
+the second form below is an embedding of that library, not a new protocol.
 
 Today Grenada is Pecan's controller entered through graph tables. A single
 Spark Connect request per algorithm is an architectural candidate, not a
@@ -374,6 +433,12 @@ the gap between it and 28 s is what the candidates below have to close.
 The crossover test of `FABLE-ON-ASTRA.md` section 8 stands: if the ingest
 does not come under the relational path's first-round cost on graph500-24,
 that is evidence for Sem's position and the decision guide says so.
+
+Sem's condition is adopted as the contract: vertex ids are i64 at every
+interface, and no parity number is produced with a narrowed representation.
+A dense internal target width inside one partition's CSR is an optimization
+with a checked bound and a 64-bit fallback; it is measured beside the i64
+form and never substituted for it in a comparison.
 
 Evaluate Int64 identity and dense u32 vertex targets from `FABLE-ON-ASTRA.md`
 as separate candidates. Preserve usize/u64 arc offsets: a graph may fit u32
@@ -415,20 +480,18 @@ future run; no scale-28 launch is authorized by this document.
 
 ## 6. Questions
 
-For Sem:
+For Sem (all four answered on 2026-09-30; see section 1):
 
-1. The pinned monitor/CLI includes input setup and final writing; can he
-   confirm that the published runtime artifact matches those boundaries?
-2. Which WCC variant and checkpoint interval produced the table, and is
-   `prefer_smj` on?
-3. His graph500-24 has 8.87M vertices and 260M edges, ours 16.8M vertices
-   (8.86M reached from the hub) and 268M edge tuples. Is his input
-   deduplicated and stripped of isolated vertices, and can he share the
-   generator command so both sides read the same bytes? Better: where are
-   the DuckLab Parquet conversions of the LDBC graphs he mentioned, so
-   both sides read those?
-4. Which graphframes-rs APIs support an explicit per-round Sail submission
-   adapter with the agreed algorithm, output and ownership contracts?
+1. Timer boundary: confirmed, launch to exit with input read and output
+   write.
+2. Settings: pinned in `main.rs`; sort-merge join on; hash join allowed for
+   Sail's pilot.
+3. Inputs: the LDBC Graphalytics Parquet files from `datasets.py`; the
+   vertex-count difference is isolated ids (section 2).
+4. API: the library is `GraphFrame` in `lib.rs`; the CLI is `main.rs`.
+
+Open for him: none at the moment. What he will see next is Stage A's
+pilot on his inputs, with its receipts.
 
 For Astra:
 
