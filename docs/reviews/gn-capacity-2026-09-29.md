@@ -321,8 +321,20 @@ Morrobay launched over ssh by the qualifier's supervisor. The qualifier's
 own two-host BFS fixture passed (`smoke-bfs/receipt.json`: hosts
 `Capitola.local` twice and `morrobay.local`, native audit clean). Scale 24
 is on the object store; scale 22 is being prepared with the `max-degree`
-source. Next: `argentea_two_host_capacity.py` on scale 22, then 24, against
-the same runs on one host.
+source. The first scaled two-host run (`argentea_two_host_capacity.py`,
+`scale22-bfs-reference/receipt.json`): Graph500 scale 22 (4,194,304
+vertices, 67,108,864 edges, source 2301132 of degree 320,916), Argentea BFS
+reference, 16 partitions, one worker per host, 8 GiB native quota per
+worker.
+
+| Outcome | Time | Result | Notes |
+|---|---|---|---|
+| **passed** | 2746 s | 6 levels, 2,394,613 reached, 4,194,304 owned rows | 64 native phases unrolled for the 30-round cap (31 executed), 1,040 native receipts, 1,598 completed worker tasks, worker 1 on Morrobay and worker 2 on Capitola; Capitola runs the x86_64 artifact under Rosetta, and the two hosts talk over Tailscale, so this is a functional and relative measurement only |
+
+Next: the same cell on one host with the same artifacts (Capitola alone,
+two worker processes), Banda single-process on the same input, both with
+the 30-round cap and with an 8-round cap that fits the 6 levels, then
+scale 24 across the two hosts.
 
 ## 5. Findings so far
 
