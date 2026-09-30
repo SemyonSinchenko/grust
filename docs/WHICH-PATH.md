@@ -112,7 +112,7 @@ a sequence of native phases with shuffles between them.
 | Input | Banda | Pecan / Grenada | Argentea (one host) | Argentea (two hosts) |
 |---|---|---|---|---|
 | cit-Patents, 16.5M edges | 30 to 92 s, under 4 GiB | 160 to 729 s, under 4 GiB | not run | not run |
-| Graph500 scale 22, 16.8M edges | 120 s (Capitola) | not run | 268 s | 381 s |
+| Graph500 scale 22, 67.1M edges | 120 s (Capitola) | not run | 268 s | 381 s |
 | Graph500 scale 24, 268M edges | BFS 704 s at 31 GiB; SSSP 1615 s at 46 GiB | push-pull BFS 775 to 844 s; other variants lose the stream or the container | BFS 1213 s at 65 GiB; SSSP over 4215 s at 68 GiB | fails in the first phase |
 | Graph500 scale 25, 537M edges | refused (80 GiB budget) | push-pull BFS 1516 to 1610 s at 39 GiB; frontier 2729 to 2764 s at 75 GiB; reference at the 100 GiB limit | out of memory in the first phase | not attempted |
 

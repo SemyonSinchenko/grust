@@ -488,8 +488,9 @@ validated, max edge slack 0, parent tree checked), so the citable
 single-host scale-24 number on Capitola is 1179 s and the first run's
 1409 s stands as a repeat within 20%. Rule from this: never
 commit in a harness checkout while a cell runs on it; edit in another
-worktree. Against scale 22 (268 s for 16.8M edges, 20 phases), scale 24 is
-16 times the edges for 5.3 times the time. The Linux gate runs the same
+worktree. Against scale 22 (268 s for 67.1M edges, 20 phases), scale 24 is
+4 times the edges for 4.4 times the time (1179 s; corrected 2026-09-30: an
+earlier version of this line said 16.8M edges and 16 times). The Linux gate runs the same
 cell first in its Argentea matrix (started 02:26 UTC) for the 32-core
 number, and the two-host scale-24 run waits on the shared store.
 
@@ -515,6 +516,81 @@ local disk on both hosts to separate the cross-host shuffles from the
 object store. The two-host run with the
 8-round cap and Banda single-process on the same input follow, then scale
 24 across the two hosts.
+
+## 4b. Against graphframes-rs (Sem's numbers, 2026-09-30)
+
+Sem Sinchenko's in-process DataFusion implementation
+(`SemyonSinchenko/graphframes-rs`, branch `new-benchmark-results`,
+`benches/results`; c5d.4xlarge, 16 vCPUs, 32 GiB, `--max-memory 30G
+--num-workers 16`, medians of 5 runs, wall time / peak RSS / peak disk) and
+his expectation that Sail should land in the same performance class,
+because both are DataFusion and Spark Connect adds a per-iteration
+constant:
+
+| Graph | WCC | PageRank (10 iterations) | Shortest paths |
+|---|---|---|---|
+| cit-Patents | 4.71 s / 1.46 GB | 4.05 s / 1.06 GB | 0.90 s |
+| graph500-24 (8.9M non-isolated vertices, 260M edges) | 33.3 s / 14.0 GB | 24.5 s / 5.0 GB | 6.7 s |
+| graph500-25 | 82.5 s / 18.6 GB | 62.3 s / 12.4 GB | 26.4 s |
+| graph500-28 | 1009 s / 20.2 GB | 912 s / 18.3 GB | 783 s |
+
+Ours on cit-Patents (baseline `b87fb27ac`, 32 cores, process-cluster mode,
+two worker processes, 32 partitions): Pecan WCC 312 s (randomized) and
+500 s (min-label), Grenada 397 and 566 s, Pecan PageRank 729 s for 20
+iterations, Banda WCC 30 to 39 s and PageRank 32 s. So the relational
+paths are 65 to 120 times his WCC and Banda 6 to 8 times.
+
+It is not the algorithm and not checkpointing as such. His WCC follows
+Bögeholz, Brand and Todor (ICDE 2020), the same randomized contraction as
+Pecan's `randomized` method, and his README says checkpoints are written
+to Parquet and re-read between iterations, as Pecan's are. What differs,
+read from the receipts and from `pyspark_pecan`:
+
+1. **Where the plan runs.** His is one process with 16 DataFusion
+   partitions; a repartition hands record batches between threads. Every
+   cell of ours ran Sail in process-cluster mode: a driver and two worker
+   processes, 32 partitions, every exchange encoded and carried over gRPC
+   task streams between processes, every job scheduled as distributed
+   tasks. No cell of this campaign ran `--mode local`.
+2. **A round is seven to nine Spark Connect jobs, not one plan.** In
+   `wcc_randomized.py` each round materializes three tables (priorities,
+   representatives, relabeled edges), and each `materialize`
+   (`staging.py`) is a `repartition(partitions)` of the whole result, a
+   Parquet write, a read back, and for two of them a `count()` to verify
+   the row count; three more `count()` actions feed the metrics and the
+   loop test. Min-label does the join and aggregate, one materialize with
+   its count, and a second full join only to ask whether any label
+   changed.
+3. **The per-round floor is 4.7 s, not a small constant.** In the
+   randomized cell the last eleven rounds, on a contracted graph that is
+   nearly empty, take 4.6 to 5.7 s each; 19 rounds of that floor are
+   about 90 s, nineteen times his whole run. Min-label's rounds are a flat
+   22 to 25 s on 33M adjacency rows whatever changed.
+4. **Setup before the first round.** `_snapshot` rewrites vertices and
+   edges to Parquet and runs five validation jobs (null ids, id
+   uniqueness by group-by, null endpoints, two anti-joins of every edge
+   against the vertices) and a count: 28 s before round 1 of randomized
+   WCC, 39 s before min-label, 58 s before PageRank. At scale 24 the
+   source-0 cells measured this alone: 200 s (Pecan) and 372 s (Grenada)
+   of loading against his 6.7 s complete shortest-paths run.
+5. **Banda's time is ingest, not kernel.** WCC: staging 13.8 s, projection
+   14.4 s, kernel and output 1.4 s (min-label) to 10.6 s. PageRank:
+   13.8 + 14.6 + 3.3 s. The kernel is faster than his whole run; getting
+   the graph out of Sail tables into the CSR (Utf8 ids, canonical sort)
+   costs 28 s.
+
+What is not measured is the split between items 1 and 2: how much of a
+22 s round is the cross-process exchange and how much is Pecan's own
+extra jobs. Two cells separate them and mirror his machine: the same
+Pecan WCC (randomized and min-label) on cit-Patents in `--mode local`
+with 16 threads, 16 partitions and a 30 GiB pool in a 16-core, 32 GiB
+container. If local mode lands near his class, the cluster exchange is
+the cost, which is the same subsystem as the stream loss
+(`STREAM-LOSS-STATUS.md`); if it stays in the hundreds of seconds, Pecan's
+round structure is. Not run yet: the gate is building
+`work/stream-performance-review` for the stream review
+(`sail-stream-build289`, 16 CPUs), and the comparison should not share
+cores with it.
 
 ## 5. Findings so far
 
