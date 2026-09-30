@@ -303,6 +303,19 @@ baseline's 7 unrun cells.
 
 ### Gate 3, Argentea and Banda `asStaged` matrix (running since 23:47 UTC)
 
+The matrix as configured ran its 12 Banda `asStaged` cells before its 10
+Argentea cells, against the direction to run Argentea first; at 02:22 UTC on
+2026-09-30 it was stopped in its fifth cell (Banda scale-25 frontier, no
+result recorded, the four recorded cells kept) and `chain-argentea2.sh`
+started `gn-argentea-first-gate3.json`: the 10 Argentea cells alone, with
+`SAIL_CLUSTER__TASK_STREAM_CREATION_TIMEOUT_SECS=900` exported into every
+cell container through a new `environment` map in `run_matrix.py`
+(`work/matrix-environment`), because the scale-24 Argentea attempts on
+Capitola had failed on Sail's 60 s default while the unrolled job's first
+stages initialized. The 8 remaining Banda cells resume after it. First cell:
+scale-24 BFS reference, 02:26 UTC.
+
+
 | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|
 | scale 24, Banda BFS reference, `asStaged` | **passed** | 704 s | 31.3 GiB | Banda stages Graph500 scale 24 once the canonical sort is skipped: staging 48.5 s, 268,435,456 edges retained as 9.73 GiB of Utf8-id rows with every sort tier at zero (the S0 receipt), one projection built and reused; 8,862,601 reached, certificate validated with 5 witness rounds. The first Banda result on Graph500 at this scale. Its 704 s are within 10% of the relational push-pull cells (775 and 844 s) rather than the 4 to 20x of cit-Patents: at 268M edges the projection from Utf8 ids to a CSR dominates, which is what S1 (Int64 identity) and S3 (dense u32 projection) are for |
