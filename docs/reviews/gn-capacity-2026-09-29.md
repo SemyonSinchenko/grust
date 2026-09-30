@@ -347,6 +347,19 @@ two worker processes, x86_64 under Rosetta, the dataset on local disk,
 | Banda, single process on Capitola (x86_64 under Rosetta), `asStaged` | 120 s | same result; staging 52 s, 2.36 GiB retained |
 | Argentea, two hosts, 8-round cap, input on local disk on both hosts (no object store) | 405 s | same result; zero object-store retries |
 
+Network correction (2026-09-30, 02:30 UTC): the two-host runs above went
+over Tailscale, which was set up while Capitola was away, although both
+machines were back on the home LAN (Capitola 192.168.4.61, Morrobay
+192.168.4.63; from Capitola, LAN ping 14 to 82 ms over Wi-Fi against 178 to
+245 ms through the Tailscale relay at that moment). The user's rule from
+here on: verify the network path before any distributed run and use the
+LAN when both are home. The configuration now advertises the LAN addresses
+(gRPC's resolver cannot resolve `.local` mDNS names, so IPs, not
+hostnames) and launches the Morrobay worker through the existing `morrobay`
+ssh alias; the qualifier's two-host fixture passed again over the LAN. The
+scale-24 two-host run is the first on the LAN; scale 22 is rerun on the LAN
+for a like-for-like number.
+
 So on one host the unrolled empty phases cost 20 s, but across two hosts
 they cost 2325 s: about 53 s per native phase on the network against
 about a second on one host, so the round cap has to fit the graph's depth
