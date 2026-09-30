@@ -308,6 +308,7 @@ baseline's 7 unrun cells.
 | scale 24, Banda BFS reference, `asStaged` | **passed** | 704 s | 31.3 GiB | Banda stages Graph500 scale 24 once the canonical sort is skipped: staging 48.5 s, 268,435,456 edges retained as 9.73 GiB of Utf8-id rows with every sort tier at zero (the S0 receipt), one projection built and reused; 8,862,601 reached, certificate validated with 5 witness rounds. The first Banda result on Graph500 at this scale. Its 704 s are within 10% of the relational push-pull cells (775 and 844 s) rather than the 4 to 20x of cit-Patents: at 268M edges the projection from Utf8 ids to a CSR dominates, which is what S1 (Int64 identity) and S3 (dense u32 projection) are for |
 
 | scale 24, Banda BFS frontier, `asStaged` | passed | 742 s | | same reach and certificate |
+| scale 24, Banda BFS push-pull (direction), `asStaged` | passed | 1213 s | | same reach and certificate; the direction-switching kernel builds both an outgoing and an incoming CSR, hence 1.7 times the reference variant's 704 s |
 | scale 25, Banda BFS push-pull (direction), `asStaged` | error | 1641 s | 60.0 GiB | staging passed in 114 s (536,870,912 edges retained as 19.8 GiB of Utf8-id rows, unsorted); the projection then refused: `procedure memory budget exceeded (limit 85899345920)`, with the process at 60 GiB. So at scale 25 Banda's wall is now the projection's admitted bound inside the 80 GiB quota, the direction-switching kernel needing both an outgoing and an incoming CSR from Utf8 ids; S3's dense `u32` projection is the fix, S1's `Int64` identity halves the staged rows first |
 
 ### Two hosts: Capitola and Morrobay (23:50 UTC)
@@ -360,6 +361,17 @@ hostnames) and launches the Morrobay worker through the existing `morrobay`
 ssh alias; the qualifier's two-host fixture passed again over the LAN. The
 scale-24 two-host run is the first on the LAN; scale 22 is rerun on the LAN
 for a like-for-like number.
+
+Scale 24 stopped twice before running: Argentea at 32 partitions needs 96
+worker task slots (the harness default of 32 per worker gives 64), and with
+48 per worker the one-host run then failed with `local stream is not
+created within the expected time`, Sail's `cluster.task_stream_creation_timeout_secs`
+(default 60 s), which the Argentea init stage exceeds on 268M edges under
+Rosetta. The two-host run failed on its first write instead: Morrobay's
+data volume is full (3.6 TiB, 37 GiB free), so its MinIO refuses writes
+(`XMinioStorageFull`). The shared store moves to a MinIO on Capitola for
+the two-host runs, and the qualifier gains a `SAIL_QUALIFY_EXTRA_ENV`
+passthrough so the timeout can be raised for the supervised processes.
 
 So on one host the unrolled empty phases cost 20 s, but across two hosts
 they cost 2325 s: about 53 s per native phase on the network against
