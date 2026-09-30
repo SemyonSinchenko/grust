@@ -9,6 +9,32 @@ receipt or server log on Morrobay; the campaign record is
 and the decision guide that this failure limits is
 [`WHICH-PATH.md`](WHICH-PATH.md).
 
+
+## Review update
+
+Updated UTC: 2026-09-30T18:11:45.786042+00:00. The [focused results](reviews/sail-stream-experiments-2026-09-30/RESULTS.md)
+record the subsequent controls and implementation. The historical table has
+twelve zero-`memory.max`-event rows; eleven of those also have sampled PSS of
+20–66 GiB. The cause of these historical stream failures remains **unexplained**.
+
+A separate logged scale-24 Pecan BFS frontier replay is explained by a kernel
+OOM kill in the exact failing Docker cgroup. Worker 2 disappears in the sampler
+window; identifying it with the kernel victim is an inference because the live
+PID namespace mapping was not recorded. This does not resolve the earlier
+no-OOM cells. [Kernel attribution](reviews/sail-stream-experiments-2026-09-30/logging01/kernel-oom-attribution.json).
+
+Pinned h2 0.4.15 controls show ordinary stream cancellation does not consume
+the error-reset cap. A reset-limit warning during teardown does not establish
+the initiating cause. An actual Tonic server control shows
+`tonic::transport::server=debug` exposes a keepalive timeout's specific source
+without hyper tracing; the same failure remains generic at `info`.
+[Pinned cancellation control](reviews/sail-graphs-2026-09-30/h2-cancellation-probe/release-loaded.json),
+[transport controls](reviews/sail-stream-experiments-2026-09-30/transport-control/),
+[Tonic control](reviews/sail-stream-experiments-2026-09-30/tonic-keepalive-control/receipt.json).
+The prepared replay repeats the earlier scale-24 SSSP delta-star workload with
+the original controller/native code and an instrumented host plus that filter.
+Its Linux build and replay are pending; the configuration is not a result.
+
 ## 1. The symptom
 
 A relational traversal (Pecan or Grenada) on Graph500 scale 24 or 25, in
@@ -21,7 +47,8 @@ pyspark.errors.exceptions.connect.SparkRuntimeException:
   h2 protocol error: error reading a body from connection
 ```
 
-The driver log is silent until the failure. Its only errors are teardown
+In the historical runs below, before the new diagnostic patch, the driver
+log is silent until the failure. Its only errors are teardown
 noise after the session is removed: the driver's own calls to stop tasks
 on a worker fail with `tonic::transport::Error(Transport, hyper::Error(Io,
 Kind(ConnectionReset)))`, and workers retrying a report log `invalid
@@ -54,9 +81,11 @@ seconds).
 | gate 3 | s25 Pecan BFS reference | iteration 2 | 616 s | 40.7 GiB | 0 |
 
 Three of the baseline rows sit at the container limit and one has a
-kernel OOM kill, so memory explains or confounds those. The other eleven
-fail with 34 to 80 GiB of headroom and no memory event at all. Those
-eleven are the problem.
+kernel OOM kill, so memory explains or confounds those. Twelve rows have no recorded memory event; eleven of those have sampled
+PSS between 20 and 66 GiB, and the remaining zero-event row peaks at 91.9 GiB.
+Subtracting sampled PSS from the limit is not a measurement of cgroup headroom.
+These unresolved rows require the initiating error, separately from the
+confirmed OOM cases.
 
 What passes on the same inputs, same builds, same container:
 
@@ -76,22 +105,25 @@ the hub: 407,203 reached after iteration 1 at scale 24; at scale 25,
 passes. A 949 s iteration passed at scale 25 while a 108 s one failed at
 scale 24, so neither scale nor duration alone decides it.
 
-## 3. Established
+## 3. Evidence and its limits
 
 Each item names its evidence.
 
-1. **Both workers are alive when the stream dies.** The harness samples
-   every Sail process each 50 ms. In the four cells checked (gate 3 s25
+1. **Both workers are observed near the failure in four checked cells.** The harness samples
+   Sail processes with a configured 50 ms sleep, not a guaranteed observation interval. In the four cells checked (gate 3 s25
    Pecan BFS reference; gate 3 s24 Pecan SSSP delta-star; baseline s24
    Grenada BFS reference; baseline s24 Pecan SSSP reference) both worker
    pids are present, holding their memory (up to 31 and 33 GiB), until 0
-   to 2 s after the execute phase ends. No worker crashed, aborted or was
-   killed first. The `ConnectionReset` errors are the driver talking to
-   workers that are already shutting down.
-2. **It is not memory in eleven cells.** No `memory.max` reclaim event, no
-   OOM kill, 20 to 66 GiB peak in a 100 GiB container.
-3. **It is not a fixed timer.** The failing iteration ran between 108 s
-   and 1142 s before the loss.
+   to 2 s after the execute phase ends. This supports a different mechanism
+   from the confirmed OOM case, but samples alone do not prove the ordering
+   of the first transport fault. Later `ConnectionReset` errors can be teardown.
+2. **Twelve table rows have no recorded cgroup memory event.** Eleven of
+   those have sampled peaks of 20 to 66 GiB in a 100 GiB container; one peaks
+   at 91.9 GiB. That does not rule out pool refusal or other memory-related
+   mechanisms outside this evidence.
+3. **Iteration duration alone does not select failure.** The failing iteration
+   ran between 108 s and 1142 s. This does not exclude keepalive or another
+   timer measured from a different event.
 4. **It is not the worker idle probe.** Sail removes a worker whose task
    slots have been vacant for `cluster.worker_max_idle_time_secs` (default
    60), and that did kill one Argentea cell with this same error text
@@ -103,7 +135,7 @@ Each item names its evidence.
    128 MiB), it produced a different, explicit message (`decoded message
    length too large`), it is fixed on `work/grpc-client-decode-limit` and
    verified, and gate 3 contains the fix.
-6. **It is not the hash join's build side.** Recorded plans showed the
+6. **Changing the hash join's build side did not prevent all failures.** Recorded plans showed the
    partitioned hash join building on the adjacency; `work/s5-frontier-build-side`
    puts the frontier on the left. Gate 3 contains it, and the reference
    variant still loses its stream (and earlier than on the baseline at
@@ -115,24 +147,25 @@ Each item names its evidence.
    relational cells still failed. The gate-3 scale-24 SSSP delta-star cell
    ran 1082 s into its failing iteration against 494 s for the baseline's
    delta-star cell (Grenada), which is suggestive and no more than that.
-8. **Stream creation timeout and task attempts are not involved.** The
-   failures occur with the stream timeout at 60 s and at 900 s alike.
+8. **Changing the stream creation timeout did not prevent all failures.**
+   Failures occur with the setting at 60 s and at 900 s. This is not by
+   itself a causal exclusion; retain the first task/stream error when testing it.
 
 One earlier statement in the campaign record is wrong and is corrected
 here: worker processes do log into the driver's `server.log` at `info`
-(the `sail_execution::worker::actor` lines are theirs). What is missing is
-any worker-side warning or error, because a task failure is reported to
-the driver only as a status, and the driver logs statuses at `debug`.
+(the `sail_execution::worker::actor` lines are theirs). In those historical builds, what is missing is a worker-side warning or
+error naming the task cause: failure is reported to the driver as a status,
+which the driver logs at `debug`. Runtime289 now adds bounded cause logging.
 
-## 4. Same error text, different causes already explained
+## 4. Same error text, explained and confounded cases
 
-These are closed; they are listed so they are not re-diagnosed.
+Keep the confirmed causes separate from a run confounded by host interference.
 
 | Cell | Cause |
 |---|---|
 | gate 3, Argentea BFS frontier, scale 24 | the idle probe removed worker 1 with its shuffle output; the extension job runs with one attempt |
 | baseline, Pecan BFS reference, scale 24 | kernel OOM kill of a worker at the 100 GiB limit |
-| gate 3, Argentea BFS reference, scale 25, first attempt | the host was in a swap storm under a second VM; the retry without it ran to an OOM kill at 2 h 14 min instead |
+| gate 3, Argentea BFS reference, scale 25, first attempt | confounded: substantial host swap and a second VM were recorded, but the initiating stream fault was not captured; the later retry stopped that VM and changed keepalive settings, then reached a confirmed OOM kill at 2 h 14 min |
 
 ## 5. Hypotheses
 
@@ -148,52 +181,53 @@ effectively off (interval and timeout both very large) on every server.
 The one Argentea cell run with 300 s and 600 s did not lose a stream, but
 it is a different job and died of memory.
 
-**H2. HTTP/2 reset-stream protection.** The shuffle between 32 map and 32
-reduce partitions opens about 1024 streams per worker pair. The `h2`
-crate (0.4.15 in the lock file; limits read from the 0.4.19 source)
-closes a connection with
-`ENHANCE_YOUR_CALM` when a peer resets too many streams: more than 20
-pending-accept resets from the remote side, or 1024 locally reset streams.
-A consumer that drops many task streams at once (a join side finishing,
-a cancelled stage, a limit) issues that many resets. One two-host Argentea
-run logged `locally-reset streams reached limit (1024)` on the driver at
-the moment it failed. Fits: depends on partition count and plan shape, not
-on time or memory; push-pull has a different plan and passes. Not tested.
+**H2. HTTP/2 reset-stream protection.** Initially suggested because a
+32-by-32 exchange can create many streams and an earlier two-host log named
+the locally-reset-streams cap. The subsequent locked h2 0.4.15 controls show
+that ordinary cancellations do not consume its protocol-error reset budget.
+In the recorded two-host case task failures precede the reset-limit warning,
+so that warning may be a teardown consequence. An initiating protocol error
+still needs to be captured before assigning this mechanism as a cause.
 
 **H3. A flow-control or window stall that a timeout then converts to a
 reset.** Servers run with `http2_adaptive_window`. Least specific, listed
 for completeness.
 
-**H4. A second size limit on a path the decode fix did not cover.** The
-fix raised the decode limit on the clients built in
-`sail-execution/src/rpc.rs`. If the worker-to-worker stream client
-(`sail-execution/src/stream/service/client.rs`, `fetch_task_stream`, a
-Flight `do_get`) or an encode limit takes another path, a large batch in
-the heavy iteration could end the stream. Against: the limit error has
-its own message and none was seen. Cheap to check by reading the code.
+**H4. A second size limit on another path.** Source review confirms that
+the worker-to-worker `TaskStreamFlightClient` uses the shared `ClientHandle`
+for `FlightServiceClient`, which is included in the 128 MiB client decode-limit
+fix in `crates/sail-execution/src/rpc.rs`. It does not retain a separate 4 MiB
+default on that path. Other size limits would still require their initiating
+error and batch size as evidence; none is established here.
 
 ## 6. Experiments
 
-Each is one cell of about ten minutes on the existing gate 3 build.
+These were the initial proposed controls, not a measured ten-minute budget.
+The later logged BFS replay instead hit the container memory limit; see the
+review update above for the instrumented no-OOM-case replay being prepared.
 Reproducer: scale-24 Pecan BFS frontier (failed 146 s into iteration 2,
 at 467 s wall clock on the baseline) or scale-24 Grenada BFS reference
-(481 s). Neither has been rerun on gate 3 yet, so the first run also
-confirms the reproducer there.
+(481 s). Those were the original proposed cells. The later frontier replay reached a
+confirmed OOM kill; it did not reproduce the earlier low-memory failure. A
+new logged Grenada reference cell has not been run in this review.
 
-1. **See the close.** Rerun the reproducer with connection-level logging
-   on every process: `RUST_LOG=info,h2::proto::connection=debug,h2::proto::streams=warn,hyper::proto::h2=debug,sail_execution::task_runner=debug,sail_execution::stream=debug`.
-   The harness pins `RUST_LOG='info'` in `examples/extensions/benchmarks/runtime.py`
-   (the `server` function), so this needs a one-line knob on a fork
-   branch. Expected: a `GOAWAY` with its reason and the side that sent
-   it, and the first task that failed with its cause. This alone may end
-   the search.
+1. **See the close.** Rerun with connection-level logging on every process.
+   Diagnostic harness `3a9028057` now accepts
+   `SAIL_BENCHMARK_RUST_LOG=info,tonic::transport::server=debug,h2::proto::connection=debug,h2::proto::streams=warn,sail_execution::task_runner=debug`.
+   Runtime `2894a962` adds bounded source/status logging with process, task,
+   stream and peer identity. Use the first error before teardown; a later
+   GO_AWAY or reset alone does not establish what initiated the failure.
+   The prepared logging02 cell also records ping/GO_AWAY/reset categories.
 2. **Keepalive off.** Same cell with
    `SAIL_EXPERIMENTAL_HTTP2_KEEPALIVE_INTERVAL_SECS=86400` and the timeout
    at 86400 through the matrix `environment` map and
-   `--http2-keepalive-timeout`. Passes: H1. Fails the same way: H1 is out.
-3. **Fewer streams.** Same cell with 16 partitions (256 streams per pair).
-   Passes where 32 fails: H2, or something else that scales with stream
-   count.
+   `--http2-keepalive-timeout`. Compare first-failure diagnostics and verified
+   effective settings. A pass or the same generic error alone is not a binary
+   proof or disproof of H1.
+3. **Fewer streams.** Same cell with 16 partitions. A P-by-P partition dependency pattern has
+   256 pairs at P=16; that is not an observed per-worker-pair stream count.
+   A changed outcome also changes partition work, memory and scheduling;
+   it does not isolate the reset cap without its initiating error.
 
 The matrix harness takes a one-cell configuration; the decision cells are
 templates (`gn-decide3-gate3.json` on Morrobay is Pecan BFS reference at

@@ -9865,3 +9865,35 @@ Gate: `ci-local: PASSED every gate at ead3568 on Linux x86_64 in 2417s` (host gr
 ## 2026-09-23T03:20:17Z — Claude Code (B8, quegee via ssh from the Mac): ACK B8; gate `ci-local: PASSED every gate at 2985fac on Linux x86_64 in 2471s` taken from the coordinator, the image build is running
 
 quegee, now: `~/src/b8-build.sh` (log `~/src/b8-build.log`) builds `simple-rust-algo-bench:b8-2985fac` capped (`MemoryMax=20G`, `--jobs 4`) from harness `1ccd8bf` (`work/bench-b7`, worktree `~/src/aga-b7`), `grust` by `git archive v0.22.0`, `grust-next` by `git archive 2985fac`, icecat 57b443e; no other build or container on the host. Then, one at a time: audit, receipt, manifest, plan (`b8-` prefixed in `~/src/b6-work`); parity for the three sets at unset/1/16 with both bits gates, stopping if any f64 row is not bit-identical to v0.22.0; page cache drop; the six timed runs in plan order. After quegee only: the protocol set on eigen and lakecat, capped builds, timed runs outside eigen's blackout windows. The codex session pid 2382171 is not touched. DONE follows with the evidence; silence until then means running.
+
+
+## 2026-09-30T15:06:22.959422+00:00 — Codex: ACK pending Fable Sail graph review
+
+User requested review after Fable finishes its handoff. Located the in-progress `docs/STREAM-LOSS-STATUS.md` in querygraph/grust. Waiting for completed handoff before reviewing Pecan, Banda, Argentea, the benchmark harness and retained evidence in querygraph/sail. No implementation or benchmark runs started.
+
+
+## 2026-09-30T15:20:41.258246+00:00 — Codex: DONE Fable Sail graph review
+
+Reviewed completed Grust handoff `b91828b2765ec2018e21011aea686e931af68c99`; querygraph/sail runtime `work/s5-frontier-build-side` at `ffcfbd5690e3f3681ef9ac18ba959bc231cf9f73`, and host runner `work/matrix-environment` at `ae3b08f4f`. Report and reproducible evidence: `docs/reviews/sail-graphs-2026-09-30/REVIEW.md`. The stream origin remains unexplained; findings distinguish missing diagnostics, reset-limit semantics, WCC partial certification, memory-boundary mistakes, Argentea protocol/scalability issues, Pecan bucket overflow, and current exporter/outcome gaps. Later gate-2 Grenada certification is retained distinctly from failed baseline verification.
+
+Evidence: exact detached Argentea core release run, 92 passed/0 failed, source HEAD unchanged; not a full Sail/distributed/concurrency gate. BFS inconsistent-completion counterexample reproduced against that build. Pinned h2 0.4.15 control passed 1,100 ordinary cancellations with error-reset cap 1, including three release runs with 10 load processes. WCC predicate and actual exporter controls retained; Pecan floor probe uses verified older binary with byte-identical relevant source and explicit limits. Read-only original Morrobay evidence; no new large campaign or implementation edits. This is a review delivery, not a merge/release gate verdict.
+
+
+## 2026-09-30T16:12:00.013594+00:00 — Codex: ACK focused Sail stream-loss experiments
+
+User authorized focused experiments after reviewing STREAM-LOSS-STATUS.md. Repository querygraph/sail, runtime baseline ffcfbd569, existing gate3 artifacts and original inputs on Morrobay. Scope: validate failure logging cheaply, replay one previously failing cell with controlled settings, choose follow-up based on first-error evidence. Separate work branches for instrumentation and harness; no broad matrix. All evidence and diagnoses live in grust/docs/reviews/sail-stream-experiments-2026-09-30/.
+
+
+## 2026-09-30T16:19:37.255901+00:00 — Codex: ACK Sail performance and cluster preparation
+
+User expanded the focused stream-loss experiments to implementation work that improves speed and reduces memory, with Grenada/Argentea cluster scaling as an engineering target. Continue the stream diagnosis; develop and gate focused optimizations in querygraph/sail work branches, measuring preserved correctness and resource boundaries. No claim of near-linear scaling until measured; plans, evidence interpretation and handoffs remain in grust/docs.
+
+
+## 2026-09-30T18:32:51.314677+00:00 — Codex: ACK scoped benchmark-neutrality history correction
+
+Repository querygraph/grust, work/proposal-v5. Preparing a guarded rewrite from df728bb through current 5c1f7db to remove prescribed comparative benchmark outcomes from two documents, as required by AGENTS.md. All measurements, attributed quotations, commit identities/messages and other files are preserved; the latest four SEM-REVIEW-2 updates are preserved byte-for-byte. The initial attempt refused before mutation because HEAD advanced. Private candidate 34a535c3f0c845c03533f1ae53ac14e8b2bb3972 is under independent audit; activation uses a source/index guard and exact remote lease. Existing dirty work is retained. Evidence: docs/reviews/sail-stream-experiments-2026-09-30/history-neutrality/.
+
+
+## 2026-09-30T18:35:20.394414+00:00 — Codex: DONE scoped benchmark-neutrality history correction
+
+Repository querygraph/grust, work/proposal-v5 now 34a535c3f0c845c03533f1ae53ac14e8b2bb3972 locally and on origin (verified). The exact-lease update replaced 5c1f7db after the detached gate reported `NEUTRAL_HISTORY_GATE PASSED 34a535c3f0c845c03533f1ae53ac14e8b2bb3972`. Twenty linear commits preserve raw identities/dates/messages, all measurements and quotations, every other tree entry, and the last four SEM-REVIEW-2 versions byte-for-byte. Only the prescribed comparative-outcome prose in two document histories changed. All dirty tracked files survived byte-for-byte. Old→new mapping and independent audits: docs/reviews/sail-stream-experiments-2026-09-30/history-neutrality/extended-prepared-receipt.json and activation-receipt.json. Other branches, main and tags were not pushed.

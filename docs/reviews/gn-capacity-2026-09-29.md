@@ -14,6 +14,12 @@ Evidence root on morrobay: `~/src/sail-extensions-gates/graph-nuts-b87fb27ac/`
 gate, the chain logs, `capacity_findings.py`, `pick_sources.py`). Volume paths
 are under `/targets/`.
 
+Correction recorded UTC: 2026-09-30T18:11:37.461276+00:00. This review preserves recorded
+measurements and failed outcomes while correcting causal and comparison claims.
+Shared-host observations do not establish dedicated-host performance or a
+completed-run ratio for a failed cell. Later stream/allocation evidence is in
+[the focused results](sail-stream-experiments-2026-09-30/RESULTS.md).
+
 ## 1. Inputs
 
 | Input | Vertices | Edges | Files | Source vertex | Why that source |
@@ -358,14 +364,13 @@ Read beside the same cell elsewhere on the same input and source:
 | Banda reference, `asStaged`, Linux gate, one process | 704 s | 31.3 GiB |
 | Pecan / Grenada push-pull, Linux gate (baseline) | 775 / 844 s | about 39 GiB |
 
-So at scale 24 on one host Argentea is 1.7 times Banda's time at twice
-Banda's memory, and four times the cores over Capitola's run buy nothing (1213 s against 1179 s):
-the unrolled job's time is not in the kernels but in the per-phase shuffle
-and materialization of the frontier and adjacency between Sail stages,
-which is the same cost that dominated the two-host scale-22 runs. A distributed placement experiment should hold the workload, protocol and
-resource envelope fixed and measure time and memory as resources are added.
-The S1/S3 projection work applies to Argentea's adjacency build as much as
-to Banda's.
+These scale-24 observations compare different execution paths on a shared
+host. Argentea took 1213 s on the Linux gate and 1179 s on Capitola; hardware
+and runtime differences do not isolate the effect of core count. The
+measurements do not separate kernel, initialization, scheduling and shuffle
+costs. A placement comparison should hold the dataset, certified result,
+protocol and resource envelope fixed and measure each component. Adjacency
+construction remains a separate memory/work measurement for both native paths.
 
 ### The decision matrix (05:19 to 11:31 UTC, 2026-09-30; complete)
 
@@ -391,19 +396,19 @@ Results:
 
 | # | Cell | Outcome | Time | Peak PSS | What happened |
 |---|---|---|---|---|---|
-| 1 | Argentea BFS reference, scale 25 | error | 1767 s | 56.2 GiB | all 32 partitions initialized (native plan at 313 s), then the unrolled job failed in phase 0 with `h2 protocol error: error reading a body from connection`; no worker was replaced, no OOM event. Confounded: the host carried the user's default VM (its nightly container had run since about 03:00 UTC) and was at 32.8 of 33.8 GB swap; the in-container memory sampler recorded nothing between 302 s and 939 s of the execute phase, ten minutes in which the whole VM was evidently stalled, and worker memory peaked at 40 GiB and then unwound from about 1250 s. Retried once the default VM stopped, as `gn-decide2-gate3.json` (`chain-decide2.sh`, `decide2-gate3/`) with the h2 keepalive interval at 300 s and timeout at 600 s beside the idle and stream settings; if the retry passes, scale 25 was the overlap and the ping window, if it fails the same way, phase 0 at scale 25 is where Argentea's per-partition work exceeds what one host sustains |
+| 1 | Argentea BFS reference, scale 25 | error | 1767 s | 56.2 GiB | all 32 partitions initialized (native plan at 313 s), then the unrolled job failed in phase 0 with `h2 protocol error: error reading a body from connection`; no worker was replaced and no OOM event was recorded. The host carried the user's default VM (its nightly container had run since about 03:00 UTC) and was at 32.8 of 33.8 GB swap. The sampler recorded nothing between 302 s and 939 s of execution; the cause of that sampling gap was not measured. Worker memory peaked at 40 GiB and unwound from about 1250 s. The retry below stopped the default VM and changed keepalive interval/timeout to 300/600 s (`gn-decide2-gate3.json`, `chain-decide2.sh`, `decide2-gate3/`); changing both conditions does not isolate either cause |
 | 2 | Banda SSSP delta-star, scale 24, `asStaged` | **passed** | 1615 s | 45.8 GiB | the weighted traversal on the resident CSR: 8,862,601 reached (the same set as BFS), certificate validated with 22 witness rounds, max edge slack 5.6e-12, conservative distance error bound 9.3e-5. 2.3 times the BFS reference on the same input (704 s), with the host again at a load average of 15 to 17 |
-| 3 | Argentea SSSP delta-star, scale 24 | nonconverged (harness cap) | 4215 s | 67.8 GiB | the worker-partitioned weighted traversal ran its full 30-round cap (`--argentea-max-rounds 30`, 992 decide/apply events over 32 partitions) and stopped with the structured `sssp_round_cap` failure at bucket 3.0: 8,853,142 reached of Banda's 8,862,601 with 2,007,762 vertices still active; native plan at 189 s, then about 130 s per round. No engine fault: the cap is the harness's, and delta-stepping at delta 0.1 needs more rounds than the 30 the matrix allowed. For the decision it is enough: 30 rounds took 2.6 times Banda's complete SSSP (1615 s) at 1.5 times its memory, so on one host Argentea's weighted traversal is at least 3 times Banda's, before the rounds it still owed. A rerun with a higher cap would cost about two hours and change no decision |
-| 4 | Pecan SSSP delta-star, scale 24 | error | 1752 s | 65.0 GiB | `h2 protocol error: error reading a body from connection` in iteration 2 (iteration 1 ended at 650 s), the same failure the baseline's relational reference and frontier cells showed at this scale, now with the frontier-left joins, the 120 s keepalive timeout, the idle removal disabled and the 900 s stream timeout, so none of those was its cause; no OOM event. The matrix then stopped itself: the harness's 180 s `docker cp` of the cell's 1 GB staging directory timed out on the nearly full host volume (17 GiB free), which counts as an orchestration error, so cell 5 (Pecan BFS reference, scale 25) did not run and is queued separately as `gn-decide3-gate3.json` after the Argentea retry |
-| 1 (retry) | Argentea BFS reference, scale 25, one host, keepalive 300/600 s, default VM stopped | **oom** | 8213 s | 99.8 GiB | the definitive one-host answer: with no host interference this time (all 32 cores busy, no sampler stall), the native plan was ready at 720 s, all 32 partitions initialized, and the first phase then climbed through 74 GiB at one hour and 94 GiB at two hours until the container's 100 GiB limit killed a worker at 2 h 14 min (`memory.max` reclaim events 11,138, `oom_kill` 1), with 17 of the 32 first-phase decisions done. Beside Banda's refusal at scale 25 (its projection alone over the 80 GiB budget), Argentea's two workers need more than 100 GiB for the same graph, so on one host the partitioned path lifts neither the memory ceiling nor the time; it is the path for several hosts, and the two-host run at scale 24 does not complete yet |
-| 5 | Pecan BFS reference, scale 25, frontier-left joins | error | 2318 s | 40.7 GiB | `h2 protocol error: error reading a body from connection` in iteration 2 (loading and iteration 1 took 1685 s), at 41 GiB with no memory event and no worker replaced. The baseline's reference cell on this input got through three iterations before the container limit stopped it in iteration 4; with the join-side fix the reference variant now dies where the scale-24 relational cells die, in iteration 2, on the stream. So the fix did not carry the reference variant further, and the stream loss, not memory, is the relational path's first wall on both scales. Relational users stay with push-pull (and frontier at scale 25) until it is located |
+| 3 | Argentea SSSP delta-star, scale 24 | nonconverged (harness cap) | 4215 s | 67.8 GiB | the worker-partitioned traversal exhausted its 30-round harness cap (`--argentea-max-rounds 30`, delta 0.1, 992 decide/apply events over 32 partitions) with structured `sssp_round_cap` at bucket 3.0: 8,853,142 reached and 2,007,762 still active; native plan at 189 s. Banda's separate completed cell reached 8,862,601 in 1615 s at 45.8 GiB. The Argentea cell is nonconverged, so its 4215 s and 67.8 GiB are consumed resources, not a completed-run speed ratio. No higher-cap cell was run; completion time and certified output remain unmeasured |
+| 4 | Pecan SSSP delta-star, scale 24 | error | 1752 s | 65.0 GiB | `h2 protocol error: error reading a body from connection` in iteration 2 (iteration 1 ended at 650 s), also seen in earlier reference/frontier cells. Frontier-left joins, 120 s keepalive timeout, idle removal disabled and 900 s stream timeout did not prevent this recorded failure; its originating cause was not captured and no OOM event was recorded. The harness then recorded an orchestration error when its 180 s `docker cp` of the 1 GB staging directory timed out; host free space was 17 GiB. Cell 5 did not run in that matrix and was queued separately as `gn-decide3-gate3.json` after the Argentea retry |
+| 1 (retry) | Argentea BFS reference, scale 25, one host, keepalive 300/600 s, default VM stopped | **oom** | 8213 s | 99.8 GiB | the default VM was stopped and no comparable sampler stall was recorded; this does not establish absence of all shared-host interference. Native plan ready at 720 s, all 32 partitions initialized, then the first phase climbed through 74 GiB at one hour and 94 GiB at two hours. The 100 GiB container limit killed a worker at about 2 h 14 min (`memory.max` events 11,138, `oom_kill` 1), with 17 of 32 first-phase decisions done. This configuration exceeded its encompassing limit. Banda's separate scale-25 projection refused an 80 GiB admission quota. These distinct failed outcomes do not establish an intrinsic one-host ceiling or the memory required by another implementation or configuration |
+| 5 | Pecan BFS reference, scale 25, frontier-left joins | error | 2318 s | 40.7 GiB | `h2 protocol error: error reading a body from connection` in iteration 2 (loading and iteration 1 took 1685 s), at about 41 GiB with no recorded memory event and no worker replaced. The baseline reference cell reached iteration 4 before the container limit stopped it. This run failed earlier despite the join-side change, but the two runs do not isolate a common stream-loss cause. Preserve this error separately from the baseline memory failure and from push-pull/frontier certification outcomes |
 
-Grenada against Pecan needs no further cell: at scales 24 and 25 the two
-run within 10% of each other on every variant that finished (Grenada is
-Pecan's plan inside DataFusion), so that choice is about integration, not
-speed. The two-host Argentea scale-24 run (the same cell as the gate's
-first Argentea cell, across Capitola and Morrobay) is the remaining
-distributed question and waits on the shared store.
+The reported completed traversal times for Pecan and Grenada at scales 24
+and 25 were within 10% on corresponding variants. Certification status must
+remain separate: completion alone is not a passed comparison. Both use the
+same relational controller here, but these shared-host observations do not
+establish performance equivalence. Further cells were parked under the user's
+bounded decision-matrix scope. The two-host Argentea scale-24 outcome is below.
 
 ### Two hosts: Capitola and Morrobay (23:50 UTC)
 
@@ -441,7 +446,7 @@ two worker processes, x86_64 under Rosetta, the dataset on local disk,
 | Argentea, two hosts, one worker each, 8-round cap (20 phases) | 421 s | same result |
 | Banda, single process on Capitola (x86_64 under Rosetta), `asStaged` | 120 s | same result; staging 52 s, 2.36 GiB retained |
 | Argentea, two hosts, 8-round cap, input on local disk on both hosts (no object store) | 405 s | same result; zero object-store retries |
-| Argentea, two hosts over the home LAN, 8-round cap, local inputs | 381 s | same result; the LAN saves 6% against the Tailscale relay, so the cross-host shuffle cost (about 6 s per native phase) is the network round trips of the shuffle itself, not the link |
+| Argentea, two hosts over the home LAN, 8-round cap, local inputs | 381 s | same result; this observation is about 6% below the 405 s Tailscale/local-input observation; it does not isolate network latency, shuffle work or shared-host load |
 | **Scale 24**, Argentea, two hosts over the LAN, 8-round cap, local inputs, store on Capitola, 48 slots per worker, stream timeout 900 s, idle removal off (05:52 to 06:12 UTC, 2026-09-30) | failed at 1194 s | `argentea: operation cancelled while reading input`. The unrolled job initialized 22 of 32 partitions (16 on the Capitola worker, 6 on the Morrobay worker) in 20 minutes, then at 06:12:10 every running task on both workers flipped to FAILED in the same second (651 tasks), after which the driver's h2 client hit its locally-reset-streams limit (1024) and the session closed; five object-store body errors reading from the Capitola store at 06:04 were retried. The first failing task was on the Morrobay worker (job 37, stage 22). Sail logs worker failures only as task status, so the originating error is not in the log; the client saw Argentea's cancellation message. At scale 22 the same configuration passes in 381 s, so this is the first scale at which the two-host path does not complete on this setup (a 1 Gb LAN, the store on one of the two hosts, x86_64 under Rosetta on Capitola). Not retried without the user: a retry would need worker-side error logging first |
 
 Network correction (2026-09-30, 02:30 UTC): the two-host runs above went
@@ -477,16 +482,13 @@ Capitola alone, two workers, 32 partitions, 8-round cap:
 |---|---|---|
 | Argentea, one host, two workers, 8-round cap, scale 24 (first run; receipt spoiled, see below) | 1409 s | 6 levels in 9 unrolled phases, 8,862,601 reached (the same count as Banda and the relational cells on the Linux gate), certificate validated: all-edge inequalities and rooted tight-edge reachability, max edge slack 0, parent tree checked, 5 witness rounds; the native plan was ready at 222 s, so the unrolled job took about 1180 s |
 
-Its receipt nevertheless says `mismatch`: the harness's last guard found
-the checkout's HEAD moved during the run, because the operator committed
-`work/matrix-environment` in that checkout while the cell ran. The
-traversal, reach and certificate stand; the checkout is back on
-`837a8ecf5` and the cell is rerunning untouched for a citable receipt
-(`capitola-scale24-argentea-reference-cap8-t900b`): **passed, 1179 s**
-(native plan ready at 222 s again, 8,862,601 reached, certificate
-validated, max edge slack 0, parent tree checked), so the citable
-single-host scale-24 number on Capitola is 1179 s and the first run's
-1409 s stands as a repeat within 20%. Rule from this: never
+Its receipt says `mismatch`: HEAD moved during the run when
+`work/matrix-environment` was committed in that checkout. The reported
+traversal and certificate fields remain evidence, but 1409 s is not a passing
+repeat of a frozen source revision. The subsequent run on `837a8ecf5`
+(`capitola-scale24-argentea-reference-cap8-t900b`) **passed in 1179 s**
+(native plan ready at 222 s, 8,862,601 reached, certificate validated,
+max edge slack 0, parent tree checked). Preserve both outcomes. Rule from this: never
 commit in a harness checkout while a cell runs on it; edit in another
 worktree. Against scale 22 (268 s for 67.1M edges, 20 phases), scale 24 is
 4 times the edges for 4.4 times the time (1179 s; corrected 2026-09-30: an
@@ -494,77 +496,79 @@ earlier version of this line said 16.8M edges and 16 times). The Linux gate runs
 cell first in its Argentea matrix (started 02:26 UTC) for the 32-core
 number, and the two-host scale-24 run waits on the shared store.
 
-So on one host the unrolled empty phases cost 20 s, but across two hosts
-they cost 2325 s: about 53 s per native phase on the network against
-about a second on one host, so the round cap has to fit the graph's depth
-before a two-host number means anything. With the cap that fits (8), the
-two-host BFS is 1.5 times slower than the same Argentea on one host and
-3.5 times slower than Banda's single process. What differs between
-the two runs is where the shuffles and the inputs go: across a Tailscale
-link between a WeWork network and a home network (about 7 ms round trip)
-and through MinIO on Morrobay, with Morrobay itself carrying the gate VM
-and the nightly VM. That is the honest state of "distributed" today: it
-works, and on this network it does not pay. The driver log locates the
-time: of the 153 Spark jobs in the run, 152 took at most 255 s in all; the
-one native job that unrolls init, the 31 rounds and the result stage spanned
-2244 s, with every one of its 1,598 pipelined tasks on both workers
-"running" for the whole span (they wait on each other's shuffle output).
-During its first two minutes the object-store client logged 41
-"error while reading response body ... retrying" events reading the
-input from MinIO over Tailscale. The next two-host run puts the input on
-local disk on both hosts to separate the cross-host shuffles from the
-object store. The two-host run with the
-8-round cap and Banda single-process on the same input follow, then scale
-24 across the two hosts.
+The cap-30 and cap-8 observations differ by 20 s on one host (288 versus
+268 s) and 2325 s across two hosts (2746 versus 421 s). Dividing the latter
+by 44 removed native relations gives about 53 s per relation, but this is
+arithmetic over whole-run differences, not measured empty-phase or network
+time. The cap changes plan size, task count and terminal work; placement,
+store access and shared-host load also require controls. A cap must be
+sufficient for a certified result and disclosed with every comparison.
 
-## 4b. Against graphframes-rs (Sem's numbers, 2026-09-30)
+In the longer two-host run, 152 of 153 Spark jobs took at most 255 s in
+aggregate; the native job containing the unrolled phases spanned 2244 s.
+The running status of its 1,598 pipelined tasks does not distinguish compute
+from blocked input/output time. During the first two minutes, the object-store
+client recorded 41 response-body retries. Later local-input (405 s) and LAN
+(381 s) observations are retained above, but their differences do not assign
+a fraction of total time to storage or shuffle. The corrected network
+description is the dated LAN/Tailscale note above.
 
-Sem Sinchenko's in-process DataFusion implementation
-(`SemyonSinchenko/graphframes-rs`, branch `new-benchmark-results`,
-`benches/results`; c5d.4xlarge, 16 vCPUs, 32 GiB, `--max-memory 30G
---num-workers 16`, medians of 5 runs, wall time / peak RSS / peak disk) and
-his expectation that Sail should land in the same performance class,
-because both are DataFusion and Spark Connect adds a per-iteration
-constant:
+## 4b. External graphframes-rs context (2026-09-30)
+
+Sem Sinchenko's in-process DataFusion implementation reports these results
+on c5d.4xlarge, 16 vCPUs, 32 GiB, with `--max-memory 30G --num-workers 16`.
+The [upstream record](https://github.com/SemyonSinchenko/graphframes-rs/blob/ba2fdd8f51fa7fafdca15012d2741f5f8d80c024/benches/results/README.md)
+is pinned to `ba2fdd8f51fa7fafdca15012d2741f5f8d80c024`; it reports medians
+of five runs and memory in GiB. These are external observations on a different
+host and execution class. Sharing DataFusion does not establish a fixed or
+data-independent difference in execution cost.
 
 | Graph | WCC | PageRank (10 iterations) | Shortest paths |
 |---|---|---|---|
-| cit-Patents | 4.71 s / 1.46 GB | 4.05 s / 1.06 GB | 0.90 s |
-| graph500-24 (8.9M non-isolated vertices, 260M edges) | 33.3 s / 14.0 GB | 24.5 s / 5.0 GB | 6.7 s |
-| graph500-25 | 82.5 s / 18.6 GB | 62.3 s / 12.4 GB | 26.4 s |
-| graph500-28 | 1009 s / 20.2 GB | 912 s / 18.3 GB | 783 s |
+| cit-Patents | 4.71 s / 1.46 GiB | 4.05 s / 1.06 GiB | 0.90 s |
+| graph500-24 (8.9M non-isolated vertices, 260M edges) | 33.3 s / 14.0 GiB | 24.5 s / 5.0 GiB | 6.7 s |
+| graph500-25 | 82.5 s / 18.6 GiB | 62.3 s / 12.4 GiB | 26.4 s |
+| graph500-28 | 1009 s / 20.2 GiB | 912 s / 18.3 GiB | 783 s |
 
 Ours on cit-Patents (baseline `b87fb27ac`, 32 cores, process-cluster mode,
 two worker processes, 32 partitions): Pecan WCC 312 s (randomized) and
 500 s (min-label), Grenada 397 and 566 s, Pecan PageRank 729 s for 20
-iterations, Banda WCC 30 to 39 s and PageRank 32 s. So the relational
-paths are 65 to 120 times his WCC and Banda 6 to 8 times.
+iterations, Banda WCC 30 to 39 s and PageRank 32 s. These times have different
+hardware, process topology and timing boundaries from the external results;
+PageRank also has a different iteration count. The external scale-24 input
+lists 8,870,942 vertices and 260,379,520 edges, versus this campaign's
+16,777,216 vertices and 268,435,456 edge tuples. Even cit-Patents is listed
+with 16,518,947 edges upstream versus 16,518,948 here. Establish identical
+manifests and semantics before reporting comparative ratios.
 
-It is not the algorithm and not checkpointing as such. His WCC follows
-Bögeholz, Brand and Todor (ICDE 2020), the same randomized contraction as
-Pecan's `randomized` method, and his README says checkpoints are written
-to Parquet and re-read between iterations, as Pecan's are. What differs,
-read from the receipts and from `pyspark_pecan`:
+Both implementations cite the Bögeholz, Brand and Todor (ICDE 2020) WCC
+family and write/re-read Parquet checkpoints. This does not establish equal
+algorithmic work or equal checkpoint costs. The following observed costs and
+source differences identify controls to measure; they do not attribute the
+external timing difference.
 
 1. **Where the plan runs.** His is one process with 16 DataFusion
    partitions; a repartition hands record batches between threads. Every
    cell of ours ran Sail in process-cluster mode: a driver and two worker
-   processes, 32 partitions, every exchange encoded and carried over gRPC
-   task streams between processes, every job scheduled as distributed
-   tasks. No cell of this campaign ran `--mode local`.
-2. **A round is seven to nine Spark Connect jobs, not one plan.** In
-   `wcc_randomized.py` each round materializes three tables (priorities,
-   representatives, relabeled edges), and each `materialize`
-   (`staging.py`) is a `repartition(partitions)` of the whole result, a
-   Parquet write, a read back, and for two of them a `count()` to verify
-   the row count; three more `count()` actions feed the metrics and the
-   loop test. Min-label does the join and aggregate, one materialize with
-   its count, and a second full join only to ask whether any label
-   changed.
+   processes and 32 partitions, with jobs scheduled as distributed tasks.
+   Same-worker stream reads use the local stream manager; cross-worker reads
+   use Flight (`crates/sail-execution/src/task_runner/actor/handler.rs:317-326`). No cell of this campaign ran `--mode local`.
+2. **A round has multiple data actions and control RPCs.** The unfused
+   `wcc_randomized.py` contraction loop materializes three tables (priorities,
+   representatives, relabeled edges), verifies only the representatives with
+   `expected_rows`, and separately counts active vertices and next edges:
+   six explicit write/count actions per round. The initial `remaining` count
+   is outside the loop. `materialize` (`staging.py`) also requests owned-run
+   capability/schema information and performs keyless `repartition(P)` before
+   the write. These source counts are not measured server job/stage totals.
+   Min-label writes and counts the new labels, then joins stored new/old label
+   tables to test for change; that comparison does not repeat the adjacency
+   expansion join. These source files are identical between campaign baseline
+   `b87fb27ac` and checked controller `56194b170`.
 3. **The per-round floor is 4.7 s, not a small constant.** In the
    randomized cell the last eleven rounds, on a contracted graph that is
    nearly empty, take 4.6 to 5.7 s each; 19 rounds of that floor are
-   about 90 s, nineteen times his whole run. Min-label's rounds are a flat
+   about 90 s as a simple extrapolation, not a measured removable component. Min-label's rounds are a flat
    22 to 25 s on 33M adjacency rows whatever changed.
 4. **Setup before the first round.** `_snapshot` rewrites vertices and
    edges to Parquet and runs five validation jobs (null ids, id
@@ -572,25 +576,22 @@ read from the receipts and from `pyspark_pecan`:
    against the vertices) and a count: 28 s before round 1 of randomized
    WCC, 39 s before min-label, 58 s before PageRank. At scale 24 the
    source-0 cells measured this alone: 200 s (Pecan) and 372 s (Grenada)
-   of loading against his 6.7 s complete shortest-paths run.
+   of loading. The external 6.7 s shortest-paths result uses a different
+   input and timing boundary, so it does not measure the cost of this setup.
 5. **Banda's time is ingest, not kernel.** WCC: staging 13.8 s, projection
    14.4 s, kernel and output 1.4 s (min-label) to 10.6 s. PageRank:
-   13.8 + 14.6 + 3.3 s. The kernel is faster than his whole run; getting
-   the graph out of Sail tables into the CSR (Utf8 ids, canonical sort)
-   costs 28 s.
+   13.8 + 14.6 + 3.3 s. Staging plus projection totals about 28 s in
+   these observations. Kernel-only and whole-run boundaries must remain
+   separate; they do not supply a cross-system speed comparison.
 
-What is not measured is the split between items 1 and 2: how much of a
-22 s round is the cross-process exchange and how much is Pecan's own
-extra jobs. Two cells separate them and mirror his machine: the same
-Pecan WCC (randomized and min-label) on cit-Patents in `--mode local`
-with 16 threads, 16 partitions and a 30 GiB pool in a 16-core, 32 GiB
-container. If local mode lands near his class, the cluster exchange is
-the cost, which is the same subsystem as the stream loss
-(`STREAM-LOSS-STATUS.md`); if it stays in the hundreds of seconds, Pecan's
-round structure is. Not run yet: the gate is building
-`work/stream-performance-review` for the stream review
-(`sail-stream-build289`, 16 CPUs), and the comparison should not share
-cores with it.
+The split between execution-mode cost and controller actions is unmeasured.
+A useful first control is Pecan WCC (randomized and min-label) on the same
+cit-Patents manifest in local and process-cluster modes, with matched total
+CPU/memory budgets and partition counts. A 16-CPU/32-GiB container does not
+reproduce the external machine. Record setup, planning, tasks, transport,
+checkpoint I/O and round counts; a local-mode change alone does not identify
+one causal subsystem or explain the separate stream-loss errors. These cells
+were not run for this record and should not overlap the active Linux build.
 
 ## 5. Findings so far
 
@@ -605,18 +606,16 @@ cores with it.
 
 1. A benchmark fixture's default source has to be checked for degree zero;
    the harness now refuses to let that pass silently.
-2. Two of the three Graph Nuts paths were blocked at scale 25 by fixed
-   limits, not by the graph: an admission bound that overestimates the sort's
-   keys by an order of magnitude, and a transport default the servers had
-   already outgrown. Both are one-place fixes.
+2. Recorded scale-25 refusals included a conservative sort admission bound
+   and a client decode limit. Correcting those limits removes those specific
+   refusals; it does not establish graph completion, a new capacity ceiling
+   or a cause for other failures.
 3. Argentea runs through the same harness as the other paths, so the four-way
    comparison the plan asks for can now be one matrix.
-4. Argentea works across two physical hosts on Graph500 scale 22 with
-   identical artifacts, but on this network (Tailscale between two sites,
-   MinIO on one of them) it does not pay: 421 s across two hosts with a cap
-   that fits the depth, against 268 s for the same two workers on one host
-   and 120 s for Banda's single process. Every unrolled native phase costs
-   about 53 s across hosts, so the round cap is not a detail there.  The
-   local-input two-host run (405 s against 421 s) shows the object store is
-   4% of it; the rest is the cross-host shuffle, about 7 s per native phase
-   on this link.
+4. Argentea has certified scale-22 results across two physical hosts with
+   identical artifacts. Recorded cap-8 times were 421 s across hosts and
+   268 s with two workers on one host; Banda's separate single-process
+   boundary was 120 s. Local-input and LAN observations were 405 s and
+   381 s. Keep their store/network/load conditions with each result. These
+   observations do not isolate per-phase transport time, establish an
+   object-store percentage or demonstrate homogeneous cluster scaling.
