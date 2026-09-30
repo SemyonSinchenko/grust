@@ -331,10 +331,25 @@ worker.
 |---|---|---|---|
 | **passed** | 2746 s | 6 levels, 2,394,613 reached, 4,194,304 owned rows | 64 native phases unrolled for the 30-round cap (31 executed), 1,040 native receipts, 1,598 completed worker tasks, worker 1 on Morrobay and worker 2 on Capitola; Capitola runs the x86_64 artifact under Rosetta, and the two hosts talk over Tailscale, so this is a functional and relative measurement only |
 
-Next: the same cell on one host with the same artifacts (Capitola alone,
-two worker processes), Banda single-process on the same input, both with
-the 30-round cap and with an 8-round cap that fits the 6 levels, then
-scale 24 across the two hosts.
+The same cell on one host, same artifacts (Capitola alone, the driver and
+two worker processes, x86_64 under Rosetta, the dataset on local disk,
+16 partitions, 8 GiB quota per worker):
+
+| Run | Time | Result |
+|---|---|---|
+| Argentea, one host, two workers, 30-round cap (64 phases) | 288 s | 6 levels, 2,394,613 reached, certificate validated |
+| Argentea, one host, two workers, 8-round cap (20 phases) | 268 s | same result |
+| Argentea, two hosts, one worker each, 30-round cap | 2746 s | same result |
+
+So the second host made the same BFS about ten times slower, and the
+unrolled empty phases account for only 20 s of it. What differs between
+the two runs is where the shuffles and the inputs go: across a Tailscale
+link between a WeWork network and a home network (about 7 ms round trip)
+and through MinIO on Morrobay, with Morrobay itself carrying the gate VM
+and the nightly VM. That is the honest state of "distributed" today: it
+works, and on this network it does not pay. The two-host run with the
+8-round cap and Banda single-process on the same input follow, then scale
+24 across the two hosts.
 
 ## 5. Findings so far
 
