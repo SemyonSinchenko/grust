@@ -339,12 +339,12 @@ Read beside the same cell elsewhere on the same input and source:
 | Path, host | Time | Peak PSS |
 |---|---|---|
 | Argentea, Linux gate, 32 cores, two workers | 1213 s | 65.1 GiB |
-| Argentea, Capitola alone, x86_64 under Rosetta, 8 threads, two workers, 8-round cap | 1409 s | not sampled (macOS) |
+| Argentea, Capitola alone, x86_64 under Rosetta, 8 threads, two workers, 8-round cap | 1179 s (repeat 1409 s) | not sampled (macOS) |
 | Banda reference, `asStaged`, Linux gate, one process | 704 s | 31.3 GiB |
 | Pecan / Grenada push-pull, Linux gate (baseline) | 775 / 844 s | about 39 GiB |
 
 So at scale 24 on one host Argentea is 1.7 times Banda's time at twice
-Banda's memory, and four times the cores over Capitola's run buy 14%:
+Banda's memory, and four times the cores over Capitola's run buy nothing (1213 s against 1179 s):
 the unrolled job's time is not in the kernels but in the per-phase shuffle
 and materialization of the frontier and adjacency between Sail stages,
 which is the same cost that dominated the two-host scale-22 runs. A distributed placement experiment should hold the workload, protocol and
@@ -421,14 +421,18 @@ Capitola alone, two workers, 32 partitions, 8-round cap:
 
 | Run | Time | Result |
 |---|---|---|
-| Argentea, one host, two workers, 8-round cap, scale 24 | 1409 s | 6 levels in 9 unrolled phases, 8,862,601 reached (the same count as Banda and the relational cells on the Linux gate), certificate validated: all-edge inequalities and rooted tight-edge reachability, max edge slack 0, parent tree checked, 5 witness rounds; the native plan was ready at 222 s, so the unrolled job took about 1180 s |
+| Argentea, one host, two workers, 8-round cap, scale 24 (first run; receipt spoiled, see below) | 1409 s | 6 levels in 9 unrolled phases, 8,862,601 reached (the same count as Banda and the relational cells on the Linux gate), certificate validated: all-edge inequalities and rooted tight-edge reachability, max edge slack 0, parent tree checked, 5 witness rounds; the native plan was ready at 222 s, so the unrolled job took about 1180 s |
 
 Its receipt nevertheless says `mismatch`: the harness's last guard found
 the checkout's HEAD moved during the run, because the operator committed
 `work/matrix-environment` in that checkout while the cell ran. The
 traversal, reach and certificate stand; the checkout is back on
 `837a8ecf5` and the cell is rerunning untouched for a citable receipt
-(`capitola-scale24-argentea-reference-cap8-t900b`). Rule from this: never
+(`capitola-scale24-argentea-reference-cap8-t900b`): **passed, 1179 s**
+(native plan ready at 222 s again, 8,862,601 reached, certificate
+validated, max edge slack 0, parent tree checked), so the citable
+single-host scale-24 number on Capitola is 1179 s and the first run's
+1409 s stands as a repeat within 20%. Rule from this: never
 commit in a harness checkout while a cell runs on it; edit in another
 worktree. Against scale 22 (268 s for 16.8M edges, 20 phases), scale 24 is
 16 times the edges for 5.3 times the time. The Linux gate runs the same
