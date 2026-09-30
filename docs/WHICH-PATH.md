@@ -10,8 +10,8 @@ graphs at scale 24 (16.8M vertices, 268M edges) and scale 25 (33.6M
 vertices, 537M edges), traversed from the sampled highest-degree vertex.
 The Linux gate is one 32-core, 100 GiB container on a shared host, so the
 times are observations with a spread of about 20% between repeats, not
-publishable numbers. Last updated 2026-09-30 11:00 UTC; decision cell 5
-(Pecan BFS reference at scale 25 with the join-side fix) is still running.
+publishable numbers. Last updated 2026-09-30 11:40 UTC, with all five decision cells
+and the two-host run recorded.
 
 ## The short answer
 
@@ -54,13 +54,16 @@ adjacency table; runs anywhere Sail runs, with no server-side extension.
 - Scales as far as the engine's spilling does: at scale 25 push-pull BFS
   finished in 1610 s at 39 GiB and frontier BFS in 2729 s at 75 GiB.
 - Its reference variant, which relaxes every reached vertex each
-  iteration, hits the 100 GiB container at scale 24 (iteration 2) and
-  scale 25 (iteration 4). Decision cell 5 tests whether the frontier-left
-  join fix (`work/s5-frontier-build-side`) changes that.
+  iteration, hit the 100 GiB container on the baseline at scale 24
+  (iteration 2) and scale 25 (iteration 4). With the frontier-left join
+  fix (`work/s5-frontier-build-side`) it instead loses its stream in
+  iteration 2 at scale 25 (41 GiB, no memory event), so the fix did not
+  carry it further: the stream loss is the first wall.
 - Its reference and frontier variants and its weighted traversal at scale
-  24 lose their gRPC stream in iteration 2 (`h2 protocol error: error
-  reading a body from connection`) in every attempt so far, including the
-  decision cell with the join-side fix, a longer keepalive timeout, worker
+  24, and now the reference variant at scale 25, lose their gRPC stream
+  in iteration 2 (`h2 protocol error: error reading a body from
+  connection`) in every attempt so far, including the decision cells with
+  the join-side fix, a longer keepalive timeout, worker
   idle removal disabled and a longer stream timeout. Until that is located,
   relational users at this scale should run push-pull BFS, which passes.
 - Per iteration it is the slowest path: 20 PageRank iterations on
