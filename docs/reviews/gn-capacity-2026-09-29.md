@@ -367,6 +367,33 @@ resource envelope fixed and measure time and memory as resources are added.
 The S1/S3 projection work applies to Argentea's adjacency build as much as
 to Banda's.
 
+### The decision matrix (05:19 UTC, 2026-09-30)
+
+User direction: the question these runs answer is when to run Pecan,
+Banda, Grenada or Argentea; answer it as soon as possible and do not
+continue a long matrix unless it adds value and the user agrees. The
+chain was stopped in the Argentea scale-24 frontier cell (15 minutes in),
+and the queued Banda remainder, relational rerun, scale 26, ranking rerun
+and baseline resume are parked. `gn-decide-gate3.json` (`chain-decide.sh`,
+host output `decide-gate3/`, container root `/targets/gn-decide`, idle
+removal disabled, 900 s stream timeout) runs five cells in this order and
+stops:
+
+| # | Cell | Question it settles |
+|---|---|---|
+| 1 | Argentea BFS reference, scale 25, one host | does the worker-partitioned path pass the ceiling Banda hits at scale 25 (80 GiB projection budget), or is memory per host the same wall |
+| 2 | Banda SSSP delta-star, scale 24, `asStaged` | weighted traversal on the resident CSR at the largest scale Banda stages |
+| 3 | Argentea SSSP delta-star, scale 24 | the same weighted traversal on worker partitions, beside Banda's |
+| 4 | Pecan SSSP delta-star, scale 24 | the relational weighted traversal, which lost its stream on the baseline, now with frontier-left joins and the keepalive knob |
+| 5 | Pecan BFS reference, scale 25 | whether the join-side fix cures the reference variant's memory failure at scale 25, which decides whether relational users need the push-pull or frontier variants |
+
+Grenada against Pecan needs no further cell: at scales 24 and 25 the two
+run within 10% of each other on every variant that finished (Grenada is
+Pecan's plan inside DataFusion), so that choice is about integration, not
+speed. The two-host Argentea scale-24 run (the same cell as the gate's
+first Argentea cell, across Capitola and Morrobay) is the remaining
+distributed question and waits on the shared store.
+
 ### Two hosts: Capitola and Morrobay (23:50 UTC)
 
 The user asked for Argentea across two physical machines. Setup, all from
