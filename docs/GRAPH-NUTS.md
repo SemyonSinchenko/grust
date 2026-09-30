@@ -420,6 +420,7 @@ validation and scaling work. Paths are relative to the named repository.
 
 ### Scaling and benchmark evidence
 
+- [`WHICH-PATH.md`](WHICH-PATH.md): **the decision guide**: when to run Pecan, Banda, Grenada or Argentea, from the recorded cells of the 2026-09-29/30 campaign (short-answer table, per-path evidence, ceilings by scale, what would change the answer, what was deliberately not run). Written 2026-09-30 on the user's direction that the runs exist to answer this question; kept in step with the campaign record.
 - `grust/docs/reviews/gn-capacity-2026-09-29.md` — the running record of the
   2026-09-29 capacity campaign on morrobay: inputs and sources, the two scale-25
   blockers of the baseline, the hub-source matrices, the new gate and its
