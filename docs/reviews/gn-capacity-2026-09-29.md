@@ -386,6 +386,27 @@ data volume is full (3.6 TiB, 37 GiB free), so its MinIO refuses writes
 the two-host runs, and the qualifier gains a `SAIL_QUALIFY_EXTRA_ENV`
 passthrough so the timeout can be raised for the supervised processes.
 
+**Scale 24 on one host runs (2026-09-30, 02:11 to 03:07 UTC).** With 48
+task slots per worker and the stream-creation timeout at 900 s, Argentea
+BFS reference on Graph500 scale 24 (268M edges, source 13507776) on
+Capitola alone, two workers, 32 partitions, 8-round cap:
+
+| Run | Time | Result |
+|---|---|---|
+| Argentea, one host, two workers, 8-round cap, scale 24 | 1409 s | 6 levels in 9 unrolled phases, 8,862,601 reached (the same count as Banda and the relational cells on the Linux gate), certificate validated: all-edge inequalities and rooted tight-edge reachability, max edge slack 0, parent tree checked, 5 witness rounds; the native plan was ready at 222 s, so the unrolled job took about 1180 s |
+
+Its receipt nevertheless says `mismatch`: the harness's last guard found
+the checkout's HEAD moved during the run, because the operator committed
+`work/matrix-environment` in that checkout while the cell ran. The
+traversal, reach and certificate stand; the checkout is back on
+`837a8ecf5` and the cell is rerunning untouched for a citable receipt
+(`capitola-scale24-argentea-reference-cap8-t900b`). Rule from this: never
+commit in a harness checkout while a cell runs on it; edit in another
+worktree. Against scale 22 (268 s for 16.8M edges, 20 phases), scale 24 is
+16 times the edges for 5.3 times the time. The Linux gate runs the same
+cell first in its Argentea matrix (started 02:26 UTC) for the 32-core
+number, and the two-host scale-24 run waits on the shared store.
+
 So on one host the unrolled empty phases cost 20 s, but across two hosts
 they cost 2325 s: about 53 s per native phase on the network against
 about a second on one host, so the round cap has to fit the graph's depth
