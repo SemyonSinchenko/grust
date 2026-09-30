@@ -301,6 +301,12 @@ Argentea cells beside the 12 Banda `asStaged` cells at scales 24 and 25,
 then the 20 relational cells, then scale 26, the ranking rerun and the
 baseline's 7 unrun cells.
 
+### Gate 3, Argentea and Banda `asStaged` matrix (running since 23:47 UTC)
+
+| Cell | Outcome | Time | Peak PSS | What happened |
+|---|---|---|---|---|
+| scale 24, Banda BFS reference, `asStaged` | **passed** | 704 s | 31.3 GiB | Banda stages Graph500 scale 24 once the canonical sort is skipped: staging 48.5 s, 268,435,456 edges retained as 9.73 GiB of Utf8-id rows with every sort tier at zero (the S0 receipt), one projection built and reused; 8,862,601 reached, certificate validated with 5 witness rounds. The first Banda result on Graph500 at this scale. Its 704 s are within 10% of the relational push-pull cells (775 and 844 s) rather than the 4 to 20x of cit-Patents: at 268M edges the projection from Utf8 ids to a CSR dominates, which is what S1 (Int64 identity) and S3 (dense u32 projection) are for |
+
 ### Two hosts: Capitola and Morrobay (23:50 UTC)
 
 The user asked for Argentea across two physical machines. Setup, all from
