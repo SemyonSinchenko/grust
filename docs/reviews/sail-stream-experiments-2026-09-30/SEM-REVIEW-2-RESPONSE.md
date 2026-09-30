@@ -291,8 +291,14 @@ DataFusion grouped-accumulator constructor. At 100,000 groups it retains
 11,692,032 requested heap bytes but reports 10,946,304: the 745,728-byte
 difference matches omitted spare capacity in the outer ordering vector. Two
 semantic tests and allocation controls at 1k/10k/100k groups passed. This uses
-the System allocator on the shared laptop, not Linux RSS or an executed WCC
-query; the actual optimized Sail plan still needs confirmation.
+the System allocator on the shared laptop, not Linux RSS or a full WCC query.
+The subsequent [Linux worker control](wcc-fused-worker-plan/README.md) confirms
+the ordered LAST_VALUE expression in both explain output and 24 successfully
+executed aggregate tasks across both workers. Two input orders each return the
+exact 17-row BIGINT oracle, including signed Int64 extrema and adjacent IDs
+beyond 2^53. Source and dependency identities connect this runtime to the
+component probe. This confirms the execution route, not its whole-query memory
+cost or the occurrence of prefix emission.
 
 The probe also confirms that `state()` uses the remaining group count for
 output capacity after extracting emitted state (`first_last.rs:674,681`).
@@ -322,9 +328,16 @@ deletes the borrowed dataset, retain its lifetime for all lazy descendants,
 and verify schema/manifest identity. Checkpoint layout declarations remain a
 separate contract: simply reusing a Parquet file does not prove keyed partitioning.
 
-This review and the completed experimental evidence are being committed and
-pushed as a documentation snapshot. The Linux host builds, real-worker smoke
-checks and scale-24 diagnostic/compact replays are still pending; their prepared
-configurations are not benchmark results. Later receipts will be added in a
-follow-up commit. The WCC outcome correction is still under independent review,
-so its interim passing tests do not constitute a delivered implementation verdict.
+This review and its completed evidence were committed and pushed in Grust
+`51644023a02185679527304682ed41055ae1c4aa`. Subsequent status is recorded in
+[RESULTS.md](RESULTS.md): the instrumented289 Linux build and real-worker smoke
+have passed, and WCC outcome/inbox corrections have passed their scoped gates
+and been delivered to fork branches. Compact561's Linux build, its worker
+check and the scale-24 diagnostic/compact replays remain pending. Prepared
+configurations are not benchmark results. B1 is delivered as a separate opt-in
+candidate with scoped unit/local-SQL validation; distributed qualification
+remains pending, and no default change or speedup is claimed. The combined
+follow-up snapshot `200d1cf8` is pushed to `work/stream-review-followup` after
+its exact detached combined gate and independent source audit. The production
+WCC representative control has also passed on the Linux process workers.
+These later receipts will be published in a follow-up documentation commit.

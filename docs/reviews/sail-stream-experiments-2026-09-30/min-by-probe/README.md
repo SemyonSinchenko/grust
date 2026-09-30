@@ -8,7 +8,11 @@ This is a bounded component measurement of the public DataFusion 55.1.0 grouped
 below. No optimized Sail plan was captured, no remote workload was launched, and
 these results do not establish WCC query memory, throughput, or a stream-loss
 cause. Shared-laptop elapsed times remain exploratory raw fields; there is no
-performance comparison or speedup claim.
+performance comparison or speedup claim. A later, separately recorded
+[Linux worker control](../wcc-fused-worker-plan/README.md) now confirms the
+ordered LAST_VALUE route for Pecan's production representative expression.
+Its source bridge and exact task assignments do not turn these component
+allocation measurements into whole-query memory measurements.
 
 ## Source route and scope
 
@@ -33,11 +37,11 @@ LAST_VALUE, and the separate `min(priority)` is an ordinary Int64 MIN. Casting
 the 64-bit priority to Float64 would lose exact ordering and is not a valid
 substitute.
 
-A production plan can still change the aggregate route, ordering, partitioning,
-or execution mode. Confirming the concrete physical aggregate and its options
-on a tiny persisted Int64 relation through the exact Sail host remains the next
-integration check. An alias displayed as `min_by` alone is insufficient evidence
-of the physical accumulator selected.
+At the time of this probe, the production aggregate route, ordering and
+execution mode still needed confirmation. The subsequent linked control
+confirms ordered LAST_VALUE in partial and final-partitioned task plans and
+correlates every aggregate task with its worker's successful status. An alias
+displayed as `min_by` alone would have been insufficient evidence.
 
 ## Provenance and gate
 

@@ -1,6 +1,6 @@
 # Focused Sail stream and resource experiments
 
-Recorded UTC: 2026-09-30T18:16:12.244600+00:00
+Recorded UTC: 2026-09-30T19:49:36.308368+00:00
 
 Work in progress. This report separates the completed evidence from the compact
 aggregation implementation and instrumented Linux replay still being qualified.
@@ -207,6 +207,29 @@ cases fail on unchanged b569, while the wrong-mode protocol control passes.
 The host's 490-test verdict remains scoped to b569; no new Linux/cluster verdict
 is claimed for this native-only follow-up. [Receipt](bfs-inbox/final-receipt.json).
 
+## WCC inbox allocation by phase
+
+[`b4babe87cb50d16b4d439a0841a6291991c433d2`](https://github.com/querygraph/sail/commit/b4babe87cb50d16b4d439a0841a6291991c433d2)
+on `work/argentea-wcc-inbox`, based on c612, applies the same discipline to WCC.
+Topology and Done do not read per-vertex candidate labels, so their inboxes
+omit that buffer and its admission. The six active modes retain it.
+
+With 65,536 total vertices across three owners, inbox construction in either
+WCC algorithm changes requested allocation from 1,051,663 to 3,087 bytes and
+peak admission from 1,056,528 to 7,952 bytes. Optimized costs agree at
+1/1,024/65,536 vertices; all six active-mode controls are unchanged. These
+counters cover `start_emission`. A separate 32-KiB-headroom test holds that limit
+through Done publication. Topology still constructs its incoming CSR later.
+
+Three new allocation/headroom tests fail on the baseline. The exact detached
+candidate passed core formatting/strict Clippy, 113 core tests and 49 native
+adapter tests, including 43 Argentea tests. Both suites also passed with ten
+load processes; all 24 matched allocation cells were unchanged under load.
+[Exact receipt](wcc-inbox/final-receipt.json),
+[matched counters](wcc-inbox/matched-counters.json),
+[fork delivery](wcc-inbox/delivery.json). This is local allocation/protocol
+qualification, not a multi-host scaling or stream-cause result.
+
 ## Pecan production-path crosscheck and paired measurement
 
 Both candidate production-path suites passed all 125 tests, once locally and
@@ -260,6 +283,96 @@ heap-Dijkstra/parent checks (distance tolerance 1e-12). Candidate/baseline ratio
 1.0204 execute PSS, and1.0468 sampled cgroup memory. This is one shared-host
 pair, not a statistical timing conclusion. It does not supply a performance
 benefit for the fused controller on this fixture. [All outcomes](grenada-gate3/summary.json).
+
+## WCC certificate outcome correction
+
+The benchmark's WCC certificate verifies edge consistency and that labels name
+input vertices. It does not prove that each label class is connected; merging
+disconnected components can satisfy those predicates. The correction is
+[`c8fe857848f3ba1698ee0f9d1daf000790d691d4`](https://github.com/querygraph/sail/commit/c8fe857848f3ba1698ee0f9d1daf000790d691d4),
+pushed to `work/wcc-certificate-outcomes`, based on b569.
+
+New certificate results are `partially_verified`. Summaries and resumed runs
+preserve that distinction for valid historical receipts too. Completed partial
+results receive source, binary, dataset and validation-policy integrity checks;
+only exact passes enter success metrics. Original evidence is retained.
+This changes reporting, not the incomplete certificate into a connectivity proof.
+
+The exact detached gate passed 333 Python tests (39 optional tests skipped) and
+six actual local SQL controls. Those SQL controls use installed Sail 0.7.0 with
+its native binary hash recorded; no runtime source commit is inferred.
+Independent corruption controls verified the old-pass transition, new/old exit
+codes, malformed metadata, identity conflicts and resumed missing evidence.
+[Implementation receipt](wcc-certificate/final-receipt.json),
+[independent audit](wcc-outcome-audit/hardened-c8/README.md),
+[fork delivery](wcc-certificate/delivery.json).
+
+## Linux qualification in progress
+
+The exact detached Linux build of diagnostic/runtime commit `2894a962` passed,
+including its native tests and scoped Clippy checks. Exported Sail 0.7.1 binary
+SHA-256 is `40a78182a420152e8e3651f9cdb38a4196eaf8bc7aead092d10e258a17ac3497`.
+The original source, binary, wheel and build-cache seed guards passed unchanged.
+[Build receipt](linux-builds/integration289/final/rebuild-receipt.json).
+The compact `56194b1` host build remains in progress; no new cluster result is
+implied by a successful build.
+
+The small actual-worker checks use the same original controller, native wheel,
+16k weighted input and independent Dijkstra/parent checks. A separate
+[CPU16–23 configuration](worker-smoke-cpu16-23-preparation.json) lets the
+instrumented-runtime correctness check run under an 8-CPU/12-GiB hard limit
+beside the compact build's disjoint CPU0–15/48-GiB allocation. This concurrency
+is disclosed; these checks are not isolated performance measurements. Original
+prepared CPU0–7 configurations are retained. Large 100-GiB diagnostic replays
+wait for all builds to stop and sufficient disk space.
+
+The instrumented289 check has now **passed**: 24 iterations, 16,384 unique
+vertices, independent heap-Dijkstra distances and rooted parent/hop checks.
+Workers 1 and 2 logged 743 and 938 successful task notifications, respectively.
+The dataset and original native identities match the retained control; there
+were no OOM events or cleanup leftovers. All 24 recorded plans contain grouped
+`min(struct(...))`. [Verified worker receipt](worker-smoke-instrumented289-cpu16-23/verification.json).
+A late supplemental cgroup observation found the container already removed;
+that failure is retained. Final Docker and cgroup records verify the limits.
+The compact worker check and scale-24 replays remain pending.
+
+## B1 opt-in checkpoint experiment
+
+[`fe44428c9bfb43680affed0abae07240220df852`](https://github.com/querygraph/sail/commit/fe44428c9bfb43680affed0abae07240220df852)
+on `work/pecan-checkpoint-repartition` adds
+`GraphAlgorithms(spark, repartition_checkpoints=False)`. The default remains
+`True`. The option omits keyless repartition immediately before owned staging
+writes, including snapshots and final results. Writer completion, uncertain
+ownership, cancellation, schema and row-count checks remain in place. It does
+not declare keyed partitioning or guarantee the output file count.
+
+The exact detached gate passed 78 unit tests and four real SQL/Parquet controls
+on the disclosed installed runtime. Independent review passed. These controls
+do not qualify GraphUtils, all algorithms or distributed execution; 79 other
+integration cases remain unrun in this gate. [Evidence and remaining checks](pecan-checkpoint-repartition/README.md).
+No speed or memory benefit is claimed, and no benchmark default was changed.
+
+## Combined follow-up snapshot and WCC worker control
+
+[`200d1cf8eb1db5e9057e09e071ebd57391f4b376`](https://github.com/querygraph/sail/commit/200d1cf8eb1db5e9057e09e071ebd57391f4b376)
+is pushed to `work/stream-review-followup`. It combines the BFS/WCC inbox
+changes, corrected WCC outcome reporting and opt-in checkpoint experiment.
+The exact detached gate passed 113 core and 49 native tests, both ordinarily
+and with all ten local cores saturated, plus 333 benchmark and 78 Pecan unit
+tests and ten focused local SQL controls. Optional exclusions and the installed
+SQL runtime boundary are retained in the [gate receipt](followup-union/final-receipt.json).
+An [independent source audit](followup-union/independent-exact-audit.json)
+checked all 3,429 tree entries. Host Rust remains byte-identical to `b569e75`;
+the earlier host gate is not reissued as a test verdict on this union.
+
+A separate [production representative control](wcc-fused-worker-plan/README.md)
+passed on Linux runtime `2894a962` with the original controller/native package.
+Both input orders returned exact results for 17 signed BIGINT vertices,
+including extrema and adjacent IDs beyond 2^53. All 24 aggregate task plans
+correlate with successful worker statuses on both workers and contain ordered
+LAST_VALUE. This confirms the source-derived `min_by` route used by the
+[component allocation probe](min-by-probe/README.md). It does not measure full
+WCC memory, establish prefix emission, or identify a stream-loss cause.
 
 ## Cluster preparation and remaining work
 
