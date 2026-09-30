@@ -346,6 +346,7 @@ two worker processes, x86_64 under Rosetta, the dataset on local disk,
 | Argentea, two hosts, one worker each, 8-round cap (20 phases) | 421 s | same result |
 | Banda, single process on Capitola (x86_64 under Rosetta), `asStaged` | 120 s | same result; staging 52 s, 2.36 GiB retained |
 | Argentea, two hosts, 8-round cap, input on local disk on both hosts (no object store) | 405 s | same result; zero object-store retries |
+| Argentea, two hosts over the home LAN, 8-round cap, local inputs | 381 s | same result; the LAN saves 6% against the Tailscale relay, so the cross-host shuffle cost (about 6 s per native phase) is the network round trips of the shuffle itself, not the link |
 
 Network correction (2026-09-30, 02:30 UTC): the two-host runs above went
 over Tailscale, which was set up while Capitola was away, although both
