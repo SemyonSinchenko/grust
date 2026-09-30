@@ -387,6 +387,12 @@ stops:
 | 4 | Pecan SSSP delta-star, scale 24 | the relational weighted traversal, which lost its stream on the baseline, now with frontier-left joins and the keepalive knob |
 | 5 | Pecan BFS reference, scale 25 | whether the join-side fix cures the reference variant's memory failure at scale 25, which decides whether relational users need the push-pull or frontier variants |
 
+Results:
+
+| # | Cell | Outcome | Time | Peak PSS | What happened |
+|---|---|---|---|---|---|
+| 1 | Argentea BFS reference, scale 25 | error | 1767 s | 56.2 GiB | all 32 partitions initialized (native plan at 313 s), then the unrolled job failed in phase 0 with `h2 protocol error: error reading a body from connection`; no worker was replaced, no OOM event. Confounded: the host carried the user's default VM (its nightly container had run since about 03:00 UTC) and was at 32.8 of 33.8 GB swap; the in-container memory sampler recorded nothing between 302 s and 939 s of the execute phase, ten minutes in which the whole VM was evidently stalled, and worker memory peaked at 40 GiB and then unwound from about 1250 s. Retried once the default VM stopped, as `gn-decide2-gate3.json` (`chain-decide2.sh`, `decide2-gate3/`) with the h2 keepalive interval at 300 s and timeout at 600 s beside the idle and stream settings; if the retry passes, scale 25 was the overlap and the ping window, if it fails the same way, phase 0 at scale 25 is where Argentea's per-partition work exceeds what one host sustains |
+
 Grenada against Pecan needs no further cell: at scales 24 and 25 the two
 run within 10% of each other on every variant that finished (Grenada is
 Pecan's plan inside DataFusion), so that choice is about integration, not
