@@ -245,7 +245,8 @@ publish absolute timing results only on a qualified dedicated host.
    time, and give the library a trusted-input entry (Stage B7) so the
    compared run does not perform them at all. Excluding them changes no
    conclusion on cit-Patents (rounds alone are 284, 461 and 671 s), but
-   it is the only boundary under which the numbers are comparable. Also, jobs/stages/tasks, plan bytes/planning time,
+   it is the only boundary under which the numbers are comparable. Also
+   record jobs/stages/tasks, plan bytes/planning time,
    exchanges, writer time, scalar actions, pool/spill counters and whole-process
    memory. Freeze warmup and ABBA order and retain every outcome. Estimate the
    campaign from the pilot: two inputs times three external, five local and
