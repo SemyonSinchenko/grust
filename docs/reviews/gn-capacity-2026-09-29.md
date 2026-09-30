@@ -343,9 +343,15 @@ two worker processes, x86_64 under Rosetta, the dataset on local disk,
 | Argentea, one host, two workers, 30-round cap (64 phases) | 288 s | 6 levels, 2,394,613 reached, certificate validated |
 | Argentea, one host, two workers, 8-round cap (20 phases) | 268 s | same result |
 | Argentea, two hosts, one worker each, 30-round cap | 2746 s | same result |
+| Argentea, two hosts, one worker each, 8-round cap (20 phases) | 421 s | same result |
+| Banda, single process on Capitola (x86_64 under Rosetta), `asStaged` | 120 s | same result; staging 52 s, 2.36 GiB retained |
 
-So the second host made the same BFS about ten times slower, and the
-unrolled empty phases account for only 20 s of it. What differs between
+So on one host the unrolled empty phases cost 20 s, but across two hosts
+they cost 2325 s: about 53 s per native phase on the network against
+about a second on one host, so the round cap has to fit the graph's depth
+before a two-host number means anything. With the cap that fits (8), the
+two-host BFS is 1.5 times slower than the same Argentea on one host and
+3.5 times slower than Banda's single process. What differs between
 the two runs is where the shuffles and the inputs go: across a Tailscale
 link between a WeWork network and a home network (about 7 ms round trip)
 and through MinIO on Morrobay, with Morrobay itself carrying the gate VM
@@ -382,3 +388,10 @@ object store. The two-host run with the
    already outgrown. Both are one-place fixes.
 3. Argentea runs through the same harness as the other paths, so the four-way
    comparison the plan asks for can now be one matrix.
+4. Argentea works across two physical hosts on Graph500 scale 22 with
+   identical artifacts, but on this network (Tailscale between two sites,
+   MinIO on one of them) it does not pay: 421 s across two hosts with a cap
+   that fits the depth, against 268 s for the same two workers on one host
+   and 120 s for Banda's single process. Every unrolled native phase costs
+   about 53 s across hosts, so the round cap is not a detail there. The
+   local-input two-host run separates the shuffles from the object store.
