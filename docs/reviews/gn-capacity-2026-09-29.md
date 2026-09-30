@@ -345,6 +345,7 @@ two worker processes, x86_64 under Rosetta, the dataset on local disk,
 | Argentea, two hosts, one worker each, 30-round cap | 2746 s | same result |
 | Argentea, two hosts, one worker each, 8-round cap (20 phases) | 421 s | same result |
 | Banda, single process on Capitola (x86_64 under Rosetta), `asStaged` | 120 s | same result; staging 52 s, 2.36 GiB retained |
+| Argentea, two hosts, 8-round cap, input on local disk on both hosts (no object store) | 405 s | same result; zero object-store retries |
 
 So on one host the unrolled empty phases cost 20 s, but across two hosts
 they cost 2325 s: about 53 s per native phase on the network against
@@ -393,5 +394,7 @@ object store. The two-host run with the
    MinIO on one of them) it does not pay: 421 s across two hosts with a cap
    that fits the depth, against 268 s for the same two workers on one host
    and 120 s for Banda's single process. Every unrolled native phase costs
-   about 53 s across hosts, so the round cap is not a detail there. The
-   local-input two-host run separates the shuffles from the object store.
+   about 53 s across hosts, so the round cap is not a detail there.  The
+   local-input two-host run (405 s against 421 s) shows the object store is
+   4% of it; the rest is the cross-host shuffle, about 7 s per native phase
+   on this link.
