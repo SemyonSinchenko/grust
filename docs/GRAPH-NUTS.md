@@ -420,6 +420,7 @@ validation and scaling work. Paths are relative to the named repository.
 
 ### Scaling and benchmark evidence
 
+- [`STREAM-LOSS-STATUS.md`](STREAM-LOSS-STATUS.md): the status for the review with Astra of the relational stream loss (`h2 protocol error: error reading a body from connection`): the fifteen cells, what passes, eight established facts with their evidence, the same-text failures already explained, four ranked hypotheses, three ten-minute experiments, evidence and source locations. Written 2026-09-30.
 - [`WHICH-PATH.md`](WHICH-PATH.md): **the decision guide**: when to run Pecan, Banda, Grenada or Argentea, from the recorded cells of the 2026-09-29/30 campaign (short-answer table, per-path evidence, ceilings by scale, what would change the answer, what was deliberately not run). Written 2026-09-30 on the user's direction that the runs exist to answer this question; kept in step with the campaign record.
 - `grust/docs/reviews/gn-capacity-2026-09-29.md` — the running record of the
   2026-09-29 capacity campaign on morrobay: inputs and sources, the two scale-25
