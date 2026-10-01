@@ -9866,6 +9866,112 @@ Gate: `ci-local: PASSED every gate at ead3568 on Linux x86_64 in 2417s` (host gr
 
 quegee, now: `~/src/b8-build.sh` (log `~/src/b8-build.log`) builds `simple-rust-algo-bench:b8-2985fac` capped (`MemoryMax=20G`, `--jobs 4`) from harness `1ccd8bf` (`work/bench-b7`, worktree `~/src/aga-b7`), `grust` by `git archive v0.22.0`, `grust-next` by `git archive 2985fac`, icecat 57b443e; no other build or container on the host. Then, one at a time: audit, receipt, manifest, plan (`b8-` prefixed in `~/src/b6-work`); parity for the three sets at unset/1/16 with both bits gates, stopping if any f64 row is not bit-identical to v0.22.0; page cache drop; the six timed runs in plan order. After quegee only: the protocol set on eigen and lakecat, capped builds, timed runs outside eigen's blackout windows. The codex session pid 2382171 is not touched. DONE follows with the evidence; silence until then means running.
 
+## 2026-09-26T00:04:54+00:00 — Codex: ACK Sail extension proofs of concept
+
+Reviewing fifth-revision `docs/proposals/sail-extension-api.md` and building Apache Sedona and Nutmeg proofs of concept in the Sail repository, isolated worktree `/Users/alexy/src/sail-extensions-poc`, branch `work/extensions-sedona-nutmeg`, based on upstream `a85d912d7`. Existing Grust crate code and the Sail LakeCat checkout are outside the implementation scope. Detailed plan and verification evidence will live with the Sail branch.
+
+## 2026-09-26T01:37:27+00:00 — Codex: DONE Sail extension proofs of concept
+
+Sail repository: branch `work/extensions-sedona-nutmeg`, pushed to `querygraph/sail`, commit `f4f7f7f4371f0c6a4a89db6bd08bcf0a2d218f50` (remote head rechecked). Plan: `/Users/alexy/src/sail-extensions-poc/docs/development/extensions/implementation-plan.md`; proposal review and scope limits are beside it. Actual Apache SedonaDB/GEOS scalars and Nutmeg/Grust graph operations run together through Spark Connect with two separately built native wheels.
+
+Detached-worktree verdict: `extensions-poc: PASSED local native extension gates at f4f7f7f4371f0c6a4a89db6bd08bcf0a2d218f50`. Checks passed: 16 host tests, clippy, 4 Sedona native tests, 5 Nutmeg native tests, 44 graph-core tests, 3 Python client tests, 25 integration tests, and 11 release cancellation runs (one idle plus ten with all 10 logical CPUs saturated). Binary, wheels, hashes, full gate logs and retained failed-candidate evidence are in `/Users/alexy/src/sail-extensions-poc/target/extensions-poc/`. Artifact hashes matched the detached receipt after delivery.
+
+Qualified scope is local mode. Distributed workers/codecs, optimized Sedona SpatialJoinExec and geometry client UDT remain later milestones. The pinned PySpark client's stale-destructor/shared-pool issue is reproduced and covered by a harness lifetime regression. Grust crate code, the original Sail LakeCat checkout and original Nutmeg checkout were not changed; no Grust crate release is part of this branch proof.
+
+## 2026-09-26T01:58:15+00:00 — Codex: ACK distributed Sail extensions
+
+Extending Sail repository `/Users/alexy/src/sail-extensions-poc`, branch `work/extensions-sedona-nutmeg`, starting at `f4f7f7f43`. Scope: worker-native Sedona functions with explicit package identities; driver-resident Nutmeg stages consuming distributed inputs; local-cluster and separate-process worker verification. Existing local proof artifacts are retained.
+
+## 2026-09-26T03:06:54.411Z — Codex: DONE distributed Sail extensions
+
+Sail repository: branch `work/extensions-sedona-nutmeg`, pushed to `querygraph/sail`, commit `18d7f6aa019846e01a10a6e426a76bc4e7e0b347`; remote head rechecked. Detached verdict: `extensions-poc: PASSED local and distributed native extension gates at 18d7f6aa019846e01a10a6e426a76bc4e7e0b347`.
+
+Evidence: 235 host Rust tests, clippy, four Sedona native tests, five Nutmeg native tests, 44 graph-core tests, three Python client tests, 11 release cancellation runs (one idle plus ten with all 10 logical CPUs busy), and integration matrix local 28 passed / one cluster-only skip, local-cluster 29 passed, separate-process cluster 29 passed. Worker logs record distinct worker/driver PIDs and independently loaded package identities. Missing packages and same-version changed content are rejected. Scheduler fault injection verifies one mutation attempt after acknowledgement loss; this is not a real network-partition test.
+
+Sedona runs native scalar kernels on workers with geometry expression/literal metadata preserved across task serialization and shuffles. Nutmeg stays driver-resident, gathers distributed inputs, and returns results composable with worker stages. Driver bindings preserve snapshot/attempt identity and release archived native resources; native regions do not retry.
+
+Delivery: `/Users/alexy/src/sail-extensions-poc/target/extensions-distributed-poc/` contains the runnable binary, both wheels, receipt, stress report, full logs, rejected candidate patch and run instructions. Copied artifact hashes and installed source-worktree package identities matched the receipt. Recorded worker processes were confirmed stopped. Plan and review: `docs/development/extensions/` in the Sail branch. Qualified scope is multiple processes on this macOS host; multi-host/Kubernetes deployment, optimized spatial joins and client geometry UDT remain unqualified. Original local evidence is retained separately.
+
+## 2026-09-26T04:09:28.233836+00:00 — Codex: ACK Sail extension architecture review
+
+Reviewing Sail repository `/Users/alexy/src/sail-extensions-poc`, branch `work/extensions-sedona-nutmeg`, commit `18d7f6aa019846e01a10a6e426a76bc4e7e0b347`, including Sedona, Nutmeg, distributed execution, graph-table SQL and memory ownership/admission. Source review and focused replay experiments are complete; consolidating findings in the existing delivery artifact directory. No Sail tracked files or Grust crate sources changed.
+
+## 2026-09-26T04:12:22.420117+00:00 — Codex: DONE Sail extension architecture review
+
+Sail repository: `work/extensions-sedona-nutmeg` at `18d7f6aa019846e01a10a6e426a76bc4e7e0b347`; tracked worktree remains clean. Detailed report and preserved reproductions: `/Users/alexy/src/sail-extensions-poc/target/extensions-distributed-poc/review/REVIEW.md`. No new build/gate or source fixes are claimed.
+
+Review evidence: delivered binary passes direct graph SQL with extensions disabled and separate workers (degrees including isolates, duplicate-preserving two-hop paths, closed three-hop walks). WKB conversion composition passes local but fails process-cluster; CASE/coalesce/array geometry composition fails both. Focused Arrow normalization allocates before reservation (4,000,000-byte input passes a 5 MiB check; normalized buffers 16,587,072 bytes and peak allocator requests 32,587,352 bytes, not RSS or full-server measurements). Source review shows independent Sail/Nutmeg pools and per-read private CSR caches. Delivered Sedona wheel links external Homebrew GEOS, outside wheel identity. Full Spark-client cancellation/resource-pressure and real acknowledgement-loss qualification remain incomplete. Nutmeg is already in-process on the Sail driver; recommendation is canonical Sail graph tables, ordinary DataFusion relational plans, optional shared CSR projections and host-issued native resource admission.
+
+## 2026-09-26T04:18:29.627125+00:00 — Codex: ACK Sail review implementation
+
+Implementing the Sail extension review in repository `/Users/alexy/src/sail-extensions-poc`, new branch `work/extensions-datafusion-graphs` from `18d7f6aa019846e01a10a6e426a76bc4e7e0b347`. Scope: geometry correctness, graph normalization admission/shared snapshots, direct Sail graph-table plans, host native memory admission, portable GEOS packaging, and lifecycle/resource regression evidence. Prior PoC branch and artifacts retained. Grust crate code remains outside this Sail branch implementation.
+
+## 2026-09-26T06:34:36.613438+00:00 — Codex: DONE Sail graph tables and native resource integration
+
+Sail repository `/Users/alexy/src/sail-extensions-poc`: branch `work/extensions-datafusion-graphs`, commit `de8e670989edb8ed5343764c52d0d002b6b6cd63`, pushed to `querygraph/sail`; remote head rechecked and source clean. Both detached macOS arm64 and Linux x86_64 gates reported: `extensions-poc: PASSED local and distributed native extension gates at de8e670989edb8ed5343764c52d0d002b6b6cd63`.
+
+Each platform passed 651 Rust tests, strict host clippy, three Python client tests, five launcher/evidence tests, and 22 release stress runs (two fixtures, each one idle plus ten with every logical CPU busy: 10 on Capitola, 36 in Morrobay's Linux VM). Integration results on each platform: local 64 passed/one expected worker-only skip; actor cluster 65 passed; process cluster 65 passed. The failed d714 candidate and live geometry counterexamples remain preserved; corrections retained the failing assertions.
+
+Strict two-host qualification used identical x86_64 executable/wheel bytes on Morrobay Intel and Capitola Rosetta. All source inventories were clean at the exact commit. Morrobay completed 81 worker tasks and Capitola 70; 30 stages recorded success on both. Supervised driver/worker PIDs exited. This is functional evidence, not a performance comparison.
+
+Delivery: `/Users/alexy/src/sail-extensions-poc/target/extensions-datafusion-final/README.md` links the plan, review/resolution, tested binaries/wheels, exact receipts, logs, failures, source/artifact validation and publication record. The temporary Linux container and `sail-gate` Colima profile are stopped. The default Colima profile was already running and was left untouched; its Docker context remains `colima`. Disks, images, volumes and evidence were retained.
+
+Direct graph tables use ordinary Sail/DataFusion relational plans on workers. Native staged graphs and CSR kernels remain driver-resident; same-revision reads share projections. Native quotas now participate in the configured host memory pool through a versioned ownership ABI; this is participating admission, not a universal RSS cap. Grust crate sources and releases were outside this Sail-only change.
+
+
+## 2026-09-27T16:48:13.598703+00:00 — Codex: ACK portable graph algorithms in Sail
+
+Repository querygraph/sail, /Users/alexy/src/sail-extensions-poc, branch work/extensions-datafusion-graphs starting at ef735743d. Integrating Sem’s pure PySpark graph algorithm proposal into the overall plan and implementing driver storage utilities, worker scalar support, PageRank/WCC, owned staging and distributed validation. Capitola development; Morrobay native x86 and Colima Linux gates, followed by two-host execution. Grust crates and the incoming untracked proposal are not implementation targets.
+
+
+## 2026-09-27T17:47:40.306419+00:00 — DONE — Sail portable graph algorithms
+
+Repository: `querygraph/sail` (`/Users/alexy/src/sail-extensions-poc`). Branch `work/extensions-datafusion-graphs` pushed and remote verified at `62a8c04a600b15331372e272b6fea7b27a496222`; executable code gated at `70b0d1cab2cab945d4dbaf6842ee0e38c8aa1822`.
+
+Implemented pure Spark Connect PageRank and min-label WCC, host-owned utils/storage protocol and worker GF64 scalar. PR #2670 relationship and explicit cleanup limits are documented.
+
+Evidence: macOS and Linux each passed 47 session + 37 Spark Connect Rust tests and Clippy. Linux extension matrix: local 69 passed/1 topology skip; local-cluster and process-cluster 70 passed each. Graph package: 33 passed per mode. Capitola local/process suites and both two-host exercises passed. Two-host PageRank had 72 successful iteration tasks and WCC 66, on both workers. Final staging scans found no remaining files or shared-store objects.
+
+Gate verdict: `portable-graphs Capitola macOS/Rosetta PASS 70b0d1cab2cab945d4dbaf6842ee0e38c8aa1822`. Full exact-revision evidence is in `docs/development/extensions/portable-graph-validation.md` and its adjacent evidence archive. Earlier failures are retained. Task MinIO/Colima stopped, default profile unchanged, obsolete task worktrees/caches removed.
+
+
+## 2026-09-27T18:08:27.035965+00:00 — ACK — Pecan naming and Pecan/Nutmeg benchmark
+
+Repository querygraph/sail, /Users/alexy/src/sail-extensions-poc, branch work/extensions-datafusion-graphs starting at f37b1e819. Name the portable client Pecan with compatibility imports, then measure PageRank and WCC elapsed time and memory against Nutmeg under disclosed common workloads and resource boundaries. Morrobay dedicated-host execution; preserve all outcomes and correctness checks. Grust crates and incoming proposal remain outside this work.
+
+## 2026-09-27T19:34:48.045095+00:00 — ACK — Pecan/Banda/Grenada delivery goal
+
+User explicitly made the current work an active goal: finish reference and advanced PageRank/WCC in repository querygraph/sail, branch work/extensions-datafusion-graphs, with detailed tutorials for each path and complete time/memory evidence. Algorithm commit 4e6100f0 and harness a6567b51 are gated and pushed. Large-fixture qualification exposed the initial benchmark envelope's native admission and worker-slot limits; preserve that attempt and qualify an explicit corrected common configuration before the final matrix. No Grust publishable crate changes are in scope.
+
+
+## 2026-09-27T21:28:26.240455+00:00 — DONE: Sail Pecan/Banda/Grenada goal
+
+Repository: querygraph/sail, checkout /Users/alexy/src/sail-extensions-poc.
+Branch: work/extensions-datafusion-graphs; local and remote HEAD bd8ce9ae8839477e2c08a0475ab7900b115c5366.
+Verdict: PECAN_DOCUMENTATION_GATE bd8ce9ae8839477e2c08a0475ab7900b115c5366 PASSED.
+Final immutable delivery gate: 101 benchmark/launcher tests, seven auditor corruption controls, public evidence replay for both matrices, figure regeneration, 71 local links and 2,630 archived-file hashes.
+Algorithms: reference and delta/frontier PageRank; reference, randomized-contraction and fused randomized WCC, across Pecan, Banda and Grenada. Defaults and unfused controls retained. Linux tutorials pass all 15 combinations in local and two-process-worker modes; physical Capitola/Morrobay relational proof records both workers inside every iteration, exact answers and empty cleanup. Native release qualified with the documented pre-existing bridge Clippy exception.
+Dedicated Morrobay Linux VM measurements: primary harness3c1fd28c/native4e6100f0/runtime70b0d1ca: 148 passed, two expected caps. Fusion harness3fd69787/native9d7155aa/runtime70b0d1ca: 78 passed. Earlier constrained attempt:16 passed, four admission errors,130 not_run, retained separately. Full commands, source identities, timing/memory boundaries and every cell (including unfavorable results) are linked below.
+Report: https://github.com/querygraph/sail/blob/bd8ce9ae8839477e2c08a0475ab7900b115c5366/docs/development/extensions/pecan-nutmeg-benchmark.md
+Primary cells: https://github.com/querygraph/sail/blob/bd8ce9ae8839477e2c08a0475ab7900b115c5366/docs/development/extensions/pecan-nutmeg-benchmark/primary/cells.csv
+Fusion cells: https://github.com/querygraph/sail/blob/bd8ce9ae8839477e2c08a0475ab7900b115c5366/docs/development/extensions/pecan-nutmeg-benchmark/fusion/cells.csv
+Constrained cells: https://github.com/querygraph/sail/blob/bd8ce9ae8839477e2c08a0475ab7900b115c5366/docs/development/extensions/pecan-nutmeg-benchmark/constrained/cells.csv
+Tutorial: https://github.com/querygraph/sail/blob/bd8ce9ae8839477e2c08a0475ab7900b115c5366/examples/extensions/benchmarks/TUTORIAL.md
+Independent audits checked 22 retained full vectors and reconstructed all25,627 memory samples; remaining outputs explicitly receipt-only in the secondary audit. All original raw evidence retained on Morrobay. Temporary task VM stopped, default Colima unchanged;10 owned temporary worktrees and2 disposable native build caches removed through the proper worktree workflow; shared Git preserved. No publishable Grust crate changed.
+
+
+## 2026-09-27T21:48:53.360855+00:00 — ACK: GraphFrames tab publication
+
+Repository querygraph/adversarial-site; isolated branch work/graphframes-sail. Publish /graph/graphframes from immutable Sail bd8ce9ae evidence, with generated time/memory tables, retained outcomes, tutorial/report links, site gates and live verification. No changes to Grust crates or Sail algorithms.
+
+## 2026-09-27T22:10:50.225760+00:00 — DONE: querygraph/adversarial-site GraphFrames publication
+
+Published https://adversari.al/graph/graphframes with Pecan/Banda/Grenada time and memory tables, all outcomes, immutable Sail reproduction links, and mirrored evidence. Site master and work/graphframes-sail: 40e23a696b2ea8e2566fbb216d1fa9edf8637c16. Detached exact-commit gate: PASS site tests and build at 40e23a696b2ea8e2566fbb216d1fa9edf8637c16 (233 passed, 14 skipped, 0 failed). Production deployment dpl_7FmyE7uisB8rgEknNmTMWx6scdsk READY; live page and selector verified in browser. No Grust crate or Sail algorithm changes.
+
+## 2026-09-27T22:24:08.651384+00:00 — ACK: querygraph/sail large graph benchmark on Morrobay
+
+Extending the Sail harness on work/extensions-large-graphs to import pinned adversarial-graph-algorithms hub/uniform fixtures and measure all Pecan/Banda/Grenada PageRank and WCC variants on Morrobay. Preserve source identities, correctness certificates, resource limits, and every outcome. Existing kernel-only timings remain separate from Sail complete-call timings. No Grust crate edits.
+
 
 ## 2026-09-30T15:06:22.959422+00:00 — Codex: ACK pending Fable Sail graph review
 
@@ -9899,19 +10005,37 @@ Repository querygraph/grust, work/proposal-v5. Preparing a guarded rewrite from 
 Repository querygraph/grust, work/proposal-v5 now 34a535c3f0c845c03533f1ae53ac14e8b2bb3972 locally and on origin (verified). The exact-lease update replaced 5c1f7db after the detached gate reported `NEUTRAL_HISTORY_GATE PASSED 34a535c3f0c845c03533f1ae53ac14e8b2bb3972`. Twenty linear commits preserve raw identities/dates/messages, all measurements and quotations, every other tree entry, and the last four SEM-REVIEW-2 versions byte-for-byte. Only the prescribed comparative-outcome prose in two document histories changed. All dirty tracked files survived byte-for-byte. Old→new mapping and independent audits: docs/reviews/sail-stream-experiments-2026-09-30/history-neutrality/extended-prepared-receipt.json and activation-receipt.json. Other branches, main and tags were not pushed.
 
 
+## 2026-09-30T19:03:10.682727+00:00 — Codex: DONE review documentation publication
+
+Repository querygraph/grust: completed Sail review, Sem second-review answers and evidence pushed to work/proposal-v5 and work/sail-graph-review at 51644023a02185679527304682ed41055ae1c4aa; both remote refs verified. Detached exact-commit verdict: `SAIL_REVIEW_DOCUMENTATION PASSED 51644023a02185679527304682ed41055ae1c4aa` (1,018 file hashes, 382 JSON files, 99 local Markdown links, selected whitespace/privacy/conflict checks). Latest Sem source reviewed: 1084eb6. Reviews are under docs/reviews/sail-graphs-2026-09-30/ and docs/reviews/sail-stream-experiments-2026-09-30/. Linux host builds/worker smoke/scale-24 replays remain pending, and the active WCC outcome implementation is excluded from this snapshot. Shared working files and unrelated coordination entries were preserved.
+
+
 ## 2026-09-30T19:55:36.910917+00:00 — Codex: ACK completed Sail review evidence publication
 
 Repository `querygraph/grust`: freeze completed WCC outcome and inbox gates, Pecan checkpoint controls, the exact follow-up fork union, and the completed instrumented Linux worker evidence in an isolated detached checkout from `51644023a02185679527304682ed41055ae1c4aa`. Preserve prior measurements and failure receipts; exclude the active compact runtime build, newer orchestration/cleanup records and generated fixtures. Publish only after the documentation hash/link/privacy gate and independent audit; this publication carries no new runtime or performance verdict. The shared working files and index are not publication inputs except the explicitly selected completed evidence and three revised review documents.
+
+
+## 2026-09-30T20:04:50.657430+00:00 — Codex: DONE follow-up review documentation publication
+
+Repository querygraph/grust: work/proposal-v5 and work/sail-graph-review are published and remotely verified at f4443ba76c18c922698a060183c02ca65ce939c7. Exact detached verdict: `SAIL_REVIEW_DOCUMENTATION PASSED f4443ba76c18c922698a060183c02ca65ce939c7` (1,389 file hashes, 499 JSON files, 145 local links), with independent broader evidence/privacy audit. Shared branch/index activation preserved existing working files and appended the isolated coordination entry; original dirty coordination text remains intact. Compact561 subsequently passed its Linux build and two-worker smoke; those newer results and the active logging02 replay remain outside this published snapshot. Publication evidence: docs/reviews/sail-stream-experiments-2026-09-30/documentation-followup-publication/.
+
+- 2026-09-30T20:22:00.623416+00:00 — ACK /root/review_benchmark, querygraph/grust: preparing a new weighted16k host289/host561 paired control only; original3a controller/ffcf native and exact8CPU16-23/12GiB retained. Independent review by review_native. No workload launch authorized by this preparation task.
+
+- 2026-09-30T20:25:22.721162+00:00 — DONE /root/review_benchmark, querygraph/grust: staged weighted16k paired host control pair16k-20260930201356 only; no Docker/workload launch. Plan d51e9f4d5a1d16fb18c36e93fcb3d641c017610a7319ee56a203676800dbe1ab. Detached candidate gate passed six offline controls, both dry paths and unchanged hashes; independent bounded review passed. Evidence: docs/reviews/sail-stream-experiments-2026-09-30/host-pair-16k/HANDOFF.json. Warmups A/B, measured ABBA; ratios gated on all six trials and labeled shared-host. Parent retains scheduling authority.
 
 
 ## 2026-09-30T20:30:15.449779+00:00 — Codex: ACK closed Sail evidence snapshot
 
 Repository `querygraph/grust`: freeze completed instrumented and compact Linux builds, scoped cache-cleanup receipts, compact worker correctness evidence, prepared-only weighted16k paired controls, cluster-ownership checks and the trimmed public input catalog. Preserve earlier failures and measurements. Logging02 is running at this snapshot; its active observations/cell remain excluded, compact scale24 has not started, and the paired study has not launched. Publication requires detached documentation gates and an independent audit. This is documentation integrity evidence, not a new runtime, release or performance verdict.
 
+- 2026-09-30T20:40:08.555698+00:00 Codex DONE: activated published Grust review b478e57cb34220c1f671dca7ce92b2b061867855 in work/proposal-v5 after remote/CAS/index/file guards; preserved concurrent dirty text, appended isolated publication entry, installed exact manifest and the recorded one-sentence SEM publication correction. Documentation gate and independent audit passed; large logging02 remains active and excluded from this closed evidence snapshot.
+
 
 ## 2026-09-30T21:19:34.637596+00:00 — Codex: ACK interim Sail documentation snapshot
 
 Repository `querygraph/grust`: preserve the completed local configuration, sampler and runtime-source audits and closed supplemental observations and completed 7bb SEM source/input audits through the logging02 observation collected at 2026-09-30T20:57:33.709595Z. All eight failed observer reads and both local stop attempts remain retained. Logging02 remains active: this is interim diagnostic evidence, not a completed replay or performance qualification. The full running cell, live observer ledger, later observations and Python caches remain excluded. Publication requires detached documentation gates, independent privacy/source review and an exact-commit gate; shared HEAD, index and prose are not activated by the publisher.
+
+- 2026-09-30T21:25:51.273504+00:00 Codex DONE: activated published Grust review 7387b985f242164281c7d94a1560bbfcfa8d8fe5 after preserving Fable7bb00a2 and re-running exact documentation/independent audits. Remote/CAS/index/file guards passed; preserved unrelated dirty text. New response reviews Sem input, CLI/library and integer-representation answers. Logging02 remains active; published interim observations stop at20:57:33UTC and make no final runtime/cause/performance claim.
 
 
 ## 2026-09-30T22:13:16.730839+00:00 — Codex: ACK closed Sail SSSP replay and input reference
@@ -9919,9 +10043,69 @@ Repository `querygraph/grust`: preserve the completed local configuration, sampl
 Repository `querygraph/grust`: retain the completed logging02 SSSP replay, exact-cgroup kernel kills of both mapped workers, first-fault chronology and all observer/collection failures. Preserve the new official cit-Patents input hashes and exact WCC reference, including failed build attempts and correctness controls. Logging03 has started after matched fresh admission; only its fixed launch/admission records enter this snapshot. Its running cell/monitor and later matched measurements are excluded. Documentation gates and independent review must pass on the detached candidate and exact commit before atomic publication. No runtime release, historical zero-OOM diagnosis, operator allocation-site attribution or end-to-end performance qualification is claimed.
 
 
+## 2026-09-30T22:40:02.946836+00:00 — Codex: DONE closed Sail evidence publication
+
+Repository `querygraph/grust`: both `work/proposal-v5` and `work/sail-graph-review` now name `d9df4b0e89b1e4a1838b1b536d05f47ba4f12808`; exact verdict `SAIL_REVIEW_DOCUMENTATION PASSED d9df4b0e89b1e4a1838b1b536d05f47ba4f12808`. The closed SSSP replay records both mapped workers OOM-killed; the historical zero-OOM failures and operator allocation site remain unexplained. Official cit-Patents input and exact WCC-reference receipts are retained. This snapshot includes only logging03 admission and launch; its final compact outcome and performance qualification are excluded. Shared index/branch activation preserved unrelated edits and all selected source bytes; only the new snapshot manifest and isolated coordination append were applied.
+
+
+## 2026-09-30T22:56:56.030439+00:00 — Codex: ACK PageRank certificate metadata parity
+
+Repository `querygraph/sail`, isolated `work/pagerank-certificate-metadata` from `200d1cf8`: an actual local SQL control accepts five malformed iteration/convergence cases under the certificate policy that the reference policy rejects. The score vectors are correct fixed points; this is metadata validation, not stream-loss attribution or a wrong-score result. Consolidating row checks and preserving nonconvergence classification; detached gates and an independent review precede delivery. Evidence lives in Grust `docs/reviews/sail-stream-experiments-2026-09-30/pagerank-certificate-metadata/`.
+
+
+## 2026-09-30T23:15:26.638664+00:00 — Codex: DONE PageRank metadata parity
+
+Repository `querygraph/sail`: `work/pagerank-certificate-metadata` pushed and remotely verified at `7df2f32f070e041eed5416eb44f7ff8fa4ce0d01`; exact verdict `PAGERANK_METADATA_GATE PASSED 7df2f32f070e041eed5416eb44f7ff8fa4ce0d01`. 333 benchmark tests pass (97 integration skips), plus 52 PageRank and 6 WCC local SQL tests without skips. Five metadata counterexamples are rejected consistently; nonconvergence classification remains distinct. A separately reproduced Parquet statistics-dependent NaN substitution in installed Sail0.7.0 is not fixed by this Python commit and remains under focused reader review. Full source, failures, independent review and delivery: Grust `docs/reviews/sail-stream-experiments-2026-09-30/pagerank-certificate-metadata/`.
+
+- 2026-09-30T23:22:41.844261+00:00 — ACK /root/review_benchmark: offline gate planning for querygraph/sail union from 200d1cf8 with Argentea owned-input 7f5b80d, PageRank metadata 7df2f32 and pending Parquet-statistics mitigation. Local pinned drivers/receipts only; no merge, build, network or Morrobay operation.
+
+- 2026-09-30T23:30:39.547361+00:00 — DONE /root/review_benchmark: offline querygraph/sail union gate plan delivered to coordinator: sail-data-source fmt/strict clippy/full library tests, Argentea 120 core/51 native ordinary+saturated tests, Python 333+58 validator scope, own-target reuse and optional newly built sail-cli integration boundary. No builds, merges, source edits, network or Morrobay operations. RESULTS.md Initialization and validation follow-up checked against both exact component/delivery receipts: no concrete mismatch.
+
+- 2026-09-30T23:30:39.547361+00:00 — ACK /root/review_benchmark: local-only preparation of a supplemental physical SSSP Parquet value verifier for a closed exact output inventory. No Morrobay reads, workload launch, certificate change or full Dijkstra claim.
+
+
+## 2026-09-30T23:31:39.903936+00:00 — Codex: ACK combined resource and validation gate
+
+Repository `querygraph/sail`: prepare the union of owned-input lifetime `7f5b80d0`, PageRank metadata `7df2f32f`, and the separately gated Parquet floating-statistics mitigation atop `200d1cf8`. A detached union receives its own targets and changed-scope core/native/host checks, plus a newly built local Sail CLI for SQL validator and default-statistics NaN controls. Component verdicts alone do not qualify this union. No Morrobay workload, Linux rebuild, multi-host scaling or release publication is part of this local gate. Plans, gate drivers and receipts live in Grust `docs/reviews/sail-stream-experiments-2026-09-30/resource-validation-union/`.
+
+
+## 2026-09-30T23:36:07.079907+00:00 — Codex: DONE Parquet component delivery
+
+Repository `querygraph/sail`: `work/parquet-float-statistics` pushed and remotely verified at `837e8e82acc5e971fce4533a7c4ecf08355cafe8`. Exact verdict `PARQUET_FLOAT_STATISTICS_GATE PASS 837e8e82acc5e971fce4533a7c4ecf08355cafe8 exact commit`; formatting, strict all-target Clippy and all 77 data-source library tests pass. Clearing floating file bounds prevents the reproduced NaN substitution and deliberately loses associated optimizations; raw footer pruning, other read paths and production performance remain unqualified. Frozen evidence keeps its pre-push cutoff; Grust `parquet-float-statistics-delivery.json` records this later delivery. Combined source and local CLI integration are being gated separately.
+
+- 2026-09-30T23:48:11.734893+00:00 — DONE /root/review_benchmark, querygraph/grust: prepared supplemental physical SSSP output verifier under docs/reviews/sail-stream-experiments-2026-09-30/physical-output-audit/. Detached candidate tree 54ab2d48 passed 31 offline tiny Parquet controls; independent review c8826775 passed. Helper 4c5fe87d binds exact closed receipt/output hashes, physical schema/rows, dense ID domain and NaN/Inf/negative/null checks; producer outcome stays separate. Actual local logging02/smoke receipts with absent payload remain inconclusive; no campaign output, remote call or workload was read/run. HANDOFF a25077274fad7f1efb765f8bd68e717a83caa7337a5d2bd660d1a7ab7f8d7ca6. New outer physical-output-pair-recipe.md SHA 1a726cc602e818acb680b17373cddad6d1304eba42f0ccface266c08ce29abe2 documents exact per-cell closure exports and all-six post-sequence physical qualification without changing frozen runner or raw ratios.
+
+- 2026-09-30T23:49:48.520991+00:00 — ACK /root/review_benchmark: independent local source/evidence audit of querygraph/sail resource-validation union, staged tree d43293b4. Check component source boundaries, conditional commit guards and completed candidate/exact receipts; no build, network, Morrobay operation or Sail source change. No exact verdict before closure.
+
+
+## 2026-10-01T00:17:07.595726+00:00 — Codex review_benchmark: DONE Sail resource-validation union independent audit
+
+Repository `querygraph/sail`, branch `work/stream-review-followup`, exact commit `a3462345a6764096024c055dc4d105a3c634e5a4`: `PASS_INDEPENDENT_EXACT_UNION_AUDIT`. Read-only full-tree/component and recorded-gate audit; no suites/builds/SQL/remote calls rerun. Receipt `docs/reviews/sail-stream-experiments-2026-09-30/resource-validation-union/independent-exact-review.json`, SHA-256 `efe879c64bb019c8a7ae541cb493237629b54b2b5df63aaca0f97aabaef50a03`. Candidate03 and exact receipts preserve 77 host tests, 120 core and 51 native (45 Argentea) ordinary/loaded, 333 Python passes/97 skips, 58 actual new-CLI SQL checks and both default-statistics controls. The two failed candidates remain retained. Scope excludes Linux/worker/Flight, loading a combined rebuilt native extension, and performance qualification.
+
+
+## 2026-10-01T00:18:59.317259+00:00 — Codex: DONE combined resource and validation gate
+
+Repository `querygraph/sail`: `work/stream-review-followup` is pushed and remotely verified at `a3462345a6764096024c055dc4d105a3c634e5a4`. Exact verdict `RESOURCE_VALIDATION_UNION_GATE PASS a3462345a6764096024c055dc4d105a3c634e5a4 exact commit`; independent source/evidence audit `efe879c6` passes. The union covers the three separately delivered input-lifetime, PageRank-metadata and Parquet-statistics changes: 77 host, 120 core/51 native ordinary and all-core-saturated tests, 333 Python unit passes (97 integration skips), 58 fresh-CLI SQL passes and explicit statistics-enabled NaN/finite controls. Both failed gate attempts are retained. No Linux, combined native worker loading, performance or cluster-scaling verdict. Evidence and outer delivery are in Grust `docs/reviews/sail-stream-experiments-2026-09-30/resource-validation-union/` and `resource-validation-union-delivery.json`.
+
+
 ## 2026-10-01T00:20:45.136930+00:00 — Codex: ACK closed resource and validation evidence publication
 
 Repository `querygraph/grust`: publish the frozen evidence for Argentea input lifetime, PageRank metadata validation, Parquet floating-statistics handling and their exact combined Sail commit `a3462345a6764096024c055dc4d105a3c634e5a4`. Retain the two failed integration gates and their narrow harness corrections. Include prepared physical-output and six-cell collection auditors and prior publication provenance. Active compact replay observations, future paired results and new PR/WCC ownership work are excluded. Detached candidate and exact documentation gates plus independent review precede atomic publication to both review branches.
+
+
+## 2026-10-01T00:29:07.658823+00:00 — Codex: DONE documentation snapshot activation
+
+Repository `querygraph/grust`: both `work/proposal-v5` and `work/sail-graph-review` now name `980da04151cd5860017a06580a658bdf7e133c40` after the exact documentation gate and independent review. This snapshot records the three component fixes, combined Sail `a3462345` evidence and retained failures, and prepared supplemental auditors. It excludes active compact replay results, paired performance and new PR/WCC ownership work. Shared source bytes and all prior coordination text were preserved.
+
+
+## 2026-10-01T00:52:15.894908+00:00 — Codex: ACK Argentea ownership follow-up delivery
+
+Repository `querygraph/sail`: review and deliver the exact descendant `33adfce1d2ab77c3e108aa542f7eda80dd5f5cf9` after its completed 136-core/55-native ordinary and saturated gate and independent source/evidence audit. Scope is PR/reference-residual and WCC staged initialization plus reproduced partition/cursor host-lease teardown ordering. Grust retains the unchanged-source failing controls and all 72 allocator cells. Code publication is to named fork work branches; documentation publication receives a separate frozen snapshot and exact gate. Active logging03 and future paired outcomes remain excluded from this closed component verdict.
+
+
+## 2026-10-01T00:56:36.819877+00:00 — Codex: DONE Argentea ownership follow-up delivery
+
+Repository `querygraph/sail`: atomic fork publication remotely verified both `work/argentea-rank-wcc-input-lifetime` and `work/stream-review-followup` at `33adfce1d2ab77c3e108aa542f7eda80dd5f5cf9`, an exact gated descendant of `a3462345`. Final component verdict `EXACT_COMPONENT_GATE_PASS`; independent exact source/evidence audit `db243b7e` and precision rebind `b5794322` pass. The gate covers 136 core/55 native (49 Argentea) tests ordinarily and with all ten local cores saturated; all load processes reaped. Retained controls establish reduced initialization overlap and premature lease release, with 72 allocator cells and eight actual adapter cases. No Linux/worker/Flight, rebuilt wheel, timing/RSS, cluster or historical zero-OOM attribution follows. Frozen component evidence and separate outer delivery receipt live in Grust `docs/reviews/sail-stream-experiments-2026-09-30/argentea-rank-wcc-input-lifetime/` and `argentea-rank-wcc-input-lifetime-delivery.json`.
 
 
 ## 2026-10-01T01:13:53.853906+00:00 — Codex: ACK closed Argentea ownership evidence publication
@@ -9929,11 +10113,115 @@ Repository `querygraph/grust`: publish the frozen evidence for Argentea input li
 Repository `querygraph/grust`: publish the closed review evidence for Sail `33adfce1d2ab77c3e108aa542f7eda80dd5f5cf9`, pushed on both named fork work branches after its exact 136-core/55-native ordinary and saturated gate and independent review. Retain all 72 allocator cells, eight actual adapter controls, reproduced partition/cursor teardown defects, failed/intermediate attempts and the separate delivery receipt. Include the prepared bounded physical-output executor and previous documentation publication provenance. Active compact replay, future pairs and subsequent SSSP feasibility remain excluded. The detached candidate and exact documentation gate qualify only this selected evidence snapshot. The first snapshot audit failed because a retained historical RESULTS copy has links relative to its source directory. The corrected verifier binds its bytes to the retained original source-manifest row and checks every link from that recorded context; the failed audit and original bytes are retained.
 
 
+## 2026-10-01T01:29:55.226398+00:00 — Codex: DONE documentation snapshot activation
+
+Repository `querygraph/grust`: both `work/proposal-v5` and `work/sail-graph-review` now name `95ad9933053a3896db10ff6b1ec57a98b904fb50` after exact documentation integrity gates and independent review. This snapshot records delivered Sail33adfce1d ownership fixes, the prepared physical-output executor, prior publication provenance and the verified historical Markdown link context with its retained failure. Active replay, SSSP candidate reuse, new pair-executor preparation and future paired outcomes are excluded. Shared source and prior coordination bytes were preserved.
+
+
+## 2026-10-01T01:35:55.106656+00:00 — Codex: DONE SSSP buffer reuse and ownership review publication
+
+Querygraph Sail `work/sssp-candidate-buffer-reuse` and `work/stream-review-followup` are remotely verified at `fc094a0c25a49edeac2f9f0195aa973421a21a43`, a direct child of `33adfce1d`. Exact local gate: 141 core / 55 native tests (49 Argentea), ordinary and all ten cores saturated, PASS; independent source/control audit PASS. At 65,536 local vertices the measured finish window requested/admitted peak falls by 2 MiB with one fewer allocation and unchanged work; no timing, RSS, worker or cluster claim. Delivery receipt: `docs/reviews/sail-stream-experiments-2026-09-30/sssp-candidate-buffer-reuse-delivery.json`.
+
+Grust `work/proposal-v5` and `work/sail-graph-review` are remotely verified at `95ad9933053a3896db10ff6b1ec57a98b904fb50`; `SAIL_REVIEW_DOCUMENTATION PASSED` for that exact commit and independent snapshot audit PASS. Shared activation preserved unrelated working bytes. Newly closed logging03 and SSSP evidence are outside that snapshot and will be published separately.
+
+
 ## 2026-10-01T02:09:20.668472+00:00 — Codex: ACK compact replay, physical output and SSSP documentation closure
 
 Snapshot preparation includes only the closed compact561 scale24 replay/certificate, supplemental physical-value audit, losslessly packaged diagnostics, retained observer/executor failures, and exact pushed Argentea SSSP buffer reusefc094a. It preserves earlier evidence and excludes the separately reviewed six-cell comparison and any new certificate implementation. Candidate/exact documentation gates and independent snapshot review remain required before publication; no runtime or multi-host gate is inferred.
 
 
+## 2026-10-01T02:21:39.831287+00:00 — Codex: DONE documentation snapshot activation
+
+Activated exact published documentation snapshot f2b3dedaebc792103d46e5cf1336c52e7c1e79ff after its candidate/exact integrity gates and independent evidence review. It closes compact replay/physical output and Argentea SSSP buffer-reuse evidence while retaining prior failures and unrelated shared bytes. Paired results, new certificate work, crates/book and runtime/cluster qualification remain outside this snapshot.
+
+
+## 2026-10-01T02:38:56.519419+00:00 — Codex: DONE parent-witness certificate component delivery
+
+Repository querygraph/sail; branch work/certificate-parent-witness and combined work/stream-review-followup now remotely verified at cab6bacc0ad0d1fc8b3070e9e4267e99751909fe, exact tree cd73d093230153857de196abc17ea8e98464149b. Verdict EXACT_COMPONENT_GATE_PASS: 337 unit passes, 136 skips, 67 actual SQL cases plus four pure argument controls; independent exact audit PASS. Atomic absent-component/combined-fc CAS followed direct-parent and source/evidence guards. Failed first exact gate and fallback extra call retained. Delivery: docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness-delivery.json. No multi-host/runtime-build qualification.
+
+
 ## 2026-10-01T02:48:58.557358+00:00 — Codex: ACK closed paired measurement and certificate documentation publication
 
 Publish the frozen six-cell shared-host paired evidence and exact delivered parent-witness componentcab6bacc, retain all failures/fallback regressions, refresh current stream status, and preserve compact publication provenance. Candidate/exact documentation gates and independent snapshot review are required; prior evidence is immutable apart from the named current RESULTS and STREAM status text. No cluster scaling verdict is inferred. This snapshot is based on Fable's disjoint documentation commit7a41f22b; all three changed files are preserved unchanged, and both remote refs must fast-forward from their separately pinned current heads.
+
+
+## 2026-10-01T02:51:55.958795+00:00 — Codex: DONE documentation snapshot activation
+
+Activated exact published documentation snapshot 23a7de9df38aefd13faa6befd37f936259f2007f after candidate/exact integrity gates and independent review. It records the closed paired measurements and delivered certificate component while retaining prior failures and unrelated shared bytes. Historical zero-OOM faults and multi-host scaling remain open; no crate/book or new runtime release is claimed.
+
+
+## 2026-10-01T03:20:57.670321+00:00 — Codex: ACK extension one-pager design review
+
+Repository querygraph/grust, with read-only inspection of querygraph/sail: review EXTENSIONS-ONE-PAGER.md against Heran’s thirty-minute design-review request and Sail authors’ stated architecture. Check alternatives, minimum public contract, sample author experience and staged scope. No Morrobay experiments, builds, source changes or upstream publication are part of this review.
+
+
+## 2026-10-01T03:24:45.824058+00:00 — Codex: DONE extension one-pager design review
+
+Reviewed Grust EXTENSIONS-ONE-PAGER.md at d7991b232f180be77cdecbb0fa345bff85433589 (SHA-256 671ba1948dbff91ba12f9fc83b325233694d2057c2b19949eda623266e5ca92f) and immutable querygraph/sail sail-extensions bd8ce9ae8839477e2c08a0475ab7900b115c5366. Read-only source/document review, with three independent review agents; no build, test or remote experiment verdict. Compared Heran’s primary discussion #2001, merged session-factory hook #2630 and Sail authors’ engine-contract article. Findings: FFI/Python direction aligns upstream; separate public obligations from driver gathering/prepaid-pool implementation, expose the indexed spatial-join decision, correct conflated alternatives and driver-only memory scope, use a coherent Sedona sample, and stage review around independently accepted capabilities. Full review delivered in the conversation; no source or entrance-document edits.
+
+
+## 2026-10-01T03:33:19.453541+00:00 — Codex: ACK extension review narrative and editions
+
+Repository querygraph/grust: refactor EXTENSIONS-ONE-PAGER into a decision brief followed by eight sequential deep dives, retaining the updated Fable module table and design-decision table; include complete pinned sample code and create Markdown, syntax-colored PDF and EPUB. Sail source bd8ce9ae remains read-only. No experiments, runtime changes or public library deployment. Preserve unrelated shared work.
+
+
+## 2026-10-01T04:10:21.072227+00:00 — Codex: DONE extension review narrative and editions
+
+Repository querygraph/grust; branch work/extensions-review-guide, remotely verified at 05a7b30277b189e4fe6a4a1eb4bdebdbbaef30b3. Sources frozen at a9011faec4cd56a03437909c9d71cce020a0b69b; verdict EXTENSION_BOOKS_EXACT_GATE_PASS commit=05a7b30277b189e4fe6a4a1eb4bdebdbbaef30b3. Main guide: one-page introduction, both updated maps, eight consecutive modules and complete sample/support listings; 29-page PDF plus Markdown/EPUB. Separate host companion compares pinned plain Sail 4d31e15b and prototype bd8ce9ae, maps decision ownership and includes the complete 82-file historical host patch; 127-page PDF plus Markdown/EPUB. Both central builds, source/code fidelity, PDF geometry/text and EPUB structure pass; all PDF pages visually reviewed, final rebuild pixels identical, EPUB rendered resources identical to 18 viewport/surface checks. Scoped FirstPair checker correction is separately pushed on work/pdf-dependency-list-layout at cc501438dd894626790eddd78fb0ad263baca36b; focused controls and book fixture workflow pass. Workspace activation preserves prior branch, existing coordination bytes and unrelated untracked evidence. No Sail runtime, Morrobay experiment, cluster qualification or public library deployment. Delivery receipts are committed under each guide dist directory.
+
+
+## 2026-10-01T04:53:29.607196+00:00 — Codex: ACK next Graph500 capacity controls
+
+Repository querygraph/grust, with read-only source/runtime inspection in querygraph/sail and Morrobay: prepare matched compact-runtime Pecan scale-25 and Grenada scale-24/25 SSSP controls following the closed 33.05 GiB scale-24 replay. Check exact artifact/input identities, current host/disk/resource admission and serial execution before any launch. Preserve every outcome and distinguish capacity from dedicated-host performance or cluster scaling. Explain Argentea failure classes using recorded evidence and actual source.
+
+- 2026-10-01T05:20:26.797237+00:00 Codex DONE Sem review accounting: Grust branch work/graph500-next-scale at b71f7ba1 updates all A–F statuses, corrects stale compact replay status and unsupported cross-input isolate inference. Independent source/link review passed; prior prepared capacity supervisor exact verdict: PASS Graph500 supervisor offline controls commit=9b21663e4e91993a5028bb0ca8a253107b0bc014 controls=15. Small Grenada DeltaStar smoke passed full 16,384-row Dijkstra/parent checks and clean exit/no OOM. No large capacity run launched.
+- 2026-10-01T05:20:26.797456+00:00 Codex ACK Sem WCC pilot: user prioritizes direct WCC performance accounting. Preparing official cit-Patents randomized/fused local and two-worker controls with exact canonical oracle, before long scale-25 SSSP cells. Original input and oracle bytes are privately staged/hashverified on Morrobay; no WCC producer has started.
+
+- 2026-10-01T06:02:50.895127+00:00 Codex DONE Sem WCC pilot and disk cleanup: Grust branch work/graph500-next-scale remotely verified at ee5a43a7b0137eb9815b16fabeae4a5f76b09e49. Verdict EXACT_SEM_REPORT_GATE_PASS commit=ee5a43a7b0137eb9815b16fabeae4a5f76b09e49 files=34 local_links=43 four_cell_oracles=pass cleanup_inventory=pass. Four cit-Patents original/fused local/two-worker cells passed full 3,774,768-row canonical membership;19rounds, noOOM/cleanclosure. Shared-host single-sample fused/original elapsed ratios0.7816local/0.7795cluster, peakmemoryratios1.1984/1.1104; instrumentation/order/host effects unisolated, no external parity claim. Disposable cache/container cleanup increased guest free space34.57→91.02GiB; datasets/evidence/source/runtimes retained. All A–F accounting and next-day plan updated at docs/reviews/sail-stream-experiments-2026-09-30/SEM-REVIEW-2-DAY-ACCOUNTING.md.
+- 2026-10-01T06:02:50.895469+00:00 Codex ACK large capacity execution: Morrobay frozen supervisor9b21663e launched05:57:46UTC with explicitPython3.12 PID46963; fresh admission90.95GiBdisk/106.23GiBavailable, unchangedboot, idleDocker. Current first workload sail-next-capacity-pecan-s25-1; then independentGrenada24 and conditionalGrenada25 under own-only disk/interference/deadline guards. Results pending; physical Parquet audit still required after any large producer pass. /Volumes/Apo remains future/unverified.
+
+- 2026-10-01T14:04:45.290897+00:00 Codex DONE morning capacity status: Grust work/graph500-next-scale remotely verified6bdd55748fa0e9233a051d52c6b0965786947676; EXACT_SEM_REPORT_GATE_PASS commit=6bdd55748fa0e9233a051d52c6b0965786947676 files=6 local_links=29 four_cell_oracles=pass cleanup_inventory=pass; PECAN25_STATUS_RECEIPT_GATE_PASS physical_output_checked=false. Independent smallbundle audit passed source/config/container/certificate closure. Pecan25 converged62rounds with33,554,432unique vertices and17,048,727reached,73.7255GiBcontainerpeak, noOOM/cleanexit. Physical4part Parquet audit deferred until activequeue idle. Grenada24 running14:01UTC, peak30.12GiBsofar, noOOM,81.31GiBdiskfree; Grenada25 conditional. Apo mounted but only60.90GiBfree on6TBtotal, not promised6TBfree. No additional workloads launched; existing supervisor remains active.
+
+- 2026-10-01T14:36:05.021713+00:00 Codex ACK Argentea two-host scale24 diagnosis: user explicitly prioritizes resolving prior ingestion cancellation. Reconstruct original firstfailure, inspect alreadygated causal logging and prepare controlled two-host reproduction using isolated querygraph/sail worktrees. Plans/evidence stay Grust. Current guarded Grenada capacity queue remains active while readonly/source work proceeds; no competing Morrobay load launched. No cause verdict without discriminating control.
+
+
+### 2026-10-01T15:37:53.918149+00:00 — ACK: Pecan code and harness locator publication
+
+Root is publishing only `docs/pecan-code-and-harness.md` from a detached Grust worktree, preserving the completed maintainer-role cleanup at `043fb2a5`. Target: `origin/work/graph500-next-scale`. Shared pending files remain owned by their existing work.
+
+
+### 2026-10-01T15:39:50.102227+00:00 — DONE: Pecan code and harness locator publication
+
+Pushed `5513e29c7ee9b845fd273657a66e188f0236ab1c` to `origin/work/graph500-next-scale`; new commit changes only `docs/pecan-code-and-harness.md`. `PECAN_LOCATOR_DOC_GATE PASS 5513e29c7ee9b845fd273657a66e188f0236ab1c`: 18 pinned links and anchors; SHA256 `2d4ce054f39ace49cf6275a4d149a59ec38120840515b0e4f5fee65cf22bd8b5`. GitHub content hash and remote branch head independently verified. Completed maintainer-role cleanup remains in ancestry. Shared checkout fast-forwarded; existing pending work preserved.
+
+
+### 2026-10-01T15:47:39.779064+00:00 — ACK: Pecan scan validation and module imports
+
+Root read the two supplied iCloud screenshots. Work is isolated in querygraph/sail branch `work/pecan-explicit-validation` from `cab6bacc`; new review evidence belongs in Grust. Scope: remove automatic input-validation actions from normal execution and move function-local imports to module scope without circular dependencies. Required algorithm work and explicit correctness tests remain.
+
+
+### 2026-10-01T16:09:56.825880+00:00 — ACK: finish isolated Pecan patch after pause
+
+User authorized finishing `querygraph/sail` work/pecan-explicit-validation in /private/tmp/sail-pecan-explicit-validation, with integration deferred until Fable finishes work/pecan-typed. No edits to Fable’s checkout or shared integration branches. Frozen draft tree 51e9ae66 on cab6bacc; detached Python/SQL gate and explicit action-count control are next. Normal execution assumes valid graph data.
+
+
+### 2026-10-01T16:27:24.810359+00:00 — ACK: integrate typed Pecan and scan reductions
+
+User authorized integration after Fable completed querygraph/sail `7145d107c772a98ce7c65637864c15eb21aee962`. Integration is isolated on `work/pecan-typed-integrated` from newer combined base `cab6bacc`; merge keeps both histories. The updated valid-graph/Pydantic rule is authoritative: discard the draft optional in-algorithm validation path, preserve typed option/event models, apply module imports, range seed and unnecessary-count reductions, then gate the combined source including mypy/ruff. No old draft has been committed or published.
+
+
+## 2026-10-01T16:53:14.981842+00:00 — Codex — DONE typed Pecan integration
+
+- Sail fork: merged typed rewrite `7145d107c` with newer `cab6bacc` on `work/pecan-typed-integrated`; commit `6ae2e43a903c2cee02da170465c922c72b76198e`, tree `4dc43a40ba4cea57deb69923e231e96a16b812b6`. Pushed that branch and fast-forwarded fork `work/stream-review-followup`; both remote refs verified.
+- Verdict: `PECAN_TYPED_GATE PASS mode=exact head=6ae2e43a903c2cee02da170465c922c72b76198e tree=4dc43a40ba4cea57deb69923e231e96a16b812b6`. Strict mypy/Ruff; 1,196 offline passes, 286 endpoint-configured cases including 183 Spark-fixture cases and 103 repeated checks; 1,379 distinct passes, 30 explicit external-tool skips. Owned local process groups reaped.
+- Same-runtime four-vertex SSSP oracle: identical exact rows and three rounds; count calls 12 to 0, forwarded ExecutePlan 49 to 37. This is an action-count control, not a speed, memory or scale result. Valid graph including finite path sums is the contract; obsolete optional-validation draft was not integrated.
+- Grust evidence and locator: `de322c1de89324e69145cf63a84a1a182eda76c9`, pushed to `work/pecan-validation-review` and `work/extensions-review-guide`, shared checkout fast-forwarded. `PECAN_DOCS_GATE PASS head=de322c1de89324e69145cf63a84a1a182eda76c9 tree=5db153b2ed8ccd9f27a4f3b7f12b0b87551fe5c7`. Read `docs/reviews/pecan-validation-2026-10-01/README.md`; older failures/controls retained, historic scale-24 code/runtime pins unchanged. No remote benchmark launched for this integration.
+
+
+## 2026-10-01T17:12:30.042738+00:00 — Codex — ACK test typed Pecan on Morrobay
+
+User authorized testing the integrated controller now. Repositories: querygraph/grust for plans/evidence and querygraph/sail at 6ae2e43a for the controller. Inspect live host/guest workload and disk admission before launching a serial smoke and matched experiment; preserve existing queue/evidence and distinguish shared-host ratios from absolute performance and cluster scaling. All remote launch authority remains with root; reviewers are local-only.
+
+## 2026-10-01T17:40:08.051078+00:00 — Codex DONE: Morrobay typed Pecan execution handoff
+
+Prepared, not launched. Grust branch `work/pecan-typed-experiments`, commit `6268d2292faacdfdcaeaab19942bd17d0ba49a1f`. Verdict: PASS exact detached commit, 50 offline controls; four-helper mypy and selected Ruff passed on identical files. Handoff: `docs/reviews/pecan-typed-experiments-2026-10-01/README.md`; source/deps/helpers staged at Morrobay `/Users/alexy/src/sail-extensions-gates/pecan-typed-tests-20261001`. No new Sail server or benchmark cell launched. Execution belongs to Morrobay agent after operator handoff; Capitola retains independent review. Exact gate receipt `/private/tmp/pecan-takeover-final-gate/exact02-receipt.json`; first local collection attempt missing its Pydantic overlay retained separately, corrected environment passed without source changes. Old Graph500 forensic lock/container untouched.
