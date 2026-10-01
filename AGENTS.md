@@ -217,6 +217,13 @@ engine; the checks were measured as a visible share of the time at scale.
   operation over the data, the check does not run by default.** Arguments
   are assumed valid too; checking that "the user is not an idiot" shifts the
   cost of the 1% onto the 99%, so only free, in-memory argument checks exist.
+- **"As in X" means as in X.** When an algorithm is asked for in the form of
+  a named reference (GraphX, the Pregel paper, graphframes-rs, a cited
+  paper), it is implemented in that form, with that reference's stopping
+  rule and no added terms, certificates or redistributions. Any deviation is
+  a separate, named method with its own docstring, never a silent
+  "improvement" (Sem, 2026-10-01: the third algorithm in a row carried an
+  unasked trade-off).
 - **Code is navigable by people, not only by grep.** Type hints on every
   definition so go-to-definition and find-references work; no function-local
   imports (the import-structure test enforces it); structured values are
