@@ -99,3 +99,14 @@ The preceding [compact replay](../sail-stream-experiments-2026-09-30/COMPACT-REP
 and [cluster preparation review](../sail-stream-experiments-2026-09-30/CLUSTER-PREPARATION.md)
 remain the evidence and design context. These next capacity cells cannot by
 themselves demonstrate near-linear distributed scaling.
+
+## Launch status
+
+The unchanged supervisor was launched on Morrobay after the four WCC pilot
+cells closed, using explicit host Python 3.12. The fresh prelaunch observation
+found 90.95 GiB free volume space and 106.23 GiB guest available memory,
+unchanged VM identity and no running containers. See [prelaunch evidence](prelaunch-after-wcc.json)
+and [launch receipt](launch01.json). This records a launch, not a completed cell;
+the supervisor still applies its per-cell admission and continuous guards.
+
+Status written UTC: 2026-10-01T05:59:41.897030+00:00

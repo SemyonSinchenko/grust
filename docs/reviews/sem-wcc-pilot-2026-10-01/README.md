@@ -3,7 +3,8 @@
 This pilot measures the WCC path raised in Sem's review. It uses the original
 official Parquet files and the complete canonical component reference prepared
 on September 30. The full [day accounting](../sail-stream-experiments-2026-09-30/SEM-REVIEW-2-DAY-ACCOUNTING.md)
-distinguishes this pending experiment from today's completed SSSP work.
+distinguishes these completed diagnostic cells from the separate SSSP work.
+All four cells passed the full oracle; see [results and phase breakdown](RESULTS.md).
 
 The source is controller `3a9028057`, compact runtime `56194b170`, and native
 wheel `ffcfbd569`; full hashes are enforced by [pilot.py](pilot.py).
@@ -31,8 +32,8 @@ It is not the repeated external-CLI comparison and does not qualify scale 26.
 
 ## Measurement and checks
 
-The timer covers lazy input handles through the public WCC call and completed
-full-result Parquet write. Startup, input hashing and independent output
+The timer starts after creating lazy input handles and covers the public WCC
+call through the completed full-result Parquet write. Startup, input hashing and independent output
 verification are separate. Delegating wrappers time the unchanged schema and
 snapshot routines; they remove no action. The snapshot residual includes
 validation/count calls and Python/control work. Public call to first round also
@@ -66,7 +67,7 @@ Prepared source and passed offline checker tests are not engine results.
 
 ## Remaining qualification
 
-After all four cells close, compare mode and algorithm observations only within
+With all four cells closed, compare mode and algorithm observations only within
 this profile. Inspect checkpoint counts, contraction sizes, actual worker plans,
 round timing, setup and reverse expansion before choosing an optimization.
 Run B1's checkpoint-repartition opt-out separately; it is not loaded here.
