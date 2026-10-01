@@ -34,16 +34,16 @@ limits, placement, replay policy, memory admission and teardown.
 
 ## Module map
 
-| # | Module | Owner | Status on the branch |
-|---|---|---|---|
-| 1 | Discovery and binding | Sail session layer | implemented, flag-gated |
-| 2 | Functions (expressions) | extension; Sail codec | implemented, workers included |
-| 3 | Relations | Sail Connect and planner; extension handler | implemented, driver placement |
-| 4 | Commands (mutations with a receipt) | extension, over module 3 | implemented |
-| 5 | Placement and replay | Sail scheduler | implemented: driver, one attempt |
-| 6 | Native memory | Sail pool; ABI crate | implemented |
-| 7 | Lifecycle and teardown | Sail session manager | implemented; one policy open |
-| 8 | Packaging and compatibility | extension; Sail loader | pinned versions, no stable ABI promise |
+| # | Module | Owner | Status on the branch | The choice to review |
+|---|---|---|---|---|
+| 1 | Discovery and binding | Sail session layer | implemented, flag-gated | a Python entry point and manifest, against a Rust plugin trait or a bare C ABI |
+| 2 | Functions (expressions) | extension; Sail codec | implemented, workers included | name-resolved native UDFs on workers, with package identity and complete fields carried by the codec |
+| 3 | Relations | Sail Connect and planner; extension handler | implemented, driver placement | the Connect envelope and a table-provider handler, against a new RPC, SQL table functions or a session override |
+| 4 | Commands (mutations with a receipt) | extension, over module 3 | implemented | mutation as a relation with a receipt, no exactly-once |
+| 5 | Placement and replay | Sail scheduler | implemented: driver, one attempt | driver placement and one attempt, against worker placement with retries |
+| 6 | Native memory | Sail pool; ABI crate | implemented | a prepaid, non-spillable reservation from the host pool through a dependency-free ABI crate |
+| 7 | Lifecycle and teardown | Sail session manager | implemented; one policy open | the fixes that stand on their own, and the policy for a stuck native owner |
+| 8 | Packaging and compatibility | extension; Sail loader | pinned versions, no stable ABI promise | exact pinned versions and hashes now, or a compatibility range from the start |
 
 Each module below has the same four parts: purpose, the minimum contract,
 the alternatives and the trade-off, and what is deliberately out.
