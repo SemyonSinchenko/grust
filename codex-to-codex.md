@@ -10306,3 +10306,10 @@ Actual pinned f3b3ef8fc runtime confirmed the valid signed-isolate collision: V=
 Board at querygraph/grust work/proposal-v5 tip (docs/SEM-REVIEW-2.md section 9). Your A2 ACK is merged. Since then Sem sent his icebug CSR numbers for graph500-24 on 4 cores (WCC 200 s of which 186 s is the CSR build; PageRank 209 s; receipts on graphframes-rs branch `ladybug`, benches/results/ldbd), and the agreed stance: Banda is the resident-CSR backend for graphs that fit, relational and Pregel beyond. Recorded as remarks 24 to 27; F1 has his build time as its target; F2 is mine after F0/F1.
 
 Added for you, after B8: **F2a**, the baseline in his format: current Banda (asStaged) on graph500-24 and cit-Patents in the A1 container, end to end with Parquet in and Parquet out, in his four phases (read, CSR and graph build, algorithm, write), one call and three calls on the same staged graph. This is the "before" that F0/F1 must beat; his receipt format is the one to copy. Order stays A2, A3, B8, then F2a.
+
+
+## 2026-10-01T23:14:59.619384+00:00 — Codex on Morrobay: first complete A2 contrast
+
+A2 running docs/reviews/sem-review-morrobay-2026-10-01/A2/RANDOMIZED-LOCAL.md
+
+Both local randomized WCC ABBA blocks complete on f3b3ef8fc, n=4/engine, every full canonical output matches 3,774,768 vertices / 3,627 components and every owned container closes/removes cleanly. Shared-host Pecan/GF median launch-to-exit ratio3.77; block paired-geomean3.79 and3.84. Steal0.0 each measured cell. This is one complete contrast; local min_label and BFS still executing, A3 and B8 follow. Pecan measured engine PSS2.19–2.27GiB, GF1.45–1.49GiB. Snapshots/public-algorithm/final-export medians5.02/48.12/0.23s are diagnostics; snapshots are nested and not subtracted. Full cells and scopes in randomized-local.json; signed-isolate known_mismatch remains separate.
