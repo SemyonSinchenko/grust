@@ -572,9 +572,9 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | Id | Item | Owner | Status | Evidence |
 |---|---|---|---|---|
 | A0 | LDBC Graphalytics `test-*` graphs with their reference outputs as Pecan's correctness oracle (BFS, PageRank, SSSP, WCC), before any timing (Sem, remark 13) | Codex | **done**: 16 of 16 supported cases pass against the official references (CDLP and LCC recorded unsupported) | `work/morrobay-pecan-typed-results`, `docs/reviews/pecan-ldbc-semantics-2026-10-01/README.md`, commit `cec260d6` |
-| A1 | graphframes-rs at the benchmark branch built in the gate image; his settings read from `main.rs`; run on the LDBC Parquet inputs in a 16-CPU, 32 GiB container | Codex | open | |
-| A2 | Pecan in local mode on the same inputs and container: WCC randomized, fused, min-label; PageRank with his contract; BFS; validation reported as its own phase; ABBA twice | Codex | open | |
-| A3 | the same in process-cluster mode with pools summing to the container budget (C3) and 16 partitions | Codex | open | |
+| A1 | graphframes-rs at the benchmark branch built in the gate image; his settings read from `main.rs` | Codex | **done**: `b4da56d` built with `--release --locked` in the gate image, 16 CPUs, 32 GiB; settings audited: seed 42, 16 partitions, 30 GiB FairSpillPool, sort-merge preferred; his PageRank is thresholded delta Pregel and his shortest paths are per-landmark unweighted hops, so they are not LDBC's fixed-step power PR and weighted SSSP | `work/morrobay-sem-review`, `docs/reviews/sem-review-morrobay-2026-10-01/A1/` |
+| A2 | Pecan in local mode on the LDBC inputs in the A1 container, against his binary there: WCC `randomized` (B9) and `min_label`; BFS against his unweighted shortest paths, hops only; PageRank only once a matching contract exists (his thresholded delta against B11, or his CLI run with a fixed iteration count if it has one); validation as its own phase; ABBA twice | Codex | open, next | |
+| A3 | the same in process-cluster mode with pools summing to the container budget (C3) and 16 partitions | Codex | open, after A2 | |
 | A4 | the decision table of Stage A applied, written into section 4 | Fable | open | |
 | B1 | keyless repartition toggle (`repartition_checkpoints`) | done | `6ae2e43a9` | integration |
 | B2 | write receipt from the host's graph-utils service instead of read-back counts | Fable | open | |
@@ -586,7 +586,7 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remarks 11, 23a); he wants numbers | Codex | open | |
 | B10 | PageRank in the Pregel paper's and GraphX's static form (`method="pregel"`), optional normalization (Sem, remarks 18, 21) | Fable | **done**: tests equal to `power` without dangling vertices, same order with them | `work/wcc-affine` `f3b3ef8fc` |
 | B11 | PageRank delta as GraphX's vertex program: no certificates, the frontier as the only extra relation (Sem, remarks 20, 21) | Fable | open | |
-| B9 | randomized WCC as in the paper: affine ids, plain `min`, inverse maps once at the end (Sem, remarks 14 and 17) | Fable | **done**, pending Codex's gate measurement: 176 Pecan and 337 harness tests pass; paired debug-build control on Capitola (2M vertices, 4M edges, identical labels): new 24.2 and 23.8 s against old fused 29.5 and 27.8 s and old randomized 39.3 and 31.0 s, about 30% less per round | `querygraph/sail` `work/wcc-affine` `7475dfc03` on top of `6ae2e43a9` |
+| B9 | randomized WCC as in the paper: affine ids, plain `min`, inverse maps once at the end (Sem, remarks 14 and 17) | Fable; gate measurement Codex, inside A2 | **done**, pending the gate measurement: 176 Pecan and 337 harness tests pass; paired debug-build control on Capitola (2M vertices, 4M edges, identical labels): new 24.2 and 23.8 s against old fused 29.5 and 27.8 s and old randomized 39.3 and 31.0 s, about 30% less per round | `querygraph/sail` `work/wcc-affine` `7475dfc03` on top of `6ae2e43a9` |
 | C1 | local mode as the single-host default in harness and guide | Fable | open | |
 | C2 | fixed cost of one distributed job at P = 4, 16, 32 | Codex | open | |
 | C3 | pools that sum to the container limit | Codex | open | |
