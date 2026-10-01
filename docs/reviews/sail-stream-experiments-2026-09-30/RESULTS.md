@@ -578,3 +578,13 @@ controls and independent review cover its admission and cleanup guards; two
 initial defects and their failing controls are retained. It has not scanned
 the campaign output. Active replay observations and future paired results are
 outside this closed evidence update.
+
+
+## Compact replay closure and SSSP buffer reuse
+
+The scale-24 compact-runtime replay passed its producer certificate and a separate
+physical scan of all 16,777,216 output vertices, with 33.05 GiB container peak and
+zero OOM events. Argentea SSSP buffer reuse is separately gated and pushed at
+`fc094a0c`; its local allocation control removes one dense buffer.
+[Closed evidence, retained failures and qualification boundaries](COMPACT-REPLAY-AND-SSSP.md)
+keep those results distinct from the pending paired and multi-host measurements.
