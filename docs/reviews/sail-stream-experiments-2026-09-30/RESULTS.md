@@ -537,3 +537,44 @@ it; a finite fixed point passes. Two failed gate attempts are retained: an
 interleaved-log counting error and mismatched Python executable/library paths.
 These are local checks; Linux, combined native loading in workers, performance
 and multi-host scaling remain outside this verdict.
+
+## Further Argentea input and lease lifetimes
+
+The next exact descendant, `33adfce1d`, is committed and pushed on both
+`work/argentea-rank-wcc-input-lifetime` and `work/stream-review-followup`.
+Reference/residual PageRank and both WCC modes now release raw input vectors
+and their charge after CSR construction, before allocating dense state.
+All 72 requested-allocation cells are retained. At 65,536 local vertices in
+one measured owner, configured for three partitions, peak requested heap falls
+by 524,288–1,179,944 bytes. Allocation counts, allocated-byte volume and metered
+work stay equal. Conservative admission peaks remain unchanged at the two
+larger fixture sizes; the single-vertex cases retain their small reductions.
+Actual adapter controls independently reproduce the reduced overlap against
+unchanged parent production. These are allocation-lifetime measurements, not
+RSS, timing or cluster results. [Full boundary and controls](argentea-rank-wcc-input-lifetime/README.md).
+
+Separate unchanged-source controls reproduce premature last-host-lease release
+in BFS, SSSP, residual PageRank and both WCC modes: the callback ran while
+native admitted storage remained live. A PageRank emission cursor also released
+its lease while its actual 2,056-byte sequence allocation remained live, despite
+zero admitted bytes. The narrow field-order fixes retain the lease through
+storage teardown. Final usage already reached zero before these fixes; this is
+not evidence of permanent leaks or the cause of historical stream loss.
+[Actual cursor allocation control](argentea-cursor-lease-control/README.md).
+
+The final detached gate passes 136 core and 55 native tests, including 49
+Argentea tests, both ordinarily and with all ten local cores saturated.
+Independent source/evidence review passes. The earlier 129/54 intermediate
+gate and failed controls remain separately identified. The exact descendant
+was delivered without a new merge; its verdict does not add Linux, worker,
+Flight, rebuilt-wheel or performance qualification.
+[Final gate](argentea-rank-wcc-input-lifetime/extended-exact-gate/receipt.json),
+[verified fork delivery](argentea-rank-wcc-input-lifetime-delivery.json).
+
+A bounded [physical-output execution helper](physical-output-execution-preparation/README.md)
+is prepared for use after the compact replay closes: one CPU, 2 GiB, no additional swap,
+read-only result inputs and a separate supplemental verdict. Nineteen local
+controls and independent review cover its admission and cleanup guards; two
+initial defects and their failing controls are retained. It has not scanned
+the campaign output. Active replay observations and future paired results are
+outside this closed evidence update.
