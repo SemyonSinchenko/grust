@@ -1,7 +1,7 @@
 # A2 and A3: matched Parquet input/output experiment
 
-This directory contains the frozen plan and execution helpers. **Staged;
-runtime validation and measured cells are pending.** Completed receipts will
+This directory contains the frozen plan and execution helpers. **Inputs
+validated; compatibility adapter correction in progress; measured cells are pending.** Completed receipts will
 supersede this preparation status. Grust's root `AGENTS.md` governs this work;
 the experiment directory is evidence, not a repository policy source.
 
@@ -37,8 +37,10 @@ Read [SOURCE-CONTRACTS.md](SOURCE-CONTRACTS.md) and the complete
 - WCC: Pecan `randomized` and `min_label`, canonical minimum original IDs;
   graphframes-rs randomized contraction, seed 42. The `wcc-min-label` name in
   a graphframes cell identifies its comparison, not a graphframes method.
-- BFS: directed unweighted hops from the same raw vertex ID, initially
-  `750000`. The validation phase must verify membership. Pecan's frontier
+- BFS: directed unweighted hops from the same raw vertex ID, `5795784`.
+  The first phase refused absent source `750000`; selection of the existing
+  source used maximum outgoing edge-row count, ties by minimum raw ID, before
+  any timing. Pecan's frontier
   implementation also computes parents and a convergence certificate
   internally; only full ID/distance output is compared. The additional work
   remains in its timer.
@@ -134,9 +136,10 @@ certain closure before releasing the lock. Stop on any unexpected outcome,
 failed oracle, OOM, timeout or uncertain closure. Retain failed IDs, logs,
 receipts and locks; use a fresh explicit ID for any later attempt.
 
-Host archive:
-`/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run01/`.
-Guest namespace: `/targets/sem-review-20261001/A2-run01/`.
+The [current plan](plan.json) records the active namespace; the
+[initial plan](plan-initial.json) is retained. Failed preparation attempts are
+under `A2-run01`, `A2-run02` and `A2-run03` in
+`/Volumes/Apo/graph-tests/results/sem-review-20261001/`.
 The host archive keeps large result Parquet files; Git keeps indexed portable
 receipts, helper sources, gates and reports. After A2 and A3 close, B8 requires
 its own paired plan and admission on cit-Patents and official scale-24 inputs.

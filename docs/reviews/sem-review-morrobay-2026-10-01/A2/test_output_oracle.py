@@ -157,6 +157,32 @@ class OutputOracleControls(unittest.TestCase):
         with self.assertRaisesRegex(oracle.Mismatch, "schema"):
             oracle.verify_bfs_output(self.output, self.bfs, "pecan")
 
+    def test_bfs_actual_graphframes_column_order_is_read_by_name(self) -> None:
+        # Observed A2 run03 physical layout: dist_1:Int32 precedes id:Int64.
+        pq.write_table(pa.table({"dist_1": pa.array([2, 2147483647, 0, 1], type=pa.int32()),
+                                 "id": pa.array([5, 9, 1, 2], type=pa.int64())}),
+                       self.output / "part.parquet")
+        result = oracle.verify_bfs_output(self.output, self.bfs, "graphframes")
+        self.assertEqual((result.rows, result.unique, result.reachable_vertices), (4, 4, 3))
+        self.assertEqual([field.name for field in result.physical_schemas[0].fields], ["dist_1", "id"])
+        self.assertEqual([field.arrow_type for field in result.physical_schemas[0].fields], ["int32", "int64"])
+
+    def test_bfs_named_fields_reject_extra_duplicate_and_wrong_type(self) -> None:
+        cases = [
+            pa.table({"dist_1": pa.array([0, 1, 2, 2147483647], type=pa.int32()),
+                      "id": pa.array([1, 2, 5, 9], type=pa.int64()),
+                      "extra": pa.array([1, 1, 1, 1], type=pa.int64())}),
+            pa.Table.from_arrays([pa.array([1, 2, 5, 9], type=pa.int64()),
+                                  pa.array([1, 2, 5, 9], type=pa.int64())], names=["id", "id"]),
+            pa.table({"dist_1": pa.array([0, 1, 2, 2147483647], type=pa.int64()),
+                      "id": pa.array([1, 2, 5, 9], type=pa.int64())}),
+        ]
+        for table in cases:
+            with self.subTest(schema=table.schema):
+                pq.write_table(table, self.output / "part.parquet")
+                with self.assertRaisesRegex(oracle.Mismatch, "schema"):
+                    oracle.verify_bfs_output(self.output, self.bfs, "graphframes")
+
     def test_bfs_duplicate_omit_unknown(self) -> None:
         cases: list[tuple[list[int | None], list[int]]] = [
                             ([1, 2, 2, 9], [0, 1, 1, 2147483647]),

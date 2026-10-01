@@ -158,7 +158,7 @@ child exit, and reject incomplete lifecycle closure before any timing ratio.
 
 ## BFS: proposed independent full-hop oracle
 
-Source `750000` was selected historically as 25% of a rounded catalog count;
+The prepared source `750000` was selected historically as 25% of a rounded catalog count;
 it is not a verified vertex percentile. Membership was not checked during
 this review. Admit it in the explicit input phase only if it appears exactly
 once among the declared vertices; preserve a missing-source outcome.
@@ -198,3 +198,23 @@ by this source review:
 | cit-Patents-v.parquet | `0969ea9ede0969e18e76a2c70191ed7ccecaecb9f1da6d954093dbefbc8958aa` |
 | cit-Patents-e.parquet | `70bcba17b5a7762ef5a0c3d16c1dc37a352461b83e338f550ae897d844f0268f` |
 | wcc-membership.i64le | `b07f8665c87f94286da7beb1ac5a9d13c4932fea31d8f1a382f9ecb1d3c0c8dc` |
+
+## Actual preflight observations
+
+Recorded 2026-10-01T22:42:56.310239+00:00. The prepared source 750000 was absent and the input
+phase refused it. A pre-timing rule (maximum outgoing edge-row count, ties
+by minimum raw ID) selected 5795784, with 770 outgoing rows. The independent
+reference phase passed: 126298 reachable vertices, maximum hop count 13,
+and zero isolates in the full 3774768-vertex domain. Both engines use the
+same chosen source. The source proposal is preserved in plan-initial.json.
+
+The release CLI’s actual tiny BFS Parquet schema was dist_1: int32 then
+id: int64. All ten rows matched the official reference; the first
+compatibility oracle had incorrectly required id first. The corrected
+adapter requires exactly the two unique named columns and their exact types,
+reads by name, and records the physical order without rewriting output.
+WCC controls passed for graphframes and both Pecan methods before that
+adapter stopped the sequence. Timed cells had not launched.
+
+See preflight-evidence-index.json and preflight-evidence.tar.gz for the
+closed attempts and unchanged raw tiny outputs.

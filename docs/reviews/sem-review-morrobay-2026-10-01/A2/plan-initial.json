@@ -1,6 +1,6 @@
 {
-  "recorded_utc": "2026-10-01T22:40:36.109392+00:00",
-  "status": "reference_passed_compatibility_adapter_fix_pending",
+  "recorded_utc": "2026-10-01T21:46:46.129212+00:00",
+  "status": "prepared_not_launched",
   "board": "c4ca01d3356460e350c200c1b997b0f76154dfcd",
   "source": "f3b3ef8fc054ce7788ec2b46ec8b034ccec1f98a",
   "runtime": "56194b170155301ba91077f0ba3df31fe2c78b6b",
@@ -630,21 +630,5 @@
       "sequence_within_contrast": 10,
       "measured_block": 2
     }
-  ],
-  "source_vertex": 5795784,
-  "archive": "/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run03",
-  "source_change": {
-    "previous_source": 750000,
-    "chosen_source": 5795784,
-    "rule": "maximum outgoing edge-row count, ties by minimum raw vertex ID; declared before engine timing",
-    "outgoing_edge_rows": 770,
-    "evidence": "/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run01/source-selection01.json",
-    "failed_phase": "/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run01/validation01/result.json",
-    "scope": "same directed hop contract, new explicit common landmark; not a claim to reproduce a historical landmark"
-  },
-  "current_archive": "/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run03",
-  "prior_archives": [
-    "/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run01",
-    "/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run02"
   ]
 }

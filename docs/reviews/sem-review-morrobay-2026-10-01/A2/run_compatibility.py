@@ -372,21 +372,24 @@ def engine_command(config: Config, control: Control, inputs: Path, output: Path)
 
 
 def physical_rows(directory: Path, expected_ids: tuple[int, ...], value_name: str,
-                  value_type: pa.DataType) -> tuple[list[PhysicalRow], list[PhysicalSchema]]:
+                  value_type: pa.DataType, *, ordered: bool = True) -> tuple[list[PhysicalRow], list[PhysicalSchema]]:
     before = inventory(directory)
     rows: list[PhysicalRow] = []
     schemas: list[PhysicalSchema] = []
     for name in (name for name in before if name.endswith(".parquet")):
         with pq.ParquetFile(directory / name) as parquet:
             schema = parquet.schema_arrow
-            require(schema.names == ["id", value_name] and schema.field(0).type == pa.int64()
-                    and schema.field(1).type == value_type, "unexpected physical control schema")
+            valid_names = (schema.names == ["id", value_name] if ordered else
+                           len(schema.names) == 2 and len(set(schema.names)) == 2
+                           and set(schema.names) == {"id", value_name})
+            require(valid_names and schema.field("id").type == pa.int64()
+                    and schema.field(value_name).type == value_type, "unexpected physical control schema")
             schemas.append(PhysicalSchema(file=name, fields=[PhysicalField(name=field.name,
                            arrow_type=str(field.type), nullable=field.nullable) for field in schema]))
             table = parquet.read(use_threads=False)
-            require(table.num_rows == parquet.metadata.num_rows and table.column(0).null_count == 0,
+            require(table.num_rows == parquet.metadata.num_rows and table.column("id").null_count == 0,
                     "physical/footer/null-id control violation")
-            for vertex, value in zip(table.column(0).to_pylist(), table.column(1).to_pylist(), strict=True):
+            for vertex, value in zip(table.column("id").to_pylist(), table.column(value_name).to_pylist(), strict=True):
                 if not isinstance(vertex, int):
                     raise TypeError("physical vertex is not a signed64 integer")
                 rows.append(PhysicalRow(id=vertex, value=value))
@@ -399,7 +402,8 @@ def check_output(control: Control, fixture: TinyFixture, inputs: Path, output: P
     control.expected_rows = [PhysicalRow(id=vertex, value=fixture.expected[vertex]) for vertex in fixture.ids]
     value_name, value_type = ((f"dist_{fixture.source}", pa.int32()) if control.engine == "graphframes"
                               else ("distance", pa.float64())) if control.algorithm == "bfs" else ("component", pa.int64())
-    control.raw_rows, control.physical_schemas = physical_rows(directory, fixture.ids, value_name, value_type)
+    control.raw_rows, control.physical_schemas = physical_rows(directory, fixture.ids, value_name, value_type,
+                                                              ordered=control.algorithm != "bfs")
     control.result_files = inventory(directory)
     require(len(control.raw_rows) == len(fixture.ids)
             and {row.id for row in control.raw_rows} == set(fixture.ids),

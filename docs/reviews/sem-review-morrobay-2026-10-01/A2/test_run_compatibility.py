@@ -104,6 +104,19 @@ class CompatibilityControls(unittest.TestCase):
         edges = pq.read_table(destination / "edges.parquet")
         self.assertEqual(edges.to_pylist(), [{"source": 1, "target": 2}])
 
+    def test_bfs_actual_graphframes_order_preserved_in_raw_receipt(self) -> None:
+        fixture = compatibility.TinyFixture("bfs-tiny", (1, 2, 9), ((1, 2),), {1: 0, 2: 1, 9: -1}, 1)
+        inputs = compatibility.make_inputs(self.root, fixture)
+        self.root.joinpath("result").mkdir()
+        pq.write_table(pa.table({"dist_1": pa.array([2147483647, 1, 0], type=pa.int32()),
+                                 "id": pa.array([9, 2, 1], type=pa.int64())}),
+                       self.root / "result/part.parquet")
+        control = compatibility.Control(id="bfs", engine="graphframes", algorithm="bfs", fixture=fixture.name, source=1)
+        compatibility.check_output(control, fixture, inputs, self.root)
+        self.assertEqual(control.outcome, "passed")
+        self.assertEqual([(row.id, row.value) for row in control.raw_rows], [(1, 0), (2, 1), (9, 2147483647)])
+        self.assertEqual([field.name for field in control.physical_schemas[0].fields], ["dist_1", "id"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -172,10 +172,15 @@ def _parquets(files: dict[str, FileIdentity]) -> list[str]:
     return names
 
 
-def _schema(name: str, schema: pa.Schema, fields: list[tuple[str, pa.DataType]]) -> PhysicalSchema:
-    if schema.names != [field[0] for field in fields] or any(
-        schema.field(index).type != expected_type
-        for index, (_, expected_type) in enumerate(fields)
+def _schema(name: str, schema: pa.Schema, fields: list[tuple[str, pa.DataType]], *,
+            ordered: bool = True) -> PhysicalSchema:
+    names = [field[0] for field in fields]
+    valid_names = (schema.names == names if ordered else
+                   len(schema.names) == len(names) and len(set(schema.names)) == len(names)
+                   and set(schema.names) == set(names))
+    if not valid_names or any(
+        schema.field(field_name).type != expected_type
+        for field_name, expected_type in fields
     ):
         raise Mismatch(f"unexpected physical schema for {name}: {schema}")
     return PhysicalSchema(file=name, fields=[PhysicalField(
@@ -254,12 +259,15 @@ def verify_bfs_output(directory: Path, reference: BfsReference,
                       else ("distance", pa.float64()))
     for name in _parquets(before):
         with pq.ParquetFile(directory / name) as parquet:
-            schemas.append(_schema(name, parquet.schema_arrow, [("id", pa.int64()), distance_field]))
+            schemas.append(_schema(name, parquet.schema_arrow, [("id", pa.int64()), distance_field],
+                                   ordered=False))
             file_rows = 0
             for batch in parquet.iter_batches(batch_size=65536, use_threads=False):
-                if batch.column(0).null_count:
+                id_column = batch.column(batch.schema.get_field_index("id"))
+                distance_column = batch.column(batch.schema.get_field_index(distance_field[0]))
+                if id_column.null_count:
                     raise Mismatch("null BFS vertex")
-                ids = batch.column(0).to_numpy(zero_copy_only=False)
+                ids = id_column.to_numpy(zero_copy_only=False)
                 positions = np.searchsorted(reference.ids, ids)
                 if bool(np.any(positions >= rows)):
                     raise Mismatch("unknown BFS vertex")
@@ -267,7 +275,7 @@ def verify_bfs_output(directory: Path, reference: BfsReference,
                     raise Mismatch("unknown BFS vertex")
                 if bool(np.any(seen[positions])) or len(np.unique(ids)) != len(ids):
                     raise Mismatch("duplicate BFS vertex")
-                distances = _bfs_distances(batch.column(1), engine)
+                distances = _bfs_distances(distance_column, engine)
                 if not bool(np.all(distances == reference.distances[positions])):
                     raise Mismatch("exact directed BFS distance mismatch")
                 seen[positions] = True
