@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-10-01T04:07:44.539437+00:00",
+  "content": {
+    "chapters": 2,
+    "headings": 94,
+    "code_blocks": 82,
+    "printed_listings": 82,
+    "overview_tables": 1
+  },
+  "epub": {
+    "zip_members": 10,
+    "xml_documents": 8,
+    "local_links": 8584
+  },
+  "pdf": {
+    "pages": 127,
+    "code_lines_missing": 0,
+    "visual_review": "required_separately"
+  },
+  "artifacts": {
+    "sail-extensions-host-review.pdf": "773ade356918b9626b0df6f1b2fa9252b897f8ba3feaad578f6666ac11f36e81",
+    "sail-extensions-host-review.epub": "32642417f78eee239a24613f9687c56a348af16b80e61f939921d413d006b5b6",
+    "sail-extensions-host-review.md": "ec110dcd606cf605fbf63149bf164028b84573de2d47374b40dfb2069db24b02"
+  }
+}
