@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T04:07:43.292720+00:00",
+  "generated_at": "2026-10-01T14:44:15.212452+00:00",
   "content": {
     "chapters": 11,
     "headings": 35,
@@ -18,8 +18,8 @@
     "visual_review": "required_separately"
   },
   "artifacts": {
-    "sail-extensions-review.pdf": "938838356a7b077db36a62c7d7efd60c3369dedc8eca87a4ab36a86957bc3d4a",
-    "sail-extensions-review.epub": "79208815a11e55980b448758dd8560397adc61e3ca2fbbb6e231ef019c0682ab",
-    "sail-extensions-review.md": "80759e68147bb35b74571301cf746cd5ac71bf3f73ad008f1b110534f7ce8f6d"
+    "sail-extensions-review.pdf": "5a20c9a75e6e8c5a19d07acfa421ab35e0ced7de9e5ef99f113faa2dc446e513",
+    "sail-extensions-review.epub": "429f7614b95a1370b7d859d0fd71fc9d7ed1e6e7832acf15ec727fbcdc827820",
+    "sail-extensions-review.md": "4a1e0f9780b2586eb4e80efedf5bfade0b9a37a13abe9b3445916b042619158f"
   }
 }

@@ -214,13 +214,13 @@ code safe.</td>
 <h2 data-number="2.3" id="overview--how-this-fits-sails-design"><span
 class="header-section-number">2.3</span> How this fits Sail's
 design</h2>
-<p>Heran's public feedback endorses Python packaging and an FFI built on
-DataFusion, while treating the session mutator as an internal detail.
-The prototype follows that direction. The original broad Rust-trait
-proposal is an alternative from an extension author, not evidence that
-Sail prefers that API. <a
-href="https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578">Heran's
-comment</a></p>
+<p>The upstream maintainer's public feedback endorses Python packaging
+and an FFI built on DataFusion, while treating the session mutator as an
+internal detail. The prototype follows that direction. The original
+broad Rust-trait proposal is an alternative from an extension author,
+not evidence that Sail prefers that API. <a
+href="https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578">the
+maintainer's comment</a></p>
 <p>Sail's authors also describe lakehouse operations as engine-visible
 plans that can be optimized and distributed. Applying that principle
 here is a design inference: independently shipped extensions should

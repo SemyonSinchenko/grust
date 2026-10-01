@@ -26,7 +26,7 @@ Sail does not distribute extension wheels to workers. Operators must install
 matching packages there.
 
 This is a qualified prototype boundary, not a promise that extensions must
-forever share Sail's release cadence. Heran's
+forever share Sail's release cadence. The upstream maintainer's
 [extension design response](https://github.com/lakehq/sail/discussions/2001)
 explicitly favors Python distribution and DataFusion FFI so Sail and extensions
 can release independently, while treating session mutators as implementation

@@ -65,13 +65,13 @@ FFI and resolved on workers</strong>. Stateful relations and distributed
 native operators are subsequent decisions. The prototype demonstrates
 useful behavior; its implementation is evidence for review, not a
 request to freeze all eight modules as public API.</p>
-<p>Heran's direction is already the starting point: Python distribution,
-DataFusion FFI, independent release schedules and a narrow contract that
-leaves Sail free to refactor. Spark Connect describes client requests;
-the FFI connects native packages to the engine. These are complementary
-boundaries. Sail retains planning, scheduling and resource policy. The
-design question is which information an extension must expose so those
-responsibilities remain possible. <a
+<p>The upstream maintainer's direction is already the starting point:
+Python distribution, DataFusion FFI, independent release schedules and a
+narrow contract that leaves Sail free to refactor. Spark Connect
+describes client requests; the FFI connects native packages to the
+engine. These are complementary boundaries. Sail retains planning,
+scheduling and resource policy. The design question is which information
+an extension must expose so those responsibilities remain possible. <a
 href="https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578">Upstream
 discussion</a></p>
 <h2 data-number="1.1" id="introduction--three-decisions-in-order"><span

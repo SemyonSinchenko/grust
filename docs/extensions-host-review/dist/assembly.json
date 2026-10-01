@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-01T04:04:11.197915+00:00",
+  "generated_at": "2026-10-01T14:44:18.638494+00:00",
   "review_target": "bd8ce9ae8839477e2c08a0475ab7900b115c5366",
-  "manuscript_sha256": "ec110dcd606cf605fbf63149bf164028b84573de2d47374b40dfb2069db24b02",
+  "manuscript_sha256": "41849317c2efbf0c39693034cd4cebe6a15c26541390ca940e1e7f2cada43e32",
   "sources": [
     {
       "path": "docs/extensions-host-review/manuscript.md",
-      "sha256": "8498e323a216644a1e8362ba2c7de248b6efe2c8755b2cefc1323cbfba4d2b67"
+      "sha256": "423604c0ed1815e1d12db6fd2f31611d1f031199a34892a0ccc95413dd3e6133"
     },
     {
       "path": "docs/extensions-host-review/host-code-listings.md",

@@ -7,7 +7,7 @@ Stateful relations and distributed native operators are subsequent decisions.
 The prototype demonstrates useful behavior; its implementation is evidence for
 review, not a request to freeze all eight modules as public API.
 
-Heran's direction is already the starting point: Python distribution,
+The upstream maintainer's direction is already the starting point: Python distribution,
 DataFusion FFI, independent release schedules and a narrow contract that leaves
 Sail free to refactor. Spark Connect describes client requests; the FFI connects
 native packages to the engine. These are complementary boundaries.
@@ -105,11 +105,11 @@ cost of each choice.
 
 ## How this fits Sail's design {#overview--how-this-fits-sails-design}
 
-Heran's public feedback endorses Python packaging and an FFI built on
+The upstream maintainer's public feedback endorses Python packaging and an FFI built on
 DataFusion, while treating the session mutator as an internal detail. The
 prototype follows that direction. The original broad Rust-trait proposal is
 an alternative from an extension author, not evidence that Sail prefers that
-API. [Heran's comment](https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578)
+API. [the maintainer's comment](https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578)
 
 Sail's authors also describe lakehouse operations as engine-visible plans that
 can be optimized and distributed. Applying that principle here is a design
@@ -516,7 +516,7 @@ Sail does not distribute extension wheels to workers. Operators must install
 matching packages there.
 
 This is a qualified prototype boundary, not a promise that extensions must
-forever share Sail's release cadence. Heran's
+forever share Sail's release cadence. The upstream maintainer's
 [extension design response](https://github.com/lakehq/sail/discussions/2001)
 explicitly favors Python distribution and DataFusion FFI so Sail and extensions
 can release independently, while treating session mutators as implementation

@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-01T04:04:04.795652+00:00",
+  "generated_at": "2026-10-01T14:44:09.685125+00:00",
   "review_target": "bd8ce9ae8839477e2c08a0475ab7900b115c5366",
-  "manuscript_sha256": "80759e68147bb35b74571301cf746cd5ac71bf3f73ad008f1b110534f7ce8f6d",
+  "manuscript_sha256": "4a1e0f9780b2586eb4e80efedf5bfade0b9a37a13abe9b3445916b042619158f",
   "sources": [
     {
       "path": "docs/EXTENSIONS-ONE-PAGER.md",
-      "sha256": "3476616382ce1f6d7e09c6c634be8a77011aefa3af014e9cd43b1fd6dc857785"
+      "sha256": "dc44aea5bf0e3c606814a917e204c04a5e9087ce3e2e36a72877b3f32aaf2f3c"
     },
     {
       "path": "docs/extensions-review/overview.md",
-      "sha256": "4274a202bf2ce2b33f771d2c4e437dbe46815b33e1275a06b3c263dadba9fc4d"
+      "sha256": "642aa58cef38dbaf31c5eaadd2a975765c9210b88fcaf29f01f3ad449c05acaa"
     },
     {
       "path": "docs/extensions-review/modules/01-discovery.md",
@@ -41,7 +41,7 @@
     },
     {
       "path": "docs/extensions-review/modules/08-compatibility.md",
-      "sha256": "f9a3141e766774502b33cbdabb3fb6c8250c42c7d8da0d7a69efcc1188d0e586"
+      "sha256": "27e31c86855321b7d702a320a030a885f269f3b488dc99e07ae004f1661c0905"
     },
     {
       "path": "docs/extensions-review/code-listings.md",

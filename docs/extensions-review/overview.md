@@ -43,11 +43,11 @@ cost of each choice.
 
 ## How this fits Sail's design
 
-Heran's public feedback endorses Python packaging and an FFI built on
+The upstream maintainer's public feedback endorses Python packaging and an FFI built on
 DataFusion, while treating the session mutator as an internal detail. The
 prototype follows that direction. The original broad Rust-trait proposal is
 an alternative from an extension author, not evidence that Sail prefers that
-API. [Heran's comment](https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578)
+API. [the maintainer's comment](https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578)
 
 Sail's authors also describe lakehouse operations as engine-visible plans that
 can be optimized and distributed. Applying that principle here is a design

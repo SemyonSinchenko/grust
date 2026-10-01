@@ -186,13 +186,13 @@ FFI and resolved on workers</strong>. Stateful relations and distributed
 native operators are subsequent decisions. The prototype demonstrates
 useful behavior; its implementation is evidence for review, not a
 request to freeze all eight modules as public API.</p>
-<p>Heran&#39;s direction is already the starting point: Python distribution,
-DataFusion FFI, independent release schedules and a narrow contract that
-leaves Sail free to refactor. Spark Connect describes client requests;
-the FFI connects native packages to the engine. These are complementary
-boundaries. Sail retains planning, scheduling and resource policy. The
-design question is which information an extension must expose so those
-responsibilities remain possible. <a href="https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578">Upstream
+<p>The upstream maintainer&#39;s direction is already the starting point:
+Python distribution, DataFusion FFI, independent release schedules and a
+narrow contract that leaves Sail free to refactor. Spark Connect
+describes client requests; the FFI connects native packages to the
+engine. These are complementary boundaries. Sail retains planning,
+scheduling and resource policy. The design question is which information
+an extension must expose so those responsibilities remain possible. <a href="https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578">Upstream
 discussion</a></p>
 <h2 data-number="1.1" id="introduction--three-decisions-in-order"><span class="header-section-number">1.1</span> Three decisions, in order</h2>
 <ol type="1">
@@ -388,12 +388,12 @@ code safe.</td>
 </table>
 <h2 data-number="2.3" id="overview--how-this-fits-sails-design"><span class="header-section-number">2.3</span> How this fits Sail&#39;s
 design</h2>
-<p>Heran&#39;s public feedback endorses Python packaging and an FFI built on
-DataFusion, while treating the session mutator as an internal detail.
-The prototype follows that direction. The original broad Rust-trait
-proposal is an alternative from an extension author, not evidence that
-Sail prefers that API. <a href="https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578">Heran&#39;s
-comment</a></p>
+<p>The upstream maintainer&#39;s public feedback endorses Python packaging
+and an FFI built on DataFusion, while treating the session mutator as an
+internal detail. The prototype follows that direction. The original
+broad Rust-trait proposal is an alternative from an extension author,
+not evidence that Sail prefers that API. <a href="https://github.com/lakehq/sail/discussions/2001#discussioncomment-17083578">the
+maintainer&#39;s comment</a></p>
 <p>Sail&#39;s authors also describe lakehouse operations as engine-visible
 plans that can be optimized and distributed. Applying that principle
 here is a design inference: independently shipped extensions should
@@ -781,7 +781,7 @@ fingerprint of every external dependency. Sail does not distribute
 extension wheels to workers. Operators must install matching packages
 there.</p>
 <p>This is a qualified prototype boundary, not a promise that extensions
-must forever share Sail&#39;s release cadence. Heran&#39;s <a href="https://github.com/lakehq/sail/discussions/2001">extension design
+must forever share Sail&#39;s release cadence. The upstream maintainer&#39;s <a href="https://github.com/lakehq/sail/discussions/2001">extension design
 response</a> explicitly favors Python distribution and DataFusion FFI so
 Sail and extensions can release independently, while treating session
 mutators as implementation details. Avoiding a public Sail Rust trait

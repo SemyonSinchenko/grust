@@ -86,7 +86,7 @@ session customization. Name precedence, collision errors, partial-load failure
 and worker installation requirements belong in the user-visible contract;
 Python ownership wrappers and registry storage are implementation details.
 
-This direction matches Heran's preference for Python distribution and
+This direction matches the upstream maintainer's preference for Python distribution and
 DataFusion FFI, with independently scheduled releases and no public Sail Rust
 trait. Exact version declarations and package fingerprints currently define a
 narrow qualification boundary. They do not prove arbitrary capsule layouts safe

@@ -7,7 +7,7 @@ Stateful relations and distributed native operators are subsequent decisions.
 The prototype demonstrates useful behavior; its implementation is evidence for
 review, not a request to freeze all eight modules as public API.
 
-Heran's direction is already the starting point: Python distribution,
+The upstream maintainer's direction is already the starting point: Python distribution,
 DataFusion FFI, independent release schedules and a narrow contract that leaves
 Sail free to refactor. Spark Connect describes client requests; the FFI connects
 native packages to the engine. These are complementary boundaries.

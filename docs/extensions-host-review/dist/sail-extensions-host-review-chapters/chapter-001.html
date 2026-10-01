@@ -212,13 +212,13 @@ invention of session customization. Name precedence, collision errors,
 partial-load failure and worker installation requirements belong in the
 user-visible contract; Python ownership wrappers and registry storage
 are implementation details.</p>
-<p>This direction matches Heran's preference for Python distribution and
-DataFusion FFI, with independently scheduled releases and no public Sail
-Rust trait. Exact version declarations and package fingerprints
-currently define a narrow qualification boundary. They do not prove
-arbitrary capsule layouts safe or establish a stable ABI range. Neither
-wheel installation nor content identity replaces testing the supported
-artifact pair. <a
+<p>This direction matches the upstream maintainer's preference for
+Python distribution and DataFusion FFI, with independently scheduled
+releases and no public Sail Rust trait. Exact version declarations and
+package fingerprints currently define a narrow qualification boundary.
+They do not prove arbitrary capsule layouts safe or establish a stable
+ABI range. Neither wheel installation nor content identity replaces
+testing the supported artifact pair. <a
 href="https://github.com/lakehq/sail/discussions/2001">Maintainer
 discussion</a>; <a
 href="https://github.com/querygraph/grust/blob/work/extensions-review-guide/docs/extensions-review/modules/08-compatibility.md">compatibility
