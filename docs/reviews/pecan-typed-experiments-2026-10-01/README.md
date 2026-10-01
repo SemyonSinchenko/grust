@@ -1,5 +1,9 @@
 # Morrobay takeover: typed Pecan experiments
 
+Execution completed on Morrobay on 2026-10-01: **all 14 frozen steps passed**.
+See the [returned evidence and comparison](morrobay-20261001/README.md).
+The preparation narrative below is the retained handoff snapshot.
+
 **Prepared, not launched.** The Morrobay agent takes execution ownership after
 the operator hands over. The Capitola agent keeps independent review and will
 not start a competing queue. Source checkouts, dependencies and helpers are
