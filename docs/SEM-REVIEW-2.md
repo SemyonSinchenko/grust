@@ -554,6 +554,50 @@ Two Stage B items follow from this review and are added here:
 | B8 | measure `unionByName` of two projections against `array(struct, struct)` + explode on Sail, paired, on cit-Patents and scale 24, for the adjacency symmetrization, min-label's message union and the fused representatives | `algorithms.py`, `traversal.py`, `wcc_fused.py` | one of two full scans per round if explode wins |
 | B9 | randomized WCC as in the paper: affine priority as representative id, plain `min`, inverse affine maps applied once at the end, original ids only on request | `wcc_randomized.py`, `wcc_fused.py` | `min_by`'s per-group accumulator and the reverse expansion joins over the round history |
 
+## 9. Work division and status board (2026-10-01)
+
+Fable keeps this board, the report and the plan current; Codex (the other
+agent, working from Morrobay with the Linux gate) owns the items marked
+Codex and appends status to `codex-to-codex.md` under the item ids below.
+Status values: `open`, `running`, `done <commit or evidence path>`,
+`blocked <reason>`. Nothing is `done` without a commit or an evidence path.
+
+| Id | Item | Owner | Status | Evidence |
+|---|---|---|---|---|
+| A0 | LDBC Graphalytics `test-*` graphs with their reference outputs as Pecan's correctness oracle (BFS, PageRank, SSSP, WCC), before any timing (Sem, remark 13) | Codex | open | |
+| A1 | graphframes-rs at the benchmark branch built in the gate image; his settings read from `main.rs`; run on the LDBC Parquet inputs in a 16-CPU, 32 GiB container | Codex | open | |
+| A2 | Pecan in local mode on the same inputs and container: WCC randomized, fused, min-label; PageRank with his contract; BFS; validation reported as its own phase; ABBA twice | Codex | open | |
+| A3 | the same in process-cluster mode with pools summing to the container budget (C3) and 16 partitions | Codex | open | |
+| A4 | the decision table of Stage A applied, written into section 4 | Fable | open | |
+| B1 | keyless repartition toggle (`repartition_checkpoints`) | done | `6ae2e43a9` | integration |
+| B2 | write receipt from the host's graph-utils service instead of read-back counts | Fable | open | |
+| B3 | round scalars folded into the state write | Fable | open | |
+| B4 | fused contraction as the default | Fable | superseded by B9 | |
+| B5 | tail cutover for the contraction | Fable | open | |
+| B6 | checkpoint every k rounds | Fable | open | |
+| B7 | trusted immutable Parquet inputs: no snapshot rewrite (Sem, "why rewrite the inputs") | Fable | open | |
+| B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remark 11) | Codex | open | |
+| B9 | randomized WCC as in the paper: affine ids, plain `min`, inverse maps once at the end (Sem, remark 14) | Fable | open | |
+| C1 | local mode as the single-host default in harness and guide | Fable | open | |
+| C2 | fixed cost of one distributed job at P = 4, 16, 32 | Codex | open | |
+| C3 | pools that sum to the container limit | Codex | open | |
+| C4 | compact `min(struct)` accumulator on the gate; `min_by` probed the same way | Codex | running | `work/compact-struct-min` |
+| D1 | sorted-Parquet write cost at 16M, 64M, 268M rows, paired (Sem, remark 12) | Fable | open | |
+| D2 | declared layout measured in cluster mode on the gate | Codex | open | |
+| E0 | the loop inside the server: Pregel-style one plan per superstep (Sem, remark 15) against embedding graphframes-rs; decided after A4 | both, design | open | |
+| F0 | native-only CSR build from `edges.parquet` as the ingest floor (Sem, remark 9 of his first review) | Fable | open | |
+| F1 | S1, S2/`asStaged`, S3 toward the 5 s ingest budget, i64 contract kept | Fable | open | |
+| R1 | typed Pecan, no validation, contract in `AGENTS.md` and README (Sem, remarks 3 to 6) | done | `7145d107c`, `6ae2e43a9`, `5aa755b9`, `71fc8c90` | |
+| R2 | reading map for Sem (remarks 1, 2, 7, 8) | done | `5513e29c` | `pecan-code-and-harness.md` |
+| R3 | every Sem remark recorded with status | done | `71fc8c90` | section 8 |
+| X1 | Argentea two-host scale-24 failure: first cause with worker-side logging, then one rerun | Codex | running | `sail-stream-experiments-2026-09-30` |
+| X2 | the relational stream loss (`STREAM-LOSS-STATUS.md`) | Codex | running | same |
+
+Order: A0 first, because no timing is reported on an unverified answer;
+then A1 to A3, which decide between B and E; B9, B7, D1 and F0 run on
+Capitola meanwhile because they need no gate time. The shared host rules
+of `AGENTS.md` apply: one heavy job on the gate at a time, Codex's.
+
 ## 7. Limits
 
 The initial document contained no paired run. The later C4 traversal control
