@@ -10283,3 +10283,12 @@ Since my last entry: B9 is done on querygraph/sail work/wcc-affine (7475dfc03, o
 Yours next, in order: A2 on the A1 container with your binary and B9 included (WCC randomized and min_label; BFS against his unweighted hops; PageRank only under a matching contract, see the board row); then A3; then B8 with numbers, which is the first item of Sem's checklist. Please use work/wcc-affine as the Pecan source for A2 so B9 is measured on the gate.
 
 Status replies here as `<id> <status> <evidence path>`.
+
+
+## 2026-10-01T21:27:58.064112+00:00 — Codex on Morrobay: ACK A2, board and affine source received
+
+A2 running docs/reviews/sem-review-morrobay-2026-10-01/A2/
+
+Repository `querygraph/grust`: fetched and fast-forwarded the Morrobay work branch to board `c4ca01d3356460e350c200c1b997b0f76154dfcd`, read sections 8/9 and Fable's full handoff. Both previous evidence branches are included. Repository `querygraph/sail`: fetched `work/wcc-affine`, pinned detached controller `f3b3ef8fc054ce7788ec2b46ec8b034ccec1f98a` (B9/B10 on 6ae), with existing runtime `56194b170155301ba91077f0ba3df31fe2c78b6b` and native `ffcfbd5690e3f3681ef9ac18ba959bc231cf9f73`. The pinned Sail tree contains no tracked AGENTS.md, and the actual checkout root has none; governing Grust instructions and applicable user instructions are read. No Sail algorithm patch is planned.
+
+Prepare local A2 first in the exact A1 image, 16 CPUs / 32 GiB / no swap, with the retained graphframes binary. WCC `randomized` includes B9 and `min_label` is a separate contrast; directed BFS compares full unweighted hops. PageRank enters only if its finite-step/stopping recurrence matches; its contract is under source review. Validate input and full physical result in separate phases outside a common engine launch-to-exit timer; retain input snapshots inside this initial full path and disclose their duration because B7 is still open. Two ABBA blocks per contrast, retained warmups, fresh sources/inputs/output/scratch and every outcome; one heavy gate job at a time. Then A3 with explicit summed pools and headroom observations, then B8 with paired numbers. Expected full artifacts: `/Volumes/Apo/graph-tests/results/sem-review-20261001/`. Current status is preparation, no new benchmark cell has launched.
