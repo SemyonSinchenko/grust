@@ -339,7 +339,8 @@ def idle() -> None:
 
 def absent(name: str) -> CommandResult:
     result = capture(DOCKER + ['inspect', name])
-    require(result.returncode == 1 and ('No such object' in result.stderr or 'No such container' in result.stderr),
+    stderr = result.stderr.casefold()
+    require(result.returncode == 1 and ('no such object' in stderr or 'no such container' in stderr),
             'container absence not proven: ' + name + ' ' + result.stderr)
     return result
 

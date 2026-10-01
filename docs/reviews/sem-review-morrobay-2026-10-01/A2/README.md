@@ -1,6 +1,6 @@
 # A2 and A3: matched Parquet input/output experiment
 
-This directory contains the frozen plan and execution helpers. **Prepared;
+This directory contains the frozen plan and execution helpers. **Staged;
 runtime validation and measured cells are pending.** Completed receipts will
 supersede this preparation status. Grust's root `AGENTS.md` governs this work;
 the experiment directory is evidence, not a repository policy source.
@@ -107,6 +107,20 @@ A3 runs Pecan's driver and two workers inside one container on one host.
 Its graphframes control remains a single CLI process with 16 workers; the
 comparison's `process-cluster` label does not turn graphframes into a cluster.
 This experiment does not measure multiple hosts.
+
+## Staging observation
+
+The `stage01` producer passed at `f3b3ef8fc`, with unchanged binary and payload
+hashes. Its host verdict is retained as `error`: the absence parser rejected
+Docker's lowercase `no such object` message after successful removal. A fresh
+name/ID inspection and idle-context observation confirmed closure; the closed
+lock was archived, preserving its original owner record. See the
+[closure review](stage01-closure-review.json). No algorithm ran in that attempt.
+
+The parser now handles either case and continues to reject other inspection
+errors. The corrected host driver is indexed separately under `controller-v2`;
+the staged guest payload and its `0f4d700c` helper tree remain immutable.
+Validation uses a fresh phase ID, rechecking every staged identity.
 
 ## Sequence and retained evidence
 
