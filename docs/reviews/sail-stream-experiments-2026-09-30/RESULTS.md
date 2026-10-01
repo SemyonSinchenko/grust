@@ -1,6 +1,6 @@
 # Focused Sail stream and resource experiments
 
-Recorded UTC: 2026-09-30T22:16:59.996293+00:00
+Recorded UTC: 2026-10-01T00:18:59.317259+00:00
 
 Work in progress. The compact aggregation has passed component and small-worker
 checks. Its large matched replay is running; paired measurements remain pending.
@@ -493,3 +493,47 @@ Near-linear cluster scaling has not been demonstrated. A homogeneous dedicated
 cluster, per-worker hard limits, exact answers and partition/transport counters
 are required for that claim. The available heterogeneous hosts can qualify
 correctness and placement, not establish homogeneous scaling efficiency.
+
+
+## Initialization and validation follow-up
+
+Three further fixes are committed and pushed as separate Sail fork branches.
+Argentea commit `7f5b80d0` releases raw vertex/edge vectors and their admission
+after CSR construction, before allocating initial BFS/SSSP state. The matched
+65,536-local-vertex, per-partition requested-heap controls, configured for three
+partitions, reduce peaks by 0.5–2.5 MiB,
+with identical allocation counts, total allocated bytes and metered work.
+Raw/CSR overlap during construction remains; this is not an RSS or timing result.
+The exact gate passes 120 core and 51 native tests, ordinarily and with all local
+cores saturated. [Evidence](argentea-input-lifetime/README.md),
+[post-gate push receipt](argentea-input-lifetime-delivery.json). The original
+evidence folder retains its pre-push cutoff; the delivery receipt updates it.
+
+PageRank commit `7df2f32f` rejects malformed per-row convergence/iteration
+metadata that nullable certificate reductions previously hid, and combines
+reference-policy row checks into one aggregate. A two-vertex fixed-point
+control reproduces five old certificate acceptances rejected by the reference
+policy. The exact gate passes 333 benchmark tests plus 58 actual local SQL
+tests; the installed runtime is pinned separately from this Python-only change.
+[Reproduction, controls and delivery](pagerank-certificate-metadata/README.md).
+
+Those controls also isolate a separate Parquet reader issue: statistics-bearing
+`[NaN, 0.5]` bytes can read back as `[0.5, 0.5]`. Omitting output statistics or
+disabling reader statistics collection preserves NaN and makes both unchanged
+validators reject it. A separate reader mitigation, `837e8e82`, now clears
+floating file bounds before caching/aggregation; all 77 data-source tests pass
+on the exact commit, including real Parquet readback. Counts and integer bounds
+remain usable, but floating-bound optimizations are lost, including for
+finite-only files. Raw footer pruning and other reader paths are outside scope.
+[Evidence and exclusions](parquet-float-statistics/README.md),
+[post-gate push receipt](parquet-float-statistics-delivery.json).
+No historical-result or stream-loss attribution follows from this control.
+The [combined source](resource-validation-union/README.md), `a3462345`, is also
+committed and pushed after its separate exact gate: 77 host tests, 120 core and
+51 native tests ordinarily and with all local cores saturated, 333 benchmark
+unit tests, and 58 SQL tests against a freshly built local CLI. A separate actual
+Parquet control with statistics enabled preserves NaN and both policies reject
+it; a finite fixed point passes. Two failed gate attempts are retained: an
+interleaved-log counting error and mismatched Python executable/library paths.
+These are local checks; Linux, combined native loading in workers, performance
+and multi-host scaling remain outside this verdict.

@@ -9917,3 +9917,8 @@ Repository `querygraph/grust`: preserve the completed local configuration, sampl
 ## 2026-09-30T22:13:16.730839+00:00 — Codex: ACK closed Sail SSSP replay and input reference
 
 Repository `querygraph/grust`: retain the completed logging02 SSSP replay, exact-cgroup kernel kills of both mapped workers, first-fault chronology and all observer/collection failures. Preserve the new official cit-Patents input hashes and exact WCC reference, including failed build attempts and correctness controls. Logging03 has started after matched fresh admission; only its fixed launch/admission records enter this snapshot. Its running cell/monitor and later matched measurements are excluded. Documentation gates and independent review must pass on the detached candidate and exact commit before atomic publication. No runtime release, historical zero-OOM diagnosis, operator allocation-site attribution or end-to-end performance qualification is claimed.
+
+
+## 2026-10-01T00:20:45.136930+00:00 — Codex: ACK closed resource and validation evidence publication
+
+Repository `querygraph/grust`: publish the frozen evidence for Argentea input lifetime, PageRank metadata validation, Parquet floating-statistics handling and their exact combined Sail commit `a3462345a6764096024c055dc4d105a3c634e5a4`. Retain the two failed integration gates and their narrow harness corrections. Include prepared physical-output and six-cell collection auditors and prior publication provenance. Active compact replay observations, future paired results and new PR/WCC ownership work are excluded. Detached candidate and exact documentation gates plus independent review precede atomic publication to both review branches.
