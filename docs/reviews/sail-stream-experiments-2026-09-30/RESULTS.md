@@ -1,9 +1,12 @@
 # Focused Sail stream and resource experiments
 
-Recorded UTC: 2026-10-01T00:18:59.317259+00:00
+Recorded UTC: 2026-10-01T02:48:30.568184+00:00
 
-Work in progress. The compact aggregation has passed component and small-worker
-checks. Its large matched replay is running; paired measurements remain pending.
+The large compact replay and all six smaller paired trials passed.
+The large replay has a producer certificate and an independent physical-output
+check; the small comparison reports descriptive ratios on a shared host. See
+[replay closure](COMPACT-REPLAY-AND-SSSP.md) and
+[all paired cells and measurement boundaries](host-pair-publication/README.md).
 The prior review is [REVIEW.md](../sail-graphs-2026-09-30/REVIEW.md).
 
 ## Stream loss: OOM in two replays, earlier failures still open
@@ -71,10 +74,13 @@ This diagnoses this replay; earlier zero-OOM failures remain unexplained.
 The [closed first-fault audit](logging02-first-fault-audit/README.md) records the
 kill/disappearance/Flight-error sequence and its clock and cleanup boundaries.
 
-The matched compact-host replay is now running after
+The matched compact-host replay completed after
 [fresh admission](logging03-admission01.json). Input manifest, controller,
 native package, resources, logging and timeouts match; the host changes from
-`2894a962` to `56194b1`. Its final outcome remains pending.
+`2894a962` to `56194b1`. It passed its producer certificate and later independent
+physical-output scan, with a 35,481,849,856-byte container peak and no OOM event.
+The earlier OOM run supplies no completed timing or uncapped memory denominator.
+[Closed evidence and limits](COMPACT-REPLAY-AND-SSSP.md).
 
 A [host-memory comparison](logging02-monitor/host-memory-comparison.json)
 shows that host paging was already substantial before this run. Between
@@ -586,5 +592,29 @@ The scale-24 compact-runtime replay passed its producer certificate and a separa
 physical scan of all 16,777,216 output vertices, with 33.05 GiB container peak and
 zero OOM events. Argentea SSSP buffer reuse is separately gated and pushed at
 `fc094a0c`; its local allocation control removes one dense buffer.
-[Closed evidence, retained failures and qualification boundaries](COMPACT-REPLAY-AND-SSSP.md)
-keep those results distinct from the pending paired and multi-host measurements.
+The [closed evidence and qualification boundaries](COMPACT-REPLAY-AND-SSSP.md)
+record that snapshot. At that evidence cutoff, paired and multi-host
+measurements remained pending.
+
+
+## Parent/hop certificate witness: delivered
+
+Recorded UTC: 2026-10-01T02:38:56.519419+00:00
+
+Certificate validation can now use a checked integer parent/hop tree in place
+of its extra tight-edge BFS. All-edge inequalities, the conservative error bound,
+input preconditions and the caller's stricter parent validation remain enforced.
+Distance-only or unsuitable/over-cap metadata keeps the original BFS fallback.
+Commit `cab6bacc0ad0d1fc8b3070e9e4267e99751909fe` passed the exact gate and
+independent review and is pushed to the component and combined fork branches.
+[Behavior, all work counters and retained failures](certificate-parent-witness/README.md),
+[verified delivery](certificate-parent-witness-delivery.json).
+
+The exact local checks passed 337 unit tests and 71 server-configured cases
+(67 SQL cases and four pure argument controls). In the bounded work controls,
+eligible parent trees required zero certificate staging writes; distance-only
+work was unchanged, while over-cap fallback added one validation call. These
+are client/staging work counts, not timings, RSS or distributed-job counts.
+The first exact gate failed with a client thread-pool shutdown error; the failed
+run, focused control and successful module-isolated gates are retained. That local
+test finding does not diagnose the historical distributed stream failures.

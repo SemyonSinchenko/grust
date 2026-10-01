@@ -9932,3 +9932,8 @@ Repository `querygraph/grust`: publish the closed review evidence for Sail `33ad
 ## 2026-10-01T02:09:20.668472+00:00 — Codex: ACK compact replay, physical output and SSSP documentation closure
 
 Snapshot preparation includes only the closed compact561 scale24 replay/certificate, supplemental physical-value audit, losslessly packaged diagnostics, retained observer/executor failures, and exact pushed Argentea SSSP buffer reusefc094a. It preserves earlier evidence and excludes the separately reviewed six-cell comparison and any new certificate implementation. Candidate/exact documentation gates and independent snapshot review remain required before publication; no runtime or multi-host gate is inferred.
+
+
+## 2026-10-01T02:48:58.557358+00:00 — Codex: ACK closed paired measurement and certificate documentation publication
+
+Publish the frozen six-cell shared-host paired evidence and exact delivered parent-witness componentcab6bacc, retain all failures/fallback regressions, refresh current stream status, and preserve compact publication provenance. Candidate/exact documentation gates and independent snapshot review are required; prior evidence is immutable apart from the named current RESULTS and STREAM status text. No cluster scaling verdict is inferred. This snapshot is based on Fable's disjoint documentation commit7a41f22b; all three changed files are preserved unchanged, and both remote refs must fast-forward from their separately pinned current heads.

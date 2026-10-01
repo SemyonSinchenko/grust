@@ -12,7 +12,7 @@ and the decision guide that this failure limits is
 
 ## Review update
 
-Updated UTC: 2026-09-30T18:11:45.786042+00:00. The [focused results](reviews/sail-stream-experiments-2026-09-30/RESULTS.md)
+Updated UTC: 2026-10-01T02:48:30.568184+00:00. The [focused results](reviews/sail-stream-experiments-2026-09-30/RESULTS.md)
 record the subsequent controls and implementation. The historical table has
 twelve zero-`memory.max`-event rows; eleven of those also have sampled PSS of
 20–66 GiB. The cause of these historical stream failures remains **unexplained**.
@@ -31,9 +31,16 @@ without hyper tracing; the same failure remains generic at `info`.
 [Pinned cancellation control](reviews/sail-graphs-2026-09-30/h2-cancellation-probe/release-loaded.json),
 [transport controls](reviews/sail-stream-experiments-2026-09-30/transport-control/),
 [Tonic control](reviews/sail-stream-experiments-2026-09-30/tonic-keepalive-control/receipt.json).
-The prepared replay repeats the earlier scale-24 SSSP delta-star workload with
-the original controller/native code and an instrumented host plus that filter.
-Its Linux build and replay are pending; the configuration is not a result.
+The instrumented scale-24 SSSP delta-star replay subsequently recorded two
+worker OOM kills, with live namespace identities and matching kernel/cgroup
+evidence. The compact-runtime replay then completed without OOM and passed its
+producer certificate and a separate physical-output scan of all 16,777,216 rows.
+This establishes OOM as the cause of the instrumented failure and records the
+later successful replay; it does not resolve the historical zero-OOM failures.
+[Replay closure](reviews/sail-stream-experiments-2026-09-30/COMPACT-REPLAY-AND-SSSP.md).
+The six smaller paired trials also passed and are reported as
+[shared-host ratios](reviews/sail-stream-experiments-2026-09-30/host-pair-publication/README.md),
+with all measured cells and memory/host-pressure boundaries retained.
 
 ## 1. The symptom
 

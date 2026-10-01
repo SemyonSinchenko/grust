@@ -1,27 +1,40 @@
 {
-  "recorded_utc": "2026-10-01T02:09:20.984781+00:00",
+  "recorded_utc": "2026-10-01T02:48:58.870815+00:00",
   "repository": "querygraph/grust",
-  "base_commit": "95ad9933053a3896db10ff6b1ec57a98b904fb50",
+  "base_commit": "7a41f22b9ab779ab53b2bca6e4208e584a73c79f",
   "branch": "work/sail-graph-review",
-  "scope": "Documentation-only closure of scale24 Pecan SSSP compact561 replay, original producer certificate and independently checked physical output; complete lossless diagnostic package and closed monitor/recovery failures; exact Argentea SSSP buffer-reuse componentfc094a with allocation/admission controls and verified fork delivery; prior95ad documentation publication provenance. No new runtime gate or multi-host performance claim.",
+  "scope": "Documentation-only closure of six same-protocol Pecan shared-host trials and supplemental physical checks; exact delivered Python parent-hop certificate optimization cab6bacc with all work counters and failed controls; refreshed current stream status and retained compact-publication provenance. No new runtime or multi-host gate.",
   "pending_excluded_subtrees": [
-    "All host-pair execution, measurement results and physical checks, even where newly closed; their independent review is separate.",
-    "Raw uncompressed logging03-compact tree and private raw host/kernel text; one exact approved lossless gzip plus public metadata is included.",
-    "New certificate-parent-witness source investigation/implementation and all other future experiments.",
-    "Generated mock fixtures, bytecode, caches, unapproved binaries or archives, dataset/output Parquet, build artifacts.",
-    "Book/crate release and combined Linux/worker/Flight/rebuilt-wheel/cluster or dedicated-host performance qualification."
+    "Private raw datasets/result Parquet, original redundant tar archives and their duplicate uncompressed source trees; their inventories/omissions remain disclosed in the immutable portable package.",
+    "All newly selected binary/archive artifacts, bytecode, caches, generated fixture data and unclosed future experiments.",
+    "No book/crate release, rebuilt runtime/native wheel, additional workload execution, dedicated-host timing or multi-host scaling qualification."
   ],
   "excluded_file_count": 0,
   "files": [
     {
       "path": "codex-to-codex.md",
-      "sha256": "c510cd1f7dd5c43d9d2076e1ebee590fdd151ff5de4678d359b6bb3f7be589f3",
-      "bytes": 624415
+      "sha256": "1758fdfaf8629e301a1191a1887396a97845a2d7a177d20d01c1ec5df0db8661",
+      "bytes": 625181
     },
     {
       "path": "docs/STREAM-LOSS-STATUS.md",
-      "sha256": "7e81c169128c934b42f1f88f0a1e7747d1994ff0b58348ee3511ad4146178537",
-      "bytes": 16661
+      "sha256": "e547fef70afccc4234e48cd25361fb686d9d0c512a848facbaf7ec5ec6fc30c9",
+      "bytes": 17215
+    },
+    {
+      "path": "docs/certificate-parent-witness-review/README.md",
+      "sha256": "e29c4e45753a03980b5d55e07e8cd0a1884ce88e07ede6a39d7c94582021da97",
+      "bytes": 7817
+    },
+    {
+      "path": "docs/certificate-parent-witness-review/probe.py",
+      "sha256": "76c5031ceb5d37f8c43270843d2db01f78e5d26d6abadf8d791b450ac1165eab",
+      "bytes": 7469
+    },
+    {
+      "path": "docs/certificate-parent-witness-review/receipt.json",
+      "sha256": "4d58c3c32f4a25254f03eb87f357e38c386a7a582a0dc05906202888165240d8",
+      "bytes": 4281
     },
     {
       "path": "docs/reviews/gn-capacity-2026-09-29.md",
@@ -185,8 +198,8 @@
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/RESULTS.md",
-      "sha256": "eb45a1c6e7652b677d0859ee3ebf38bf9bf19e48f0fa6daa5c64445f2e454adb",
-      "bytes": 36981
+      "sha256": "5fb6b70896289f6fa504bc08ddf9d37976d201416b2c1a5e137ffbc8cf716791",
+      "bytes": 38763
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/SEM-REVIEW-2-RESPONSE.md",
@@ -2094,6 +2107,946 @@
       "bytes": 5619
     },
     {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/README.md",
+      "sha256": "0c5d72a0f17d019c06ecfb1d74f42b034e17ed379558e917e75e96382988b73a",
+      "bytes": 7397
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/analyze_work.py",
+      "sha256": "1cedae4b0a211341f1decadd586f6a87c691ed3323e2bb79397ff8a785a1d6be",
+      "bytes": 3004
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/receipt.json",
+      "sha256": "2435eb723fdb3619fe07fac7e2589143ac3cbe8132bf3a7f5d24bbe8ad45774d",
+      "bytes": 4728
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/run_sql_gate.py",
+      "sha256": "b0dc664f6c9d7820b5ca1169e17e271f5749896093783c5c5e174e5775ecd4cb",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/source-after.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/source-before.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/sql.log",
+      "sha256": "76e7b8ead26db4a7570fa09aaa31605b39a7c3c5aa6d3311f2e55dd291161dd9",
+      "bytes": 253
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-preconditions01/sql.xml",
+      "sha256": "23deb7cd177c3fdbdc89fbc9a4d2584eb750f8e2a2e616f27c796431323eea22",
+      "bytes": 1010
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/receipt.json",
+      "sha256": "9a08d5c6391d1853deab77fa46eaadf51852962d96fe750120d249f8cc59f9a3",
+      "bytes": 4707
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/run_sql_gate.py",
+      "sha256": "b0dc664f6c9d7820b5ca1169e17e271f5749896093783c5c5e174e5775ecd4cb",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/source-after.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/source-before.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/sql.log",
+      "sha256": "ad1983865cf04551f2671ea60ea5178637ccfcf2d849e7e7567eae4f03959aeb",
+      "bytes": 1021
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline-work01/sql.xml",
+      "sha256": "c078c66ee266c2feadc90c287d8bb577d933658fa964312a53ad0823e16bcecd",
+      "bytes": 7989
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/receipt.json",
+      "sha256": "d0f77b34ef6968de440741f71087908c482e4041e1ea8f9718bcdd361fa367c9",
+      "bytes": 4606
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/source-after.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/source-before.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/sql.log",
+      "sha256": "fdc268dc47b5211373bb83938a9f4908ac7f8aaa1d744b821d07bf88049c8da3",
+      "bytes": 28370
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/sql.xml",
+      "sha256": "ddf2b4edccb47f191379f0a88dc751706204b845baab8d891830976eb00daffd",
+      "bytes": 28579
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline01/test_baseline.py",
+      "sha256": "c2f7110a9df82dbb56f824d72ca26990263534115c02bf65b12adbcca033016d",
+      "bytes": 2939
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/receipt.json",
+      "sha256": "bbcd517f8ca434d83808f48d33e500883f170cb7b549906e35877025b9b5ad6f",
+      "bytes": 4606
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/run_sql_gate.py",
+      "sha256": "c53dd4241735ff000fd5dc26f4220e7a00be794700f535007cdcc5f7745c9d97",
+      "bytes": 6798
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/source-after.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/source-before.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/sql.log",
+      "sha256": "e84ea35fe4eb7e2dceb181a43af53639d32384f40840dff3e8626f25aab290c2",
+      "bytes": 42075
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline02/sql.xml",
+      "sha256": "1977314a770dd1727a3fe3c5ee166d489b8e00292844b907a6d90ab9dc9062bf",
+      "bytes": 42206
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/receipt.json",
+      "sha256": "7941958bc332745167e3cf371bb446c5c7efac30c78f92ac92bd67d469cab3e8",
+      "bytes": 4691
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/run_sql_gate.py",
+      "sha256": "0486471143ed7ddc39eb893361394267cf4c93a790ee1518c11099602e18f4c5",
+      "bytes": 6906
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/source-after.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/source-before.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/sql.log",
+      "sha256": "043ce2ac6a2338d86ced7476f4cce45d6fa786a956304dc825025e6f709d455c",
+      "bytes": 239
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline03/sql.xml",
+      "sha256": "5a7df5e2fff252c67104b1465cf367646d25f689f9679b05274236626d4931e5",
+      "bytes": 1041
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/receipt.json",
+      "sha256": "7afc463445706992d27202c422d0ed34c2f434d5f4ca031d80dc04557cfcbbd3",
+      "bytes": 4680
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/source-after.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/source-before.json",
+      "sha256": "5e3be829c68cfe6b658ca91471a7c7e19349ace58917ad342fee8143494c9781",
+      "bytes": 920062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/sql.log",
+      "sha256": "682f9a8c2cde15099f45240cc43a81d1f9a04c272986a7551ce1e7e71a8f5f1b",
+      "bytes": 239
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/baseline04/sql.xml",
+      "sha256": "e6b7c0277592522cbb5cce34004e1d665b919c1b1558f34eacfa0a85ee5be6bb",
+      "bytes": 1041
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/receipt.json",
+      "sha256": "d6e99919d8aa725e3213874c710b703680cc37a853b1a22e5460c143e58ac594",
+      "bytes": 6962
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/run_sql_gate.py",
+      "sha256": "d33de1ab62274ad5132e717ce7dbd3056cd36e10e1d68c924ccc73d83e3a40de",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/source-after.json",
+      "sha256": "a741796fda0250ac8d9a55ddf9c79cc4b9ca4f8b38203801d8eead6a10d24a30",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/source-before.json",
+      "sha256": "a741796fda0250ac8d9a55ddf9c79cc4b9ca4f8b38203801d8eead6a10d24a30",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/sql.log",
+      "sha256": "763b0fb26158933fd793926f3c7922014aff58c27a70cda11768a5b3cc1787ed",
+      "bytes": 1044
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/sql.xml",
+      "sha256": "ef7e03b0ef8a3b9d8da469619d3980a184e8f5eace3406cbe701b1c94e69f5e9",
+      "bytes": 19125
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/unit.log",
+      "sha256": "dcd6732e1d3654f96ffe674a0640dffc8ea9881f69aeb9605f813237f027baf3",
+      "bytes": 1422
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate/unit.xml",
+      "sha256": "b6c5b172994a327e1810c70fa4041ee8dddf731cc8719432bde8157a2a87b0c7",
+      "bytes": 121494
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/receipt.json",
+      "sha256": "6e5502bc6cd581bcd1d7e2f3430bcf9826bbdcdba87b9c1fcfe62bf4380ba0ed",
+      "bytes": 11735
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/run_sql_gate.py",
+      "sha256": "6ba173606bed542bebe34ac4cbd2e9754c4505f8d470613e52956c3d7d05427e",
+      "bytes": 8514
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/source-after.json",
+      "sha256": "96503702a8027a841331830cfcef176e78137e1c5f58e937d9906e466ce08bbc",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/source-before.json",
+      "sha256": "96503702a8027a841331830cfcef176e78137e1c5f58e937d9906e466ce08bbc",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-01.log",
+      "sha256": "05ee3f5e83524b92f5f0e62ce8af45f7831e5d5c33a97c3497120ccbb484cae8",
+      "bytes": 248
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-01.xml",
+      "sha256": "2b23bde2316442669d50862edb2e0cb43e57beb6acc11835b9d06da39bbc686e",
+      "bytes": 1812
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-02.log",
+      "sha256": "cd71cf1b5c5fa5ab0f9f923c624bb863ef5689be67f4f6bbe18a517bac17237e",
+      "bytes": 250
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-02.xml",
+      "sha256": "cc13a35a460075ded9c2322647a029392fd278b1b11b61ba7ce7bcaae834af87",
+      "bytes": 7839
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-03.log",
+      "sha256": "c867d666c69433eeea9e9e07eef41d1f0337f3bd8e92ebc28425936c703dc02a",
+      "bytes": 248
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-03.xml",
+      "sha256": "9429bad6652ec1cc918bcdd0350daa2cde1eb5cdc570545802664f8469933eeb",
+      "bytes": 1041
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-04.log",
+      "sha256": "1597f6528755d8f2eb0302fb472d47f4068c07eee52e4bdbd9092ceff03144b8",
+      "bytes": 248
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-04.xml",
+      "sha256": "105dfe17e9486b36986ce3e5e58938dc6c38e5f6ffa17d446e2f53837d9d6242",
+      "bytes": 1010
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-05.log",
+      "sha256": "538c5faf47d2d763b4f1ca53c1ba9d185aa1457ee6aa2782f378a7360750a4f1",
+      "bytes": 1025
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql-05.xml",
+      "sha256": "d5130126c7bdc97f38010d908594b6bb63d2e9d2d908e707dc398284f6511d8e",
+      "bytes": 8672
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/sql.xml",
+      "sha256": "b4c9b6ad7034281aeb600ffe77fe945ccbdf49d77764935b7944a64b1bc7ab24",
+      "bytes": 20023
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/unit.log",
+      "sha256": "1b102e7c9f991dfec8859b9146116b2047fff2fcd581610a8bbf6a31bdb3178b",
+      "bytes": 1431
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-gate02/unit.xml",
+      "sha256": "a04c714ba326e6f271be349d748487eab62abdf5e019aad8f48319025dbb8def",
+      "bytes": 122446
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/candidate.patch",
+      "sha256": "79511c27801f6ec5dca16021a1cfb95ffa1405f08f15a6c04d471be967164cab",
+      "bytes": 17850
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/receipt.json",
+      "sha256": "4a483668712c963f090bec7628dd26d52442d75ebc35eea31ef5bb39b2b8d63c",
+      "bytes": 4700
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/run_sql_gate.py",
+      "sha256": "b0dc664f6c9d7820b5ca1169e17e271f5749896093783c5c5e174e5775ecd4cb",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/source-after.json",
+      "sha256": "bf4882988c39a2b046447903cee483fda04b64197231db89b55e77e3159e0a93",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/source-before.json",
+      "sha256": "bf4882988c39a2b046447903cee483fda04b64197231db89b55e77e3159e0a93",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/sql.log",
+      "sha256": "2ce9fd33f6c821de5ce8e81c5e3df789fc0e389f4953952bcaa4c4a69c3f2c8c",
+      "bytes": 11176
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions01/sql.xml",
+      "sha256": "8317adfbd0b2e0944ce5204c4a10bec938cbf4ff5380f27c3581aefdc985258b",
+      "bytes": 10686
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/receipt.json",
+      "sha256": "ac67c318e366dbb4f2257e6d826a81cdb28477d542d0ffb1265547671359304d",
+      "bytes": 5049
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/run_sql_gate.py",
+      "sha256": "a71865f6ea133607349d71579356e08e0c0ec56113a60860e375b47c17388e75",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/source-after.json",
+      "sha256": "54e17b8ea9c3b7d3ef974e7cdb0b81c144f5a4eb967ea983f8903fa9fa1e3eea",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/source-before.json",
+      "sha256": "54e17b8ea9c3b7d3ef974e7cdb0b81c144f5a4eb967ea983f8903fa9fa1e3eea",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/sql.log",
+      "sha256": "14cfbfce62b9a4f6a171b0c0379126b45f7cbc17629fe33e03f0ca3a6bf63879",
+      "bytes": 1032
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-preconditions02/sql.xml",
+      "sha256": "db4fcc4778a442a140dd80f5ce7a0c9a93f7a7b5222178cb2a101f269a69f068",
+      "bytes": 9433
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/receipt.json",
+      "sha256": "c5db45393524d5aaab71cb52fe198d7d4f324537cf9c92776b74e5b5a69ee823",
+      "bytes": 4713
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/run_sql_gate.py",
+      "sha256": "b0dc664f6c9d7820b5ca1169e17e271f5749896093783c5c5e174e5775ecd4cb",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/source-after.json",
+      "sha256": "bf4882988c39a2b046447903cee483fda04b64197231db89b55e77e3159e0a93",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/source-before.json",
+      "sha256": "bf4882988c39a2b046447903cee483fda04b64197231db89b55e77e3159e0a93",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/sql.log",
+      "sha256": "bb3486ed46767cf663bbc5981c1a40673647bf5b10aed0abd881c443c8cddce5",
+      "bytes": 1022
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate-work01/sql.xml",
+      "sha256": "59d927e4eb26f527fb7e3791f72e76bc9ab7c1ef2723977ffdc516816a89c412",
+      "bytes": 8672
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate.patch",
+      "sha256": "5e904e3f9c8c96c201e57a41990226907cb75884e02ff92dd4118cda57364b71",
+      "bytes": 19818
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/receipt.json",
+      "sha256": "81d888227aba9af097ec7c27085b5772740922a071f074bc1dee5680a708eb30",
+      "bytes": 6291
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/run_sql_gate.py",
+      "sha256": "cc9899ddec64237a2f2cfaa43449b999f6331a7726c7a86c929b0d2c1f9e616d",
+      "bytes": 7008
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/source-after.json",
+      "sha256": "bf4882988c39a2b046447903cee483fda04b64197231db89b55e77e3159e0a93",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/source-before.json",
+      "sha256": "bf4882988c39a2b046447903cee483fda04b64197231db89b55e77e3159e0a93",
+      "bytes": 920609
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/sql.log",
+      "sha256": "3e9fa1780c0c9d73aaf53d39caf4fa556178e9ebaed985042da9355a1de039ba",
+      "bytes": 242
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/sql.xml",
+      "sha256": "5a9def1b5424b8f3b9d0afb8a543bf95ff6aae53b1cdf6c0d1be45c4581950f3",
+      "bytes": 8298
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/unit.log",
+      "sha256": "d7f446cb9c4db55a782dacfe25b4d70ae7d8f7534a7dd5f2ff025d0dff201b2e",
+      "bytes": 1419
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/candidate01/unit.xml",
+      "sha256": "cdb90fe0da4962e093202885a212d31625cf9f7aa09a1b4c3c385f4b6df164ee",
+      "bytes": 116729
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/commit-and-gate.log",
+      "sha256": "c7a3e36dc8655fdef46abcee902eb6cdafe8328bc4911219e02be0bf7e292489",
+      "bytes": 728
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/commit-message.txt",
+      "sha256": "3a70aea9d49c70a0487353cef4fbcb98bdf02f66768973eb6481995a0d314371",
+      "bytes": 562
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/commit_and_gate.sh",
+      "sha256": "edf524505eb40ef3f4f2164d0e2755c6af907cc998efac6d780523a4708bd4e3",
+      "bytes": 1299
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/receipt.json",
+      "sha256": "dad8a7f98a14dadb91ecbeeef0dcfb993400a0aab73b7a690357022ba7a7c7f6",
+      "bytes": 6916
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/run_sql_gate.py",
+      "sha256": "d33de1ab62274ad5132e717ce7dbd3056cd36e10e1d68c924ccc73d83e3a40de",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/source-after.json",
+      "sha256": "08edbe29fbed2334722e6a5b5bc67f361704cec386dc7538e8dc3b1c533b39a3",
+      "bytes": 920605
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/source-before.json",
+      "sha256": "08edbe29fbed2334722e6a5b5bc67f361704cec386dc7538e8dc3b1c533b39a3",
+      "bytes": 920605
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/sql.log",
+      "sha256": "a0f049eb31cf27ea8edc633fe8f93f8c19bb11032bee269efd936f6e8bcdbb42",
+      "bytes": 176644
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/sql.xml",
+      "sha256": "56cd8fb9b052b2780baed01241ba1e32267da4a464bd5d2801895ec24da8e3e1",
+      "bytes": 188829
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/unit.log",
+      "sha256": "7ce84c6e5b338f6292d71823d7c918b6e531ac3ff0ada22571cd114dbb0bdb51",
+      "bytes": 1418
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate/unit.xml",
+      "sha256": "17264792dcc6a924d60aa7acf3b77d6c0d533b050e1114a08878373cd9793aea",
+      "bytes": 121494
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/receipt.json",
+      "sha256": "4afe6f94ae49227ff82f1c5094fe64eb10d7779b6b654f6990fef2e35ff049d5",
+      "bytes": 11658
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/run_sql_gate.py",
+      "sha256": "6ba173606bed542bebe34ac4cbd2e9754c4505f8d470613e52956c3d7d05427e",
+      "bytes": 8514
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/source-after.json",
+      "sha256": "08edbe29fbed2334722e6a5b5bc67f361704cec386dc7538e8dc3b1c533b39a3",
+      "bytes": 920605
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/source-before.json",
+      "sha256": "08edbe29fbed2334722e6a5b5bc67f361704cec386dc7538e8dc3b1c533b39a3",
+      "bytes": 920605
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-01.log",
+      "sha256": "e06718dffa82427eebf09d1617d47f9c962efa4a5a3b628ebef9bf227023317d",
+      "bytes": 244
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-01.xml",
+      "sha256": "99a39fec607c0f2f4a51b803d54f95ec7233209e4eaedc895d6aa9ae7fbe582e",
+      "bytes": 1812
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-02.log",
+      "sha256": "6434ccc15c5a6dc1d2b96df709afd434d6415d50f36e51bcf4f74fa6a156ec73",
+      "bytes": 246
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-02.xml",
+      "sha256": "4aaee476a53aebf08cb2b3286760408593b5a27b02e143f6c537f04ac9fba82f",
+      "bytes": 7839
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-03.log",
+      "sha256": "76fbd8466d497013cd4787ffca5bca8a240ca75bb3117512ad36a0caf98c940a",
+      "bytes": 244
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-03.xml",
+      "sha256": "0330d45d4e165a6d54748d3ae56bae2206f75b2c3ceb85ae28abf3fc820d4821",
+      "bytes": 1041
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-04.log",
+      "sha256": "28fd09239f653dee9eb4a5c7331a3dc36973f75a9a7c0d76f3f9fa4caacefa74",
+      "bytes": 244
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-04.xml",
+      "sha256": "93079939146f0ff626e4c7314f2e0761f4a958b84280978ec5640d2f74bb7136",
+      "bytes": 1010
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-05.log",
+      "sha256": "f399df35b1e87639632727b1a1180926edccecde6ab49182c910793dbced65ac",
+      "bytes": 1021
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql-05.xml",
+      "sha256": "7ab2001908f00c251bd5a4fcb14e049146c8cb3f25837f027be69caa1bc3c277",
+      "bytes": 8672
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/sql.xml",
+      "sha256": "5efb8f12363f61dedc483b04169294fcb896571ec289d9a5a61c8d0b310bba3f",
+      "bytes": 20023
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/unit.log",
+      "sha256": "7e45408720661bf9f440f11ca93598c9bc943bc9b678f062a07ac65a2a380b1a",
+      "bytes": 1420
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/exact-gate02/unit.xml",
+      "sha256": "7c60d2c0d790fe2d9ca2482737d6ff59b12472d5ce56e8fd3d7bce90f56e8851",
+      "bytes": 121494
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/files-manifest.json",
+      "sha256": "9a31bad820aaf410416dae3726b5079a49fb42abf7e582d8c193b252f27f4195",
+      "bytes": 19490
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/final-receipt.json",
+      "sha256": "54dea414838506bb560647a7e5cbfea7e50968a6f0e5da0eb42ea1182e1d6990",
+      "bytes": 4153
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/finalize.py",
+      "sha256": "daee79208ed1401cf402059ac047160433114fd9bc9481fb077a4fb99cf9e788",
+      "bytes": 6750
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/frozen.json",
+      "sha256": "37b11923fde7e51bbd993799262862f23da5e379fa66edadb067b84bf0fdeaba",
+      "bytes": 1266
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/gate-isolation-change.json",
+      "sha256": "54ca8651b107a930dd890c4205f5b71688b66f0fdfdd4944cc3062aeeef1d33b",
+      "bytes": 897
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/gate-isolation.patch",
+      "sha256": "3ad5f174ce56a83a6c0041f7939806c075b60aceaa1955b8f05364a7a79d0920",
+      "bytes": 1817
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/guard_candidate.py",
+      "sha256": "9f6a80a39412a779f12b712ad567314e37eb62dd5b4bfd993c4d13f544ee2b30",
+      "bytes": 2063
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/independent-exact-review.json",
+      "sha256": "64b1d41b44f43351b127a3b615b7f0d9a4fb141f69c7ffe867fa4f5a27261c0a",
+      "bytes": 26406
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/independent-source-review.json",
+      "sha256": "b9b0248537f64081cdaf48877005796b9aa8939bc1cd9809a45408b389574d71",
+      "bytes": 19141
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/client-after.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/client-before.log",
+      "sha256": "f50b17d9b3009ca2400c24b5fe166f55db485c895f63275ed1bc74e65df6e660",
+      "bytes": 2240
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/receipt.json",
+      "sha256": "4efd221ce8e05082569df7734aa97ccd4d9c18c3b835c218d71bce9cfd4e859c",
+      "bytes": 4731
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/run_sql_gate.py",
+      "sha256": "d33de1ab62274ad5132e717ce7dbd3056cd36e10e1d68c924ccc73d83e3a40de",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/source-after.json",
+      "sha256": "08edbe29fbed2334722e6a5b5bc67f361704cec386dc7538e8dc3b1c533b39a3",
+      "bytes": 920605
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/source-before.json",
+      "sha256": "08edbe29fbed2334722e6a5b5bc67f361704cec386dc7538e8dc3b1c533b39a3",
+      "bytes": 920605
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/sql.log",
+      "sha256": "55ad29787d7176aaba6c1125bfdcab30d2cb912ccdab5f7e4771478ff92b79b4",
+      "bytes": 668
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/lifecycle-control01/sql.xml",
+      "sha256": "73aed512bb31c25efe37581ad4540ba1a7537e58d0fb488a3f8183e6dbb0ae7c",
+      "bytes": 725
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/run-isolated-gates.sh",
+      "sha256": "89bbe58157aeacfe39e03edcf662c3e4047dba1a9f5e457fae1eae53361044e7",
+      "bytes": 1052
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/run_sql_gate-before-isolation.py",
+      "sha256": "d33de1ab62274ad5132e717ce7dbd3056cd36e10e1d68c924ccc73d83e3a40de",
+      "bytes": 7515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/run_sql_gate.py",
+      "sha256": "6ba173606bed542bebe34ac4cbd2e9754c4505f8d470613e52956c3d7d05427e",
+      "bytes": 8514
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/runtime-provenance.json",
+      "sha256": "90af5742fc3ec7679dd7a149fe8a1fe8672b399e4084d8805b37628485f3a22c",
+      "bytes": 1011
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/test_baseline.py",
+      "sha256": "76727a43afd191b136f89d7bbefd600dc4e7484ae71d27430043b5ece6a1f995",
+      "bytes": 3415
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/test_preconditions.py",
+      "sha256": "4514e837d7377bbfdb747aa7c84dbfc7238906f5a564d6031d8829ca533f41d3",
+      "bytes": 1178
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/test_session_lifecycle.py",
+      "sha256": "bc4b7e85ff45b31087309b17127a481bb20fe9acd3e1f28643fc0814346857c3",
+      "bytes": 1974
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/test_work.py",
+      "sha256": "d1e60316df55dbe1179c9b53951055d3cb47aa61aad9a507e0e456e34fc8396a",
+      "bytes": 2605
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness/work-comparison.json",
+      "sha256": "e49ba134923e7484db0bb861c0db578cb6f3d5f20d8bef30844658b0106e4e03",
+      "bytes": 17502
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/certificate-parent-witness-delivery.json",
+      "sha256": "1e839be0cff9a84c09efc1de6de75a25fc898225c14732ac3b681d5714520a26",
+      "bytes": 13086
+    },
+    {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/closed-cell-audit/HANDOFF.json",
       "sha256": "fe0951133e828cde9378d51e1e00e602897957f8d97807d7da1e9dd0e2a5b161",
       "bytes": 2096
@@ -2907,6 +3860,361 @@
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-closed2-publication/typo-adjustment.json",
       "sha256": "c686ae5ef1507a2d0a841a6b43b233fc6cb98dd43efcb42df90df15d616909a4",
       "bytes": 32122
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-activation.json",
+      "sha256": "b255d4ff093f505570aee11ace1321331a0125b47da9828f1aa62ba35b5635a7",
+      "bytes": 116231
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/README.md",
+      "sha256": "84265af0cec8c88f05f02461d7523faa39daa198ef51e6f69fc0642c6f17ba2d",
+      "bytes": 1426
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/activate_shared.py",
+      "sha256": "2d9192554d6956701d549de55c75427fb32258212ca66f743099b54d6c36bccd",
+      "bytes": 7926
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/activation-intent.json",
+      "sha256": "cea4397c99a1cdf20a406a8671ebddfa68ad5d30c12ca85921351a6fd79bc065",
+      "bytes": 780
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/audit-pin.json",
+      "sha256": "ef4c2240d7bb542f983ab4389859123997b6cc256a9d155a5c43080bc8e171ca",
+      "bytes": 137
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/authorization.json",
+      "sha256": "72af4994d08303461dd188d116b1a88d312a51e4922abf2eb33fad1bc931c7a3",
+      "bytes": 120216
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/base-manifest.json",
+      "sha256": "c18d5aea38d3d81fff6b808e8e003f7157db53b2e977ea0f0b83657c71dcd347",
+      "bytes": 701976
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/candidate-after-receipt.json",
+      "sha256": "c6ca7756c69781ebec320fffb71245d97b1b2b5f6bce77bd00958a1352b57111",
+      "bytes": 2542
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/candidate-gate.log",
+      "sha256": "64cea93967dec3ae81dd5e22e8adeb89cd928d2b82219950460999cc408e0ee9",
+      "bytes": 556
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/collection.json",
+      "sha256": "c6f1881662c48de5c7a75364f5278d6e175169d386d7934d72a6053bbacd3c2d",
+      "bytes": 17644
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/commit-and-gate.log",
+      "sha256": "67ccf3586f5a8d9885d3fd60abf338b8f58b92b416e6a8bac738baa2a02f9116",
+      "bytes": 58347
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/commit-message.txt",
+      "sha256": "f94901131821c1c391bbd68405c31a43d348eae7a9e6ae9b69b8fcc99714584b",
+      "bytes": 308
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/commit_and_gate.sh",
+      "sha256": "4bea5f36f9d017e8d191ad9aee3301d290654fe497a6362baec4f26ff14a3fed",
+      "bytes": 1239
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/common.py",
+      "sha256": "8c3d1d24ff660088eeb5a5ef8ce4ea8a695da5a768b530e9d03d6a9018a27492",
+      "bytes": 14317
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/delivery.json",
+      "sha256": "c4f9082e3ac4f96b0fa52a73fcbe51e769a5e314005eb956698c6bd49eed119f",
+      "bytes": 6258
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/exact-after-receipt.json",
+      "sha256": "924af7f84de93bf84d67dd5e75ef134446883cbeab6ff14bcc6bf2855866d5fe",
+      "bytes": 2538
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/exact-gate.log",
+      "sha256": "4f3d0273a9dae2656842811ed8756fd7553a4d07508b88ab42773f8e63f370c4",
+      "bytes": 556
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/frozen.json",
+      "sha256": "db431e84969e07b701a200c728488e26e06af599edaa9fcd005f51f39382b0fe",
+      "bytes": 106113
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/guard.py",
+      "sha256": "aa4c08f14d648fef6d1e9f19fbd4b51725ea06a7845b5fa115b40b566d6cb43f",
+      "bytes": 2067
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/independent-audit-failure-20261001T021858514530Z.json",
+      "sha256": "1cd5769fa914e2202c4bdfa387fd5adb90080b17573033e5165ae089cd5d6e8a",
+      "bytes": 930
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/independent-audit.json",
+      "sha256": "160f7a50a25552056800c813487c9ff050888d7b7e7ff85427d7704810f18d25",
+      "bytes": 5683
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/independent_snapshot_review-attempt01.py",
+      "sha256": "38bfddbf377ca5ae5854aa3b9d2cd22811347a2205238155a08c25805a9fdc9b",
+      "bytes": 21038
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/independent_snapshot_review.py",
+      "sha256": "2b8d015d7831ca4d5a5c01adb4bad5cbe8cb2d29fb45459a4713d1bbfd5e6161",
+      "bytes": 22043
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/offline-controls02/receipt.json",
+      "sha256": "e974088afdabe3bfe625bbe7879f52caeeded17f6236525a393d338271d9ce3f",
+      "bytes": 8596
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/path-only-delta.patch",
+      "sha256": "c187e35695293ab998a740b62f65a376ad7ddd320bc8e4453533f7394138bb39",
+      "bytes": 2803
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/predecessor/audit_logging03_package_attempt01.py",
+      "sha256": "4c8e96c9aa1a45d522961dd4f646543dc7009ed1e83d597a75198ec019e234ed",
+      "bytes": 6775
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/predecessor/authorization.json",
+      "sha256": "72af4994d08303461dd188d116b1a88d312a51e4922abf2eb33fad1bc931c7a3",
+      "bytes": 120216
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/predecessor/independent-tooling-review.json",
+      "sha256": "2fa5f02b3039ba774d8a0b1e62b96368260160429fbafef464a2cf394c9992f6",
+      "bytes": 4062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/predecessor/index-refresh-guard-failure.json",
+      "sha256": "7a43fda0057587cd23090035817cc7e4b37b3e67a0ad76cf09691b9cca110872",
+      "bytes": 988
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/predecessor/logging03-package-audit-attempt01.json",
+      "sha256": "3b6c0a08f4d999f2a891cfce994408f68c6f5ca0414ebaa85f04328b6f5401e9",
+      "bytes": 539
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/predecessor/logging03-publication-independent-review.json",
+      "sha256": "056e465b08bc0739f064ffbb1bb2165bef6ba784013d0f4aee2b2ae907b24bec",
+      "bytes": 3951
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/predecessor/tooling-preparation.json",
+      "sha256": "e44b82b0189e2c3664191acb9ebacddeeec7b2b4125cac072832dbb369cf533a",
+      "bytes": 6014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/activate_shared.py",
+      "sha256": "2d9192554d6956701d549de55c75427fb32258212ca66f743099b54d6c36bccd",
+      "bytes": 7926
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/audit_logging03_package_attempt01.py",
+      "sha256": "4c8e96c9aa1a45d522961dd4f646543dc7009ed1e83d597a75198ec019e234ed",
+      "bytes": 6775
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/authorization-template.json",
+      "sha256": "d8322db11e825c52df11b4dfdb68e0c461447ef03009859af8dbf34573f2dafa",
+      "bytes": 1575
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/authorization.json",
+      "sha256": "72af4994d08303461dd188d116b1a88d312a51e4922abf2eb33fad1bc931c7a3",
+      "bytes": 120216
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/base-manifest.json",
+      "sha256": "c18d5aea38d3d81fff6b808e8e003f7157db53b2e977ea0f0b83657c71dcd347",
+      "bytes": 701976
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/commit-message.txt",
+      "sha256": "f94901131821c1c391bbd68405c31a43d348eae7a9e6ae9b69b8fcc99714584b",
+      "bytes": 308
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/commit_and_gate.sh",
+      "sha256": "10ae0f712215c5665f496ac9545375266f9b39d203beb646fc8f90a05b8537c7",
+      "bytes": 1215
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/common.py",
+      "sha256": "0eccd71bdb5d394491337f2a495683414522ff606c634076b22f516a480706ac",
+      "bytes": 14311
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/frozen.json",
+      "sha256": "75dea648fb6a0ad2647f6242d61f75dcdccad31dac28381123727fac10404827",
+      "bytes": 106113
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/guard.py",
+      "sha256": "aa4c08f14d648fef6d1e9f19fbd4b51725ea06a7845b5fa115b40b566d6cb43f",
+      "bytes": 2067
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/independent-tooling-review.json",
+      "sha256": "2fa5f02b3039ba774d8a0b1e62b96368260160429fbafef464a2cf394c9992f6",
+      "bytes": 4062
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/index-refresh-guard-failure.json",
+      "sha256": "7a43fda0057587cd23090035817cc7e4b37b3e67a0ad76cf09691b9cca110872",
+      "bytes": 988
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/logging03-package-audit-attempt01.json",
+      "sha256": "3b6c0a08f4d999f2a891cfce994408f68c6f5ca0414ebaa85f04328b6f5401e9",
+      "bytes": 539
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/logging03-publication-independent-review.json",
+      "sha256": "056e465b08bc0739f064ffbb1bb2165bef6ba784013d0f4aee2b2ae907b24bec",
+      "bytes": 3951
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/offline-controls01/receipt.json",
+      "sha256": "7b9671601e29fab1d86933a49272422af640a300e49477ab192c244708b23064",
+      "bytes": 8408
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/offline-controls02/receipt.json",
+      "sha256": "6c3cf1e45722830981440a002ace7326dd656f43e90eeca42fc9dda75fe4f3f5",
+      "bytes": 8596
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/preauthorization-inventory.json",
+      "sha256": "c8bdfc92395869558bae2fbbeba565a6dc2c07ed82f69bb93a076bf4f289971d",
+      "bytes": 114312
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/activate_shared.py",
+      "sha256": "cc9b28965b518107eb1e8dffbd61cf492919c820d29123fa205295329e1866e1",
+      "bytes": 7930
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/authorization-template.json",
+      "sha256": "a9358842e0570879c68765639aab9120d5e0839864c9c8d0ab1faa252597132e",
+      "bytes": 1686
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/commit_and_gate.sh",
+      "sha256": "a9f2caf1b17c3d6602970f2bb17aeb3534d6c06ebf2709fd0fc9eb25e89929ff",
+      "bytes": 1255
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/common.py",
+      "sha256": "9f9dec06c08e96cde339cc64e952111dfd1417240a362c33d525e1c94754f9d1",
+      "bytes": 11650
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/guard.py",
+      "sha256": "aa4c08f14d648fef6d1e9f19fbd4b51725ea06a7845b5fa115b40b566d6cb43f",
+      "bytes": 2067
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/prepare_snapshot.py",
+      "sha256": "c1df73246103435792cf694d8c5a31a06aa7c8223b8f6f3c711be69c561d035f",
+      "bytes": 5717
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/publish.py",
+      "sha256": "a2817a7262c2ec6ead69b812b2de75d15c24aac4993848a863369cfe5b0d0b3a",
+      "bytes": 2713
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/predecessor/run_offline_controls.py",
+      "sha256": "e82481af202c5adf412c99ebe0336f823fc35305e111c398e0c785b68cb53465",
+      "bytes": 10057
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/preparation.json",
+      "sha256": "e61e54eedd488aaf028d393b836259fa0706836ba3adaa2a80e13026a2ef4aed",
+      "bytes": 242934
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/prepare_snapshot.py",
+      "sha256": "39efab640b7e1b7478fcc1889f04a1975598e9c03c8ed0fb2d3b3b029c3a288d",
+      "bytes": 5749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/publish.py",
+      "sha256": "a2817a7262c2ec6ead69b812b2de75d15c24aac4993848a863369cfe5b0d0b3a",
+      "bytes": 2713
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/run_offline_controls.py",
+      "sha256": "1970ca269bb46d7b735b5104a77f4981cd043f02fa63e0bc5c24fdf29e95bfa2",
+      "bytes": 12435
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/tooling-delta.patch",
+      "sha256": "f24753069e42a42b739fad949d8ecb7c49ffe737c88bfe1bfb17d79201edb913",
+      "bytes": 27844
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation-attempt01/tooling-preparation.json",
+      "sha256": "e44b82b0189e2c3664191acb9ebacddeeec7b2b4125cac072832dbb369cf533a",
+      "bytes": 6014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/preparation.json",
+      "sha256": "2ed440a3c14d3cfe06bc5babbe31d5d56933ab024b87b316533a6595efb17a12",
+      "bytes": 242934
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/prepare_snapshot.py",
+      "sha256": "39efab640b7e1b7478fcc1889f04a1975598e9c03c8ed0fb2d3b3b029c3a288d",
+      "bytes": 5749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/publication-intent.json",
+      "sha256": "6091dfe3e51d44856a1559d66fcf79190df1cafd95c67944a2620280117125da",
+      "bytes": 1354
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/publish.py",
+      "sha256": "a2817a7262c2ec6ead69b812b2de75d15c24aac4993848a863369cfe5b0d0b3a",
+      "bytes": 2713
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/push.stderr",
+      "sha256": "15be8e564d4136f8b5138b3a184a3eea9f14d017a8a9b3abd9d6c1b4c06285a3",
+      "bytes": 209
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/push.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/retry-preparation.json",
+      "sha256": "fc84c22fb19f34841a3d15fdfe9f9c5b50af3d506fe85d45bb0812493c2ef35a",
+      "bytes": 1365
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-compact-publication/run_offline_controls.py",
+      "sha256": "1970ca269bb46d7b735b5104a77f4981cd043f02fa63e0bc5c24fdf29e95bfa2",
+      "bytes": 12435
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/documentation-followup-activation.json",
@@ -4777,6 +6085,2371 @@
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-collection-audit/test_audit_pair.py",
       "sha256": "4e791029d2b69f10b9480159b0a81da7aca7edc95f5b8a7dac9fb2b93fabcfae",
       "bytes": 10536
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/FREEZE.json",
+      "sha256": "12d0b46d73f3864116df436c3f8f657a15abcbe79a2faf7a0cc4eb2c7f2a446c",
+      "bytes": 80036
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/README.md",
+      "sha256": "15fb16e9b37f26740516b4d9a0a97faf6ffa33d6936ab2e11d6bfa180d66983b",
+      "bytes": 12525
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/copy-receipt.json",
+      "sha256": "576b6c19fc2ba6a1b5cf2bdbf6414cf68cdf9f1208bf67e500cbe2cdef322551",
+      "bytes": 271058
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/independent-review/FINAL-FREEZE.json",
+      "sha256": "82d005223194be0ad710afed7badcacac80fdef935646efac0d6a6fd3c64dff0",
+      "bytes": 1590
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/independent-review/audit-attempt01.log",
+      "sha256": "5f253b500b0919c9c479bed60c39cf1e56b1dd9b97493604d086aaa1ebb98cab",
+      "bytes": 511
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/independent-review/audit-attempt01.py",
+      "sha256": "4ced6155e15f4f957a3eb08e01033e06fba0f7412bf68a4484c6ed106e4309f4",
+      "bytes": 18139
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/independent-review/audit-attempt02.log",
+      "sha256": "fbbcb69884d84bfcf2c446245c0289b9e621034c6783f4757f9292803f7ef97f",
+      "bytes": 1719
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/independent-review/audit.py",
+      "sha256": "7e0a97c7f88f55f80619f81194fec976a1b6998b85b5218364acd5b24ae198d6",
+      "bytes": 18258
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/independent-review/receipt.json",
+      "sha256": "7dbf812acf37220cf8c082bbfe5a05de9da21a82c57d8e521d7e343319c63d1e",
+      "bytes": 120916
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/collection.json",
+      "sha256": "7b6af10ee1e425d6658a5f4d9662d1679574d2ce824eb1b20a3dd8a2eaa3f375",
+      "bytes": 1072
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/host_pair_control.py",
+      "sha256": "607663f3cfe3c3d3bb2435774b072656235f41af3ca853cf7d3372f8862fde15",
+      "bytes": 9253
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/host_pair_supervisor.py",
+      "sha256": "32656821d43f3578910c3e1cfe2399c04ee74946ba11b433a05ffc7e3c9d760a",
+      "bytes": 12617
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/independent-root-review.json",
+      "sha256": "81e3f39862bfda018c31a5b10d77403ec05e4b1948b100ade65795c1a556935a",
+      "bytes": 1293
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/offline-controls.stderr",
+      "sha256": "c5da4d893e10825162f4ebc88272653b18e2cad65d7ee77b97f1e39d07125cf2",
+      "bytes": 991
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/offline-controls.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/receipt.json",
+      "sha256": "decb193b25877672c20ab867bab49a889e178f906581708a0ceb4ae0084f4d49",
+      "bytes": 2243
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/launch-preparation/test_host_pair_helpers.py",
+      "sha256": "28014248097b1cbb51a9632a703cdfa0de8416a4e4296959f8a2957e7fe38ba8",
+      "bytes": 8594
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/manifest.json",
+      "sha256": "6fc14dafb8b2b9bf1790e04648025fe37a39269017f20c38b1ce8f434d2477e1",
+      "bytes": 80652
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/metrics.json",
+      "sha256": "b95e0fb33e22fe00da3c0fe2b28376ebd4c51de3e2a132b46bc8c4ebde8fee41",
+      "bytes": 23225
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015036210185Z-launch.intent.json",
+      "sha256": "e6b455a036e52df48154e6b84762697856ff4570810d04bf8d61d8d95ffadbc3",
+      "bytes": 992
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015036210185Z-launch.receipt.json",
+      "sha256": "e2409111a4779a0a52e84f03a0fb4b8d157a86997e80e28862294a11145a472b",
+      "bytes": 1589
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015036210185Z-launch.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015036210185Z-launch.stdout",
+      "sha256": "bf30dd95410ae8346f2f68b0b3a762958e36054d5ac747fe374c4886d7817c53",
+      "bytes": 448
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015249040477Z-poll.intent.json",
+      "sha256": "66ae7574ad3c6c75a9f7e0016ba99b5b19c5ba804f5f906a710ee8d67fe1acc0",
+      "bytes": 732
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015249040477Z-poll.receipt.json",
+      "sha256": "9ac1f954b54322a7e8577964ea3030198ff745ce8d91b6fd2a57858f17eec83f",
+      "bytes": 4159
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015249040477Z-poll.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015249040477Z-poll.stdout",
+      "sha256": "b1125a609dee121a3c3e3bd6da710ad2537b520e6feb04506ee9cdccebba4cf8",
+      "bytes": 2895
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015346023685Z-poll.intent.json",
+      "sha256": "1de3abe9eb97beff14587d576bac550a673941b3f36f08acef97d7f902c967fa",
+      "bytes": 732
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015346023685Z-poll.receipt.json",
+      "sha256": "fd915d8f65a63f6bbfe0e4635ce72a481fcf846996d6b2691ed0177e828e8f76",
+      "bytes": 6205
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015346023685Z-poll.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015346023685Z-poll.stdout",
+      "sha256": "ace17295e4715a615db72fe6743d23b925160bc11e9b708a102069cc444463eb",
+      "bytes": 4841
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015353080533Z-collect.intent.json",
+      "sha256": "eb39c4e0d731e3d340978005dac1a70f15ee5ca85092946a9965ae2a37eda146",
+      "bytes": 735
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015353080533Z-collect.receipt.json",
+      "sha256": "a2d8f618118901569b3b0c64adecd4decd52fc8e6606788ff60cb5b072d0066c",
+      "bytes": 1166
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/20261001T015353080533Z-collect.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/collection-audit.json",
+      "sha256": "cb64221ae759561fe5e644ee2b4bb4cc7a56d1d4b96c202d16d97888c10a2b13",
+      "bytes": 104775
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/host-after-attribution.json",
+      "sha256": "256d33638aa23ed9bb1737d18d71650ee47dfe11e9b0329b4b2fcac3637495a8",
+      "bytes": 927
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/outer/host-after.json",
+      "sha256": "e07489df76de7dc4d5c162192e0abdba1ad3f628cacaf75cc6c0e663c5e07046",
+      "bytes": 92113
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/package.py",
+      "sha256": "b25366fd99c49d08f6bdb2dbb3cb3d19cda5fd8ba86a1b01cdb7a22df2f3b576",
+      "bytes": 5636
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/baseline-v3/container_check.py",
+      "sha256": "af5f8cb2a715efe3373f75a0dc73d28fa7cd599e7294877fa24440bcfd9903fe",
+      "bytes": 6439
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/baseline-v3/prepare.py",
+      "sha256": "938885a595e5d74b134748e4d79f08e54f1bdf16e094ba0199225c1c6254ca57",
+      "bytes": 7159
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/baseline-v3/supervise.py",
+      "sha256": "c4a4cca33b5cf215d3dd798c7ca7acbef3a2b553911f8c9050b1f5449ce5f3e4",
+      "bytes": 16129
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/container_check.py",
+      "sha256": "af5f8cb2a715efe3373f75a0dc73d28fa7cd599e7294877fa24440bcfd9903fe",
+      "bytes": 6439
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/prepare_pair.py",
+      "sha256": "c55ab441da62ada590621bcf9851fc30f32bb4770a4339ccf3b955c578a603ca",
+      "bytes": 9002
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/run_pair.py",
+      "sha256": "e0dcd737124d0b4e87f33c25871580be892af54d92b0b441f50c4a6562b79e9a",
+      "bytes": 9060
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/supervise.py",
+      "sha256": "a6602b649e59a8a87c6a31f6f28ca33ed723e6c1f615b0ca3eda12af8560b6dd",
+      "bytes": 16433
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/paused-physical-preparation-v3/test_pair.py",
+      "sha256": "1c7db73be4d6203bf23009857f87acb5c8353635cb4658b2340cc7768e16c4e1",
+      "bytes": 13400
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/collection.json",
+      "sha256": "d85bea65e2189c8ec78a66d546f04e0e7accfec406b9002616181c72e4aeebc8",
+      "bytes": 439
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/dry.json",
+      "sha256": "858051c37a5270b579befb81cdc45625001a899375e4c2540ea69ea3e4088278",
+      "bytes": 2242
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/dry.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/dry.stdout",
+      "sha256": "858051c37a5270b579befb81cdc45625001a899375e4c2540ea69ea3e4088278",
+      "bytes": 2242
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/01-running-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/01-running-before.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/02-image.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/02-image.stdout",
+      "sha256": "9fa84e8683a9f53fcb93c1e2e4147070ab06aa1bf5ddbaabe146322569127834",
+      "bytes": 72
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/03-volume.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/03-volume.stdout",
+      "sha256": "a4ea179cbfbf1acc8c9757ecd838be857ee83af4006f5efc68e79a0229cd3fcb",
+      "bytes": 23
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/04-running-before-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/04-running-before-create.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/05-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/05-create.stdout",
+      "sha256": "0fe95c81896e139ba159205d7e5746ada1a68a14152e6c19f5081b7107645a1e",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/06-inspect-created.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/06-inspect-created.stdout",
+      "sha256": "335508e793d48c13f095054eac3d5126c988ccf4e02873db84f926a7db543fe7",
+      "bytes": 1275
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/07-running-before-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/07-running-before-start.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/08-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/08-start.stdout",
+      "sha256": "0fe95c81896e139ba159205d7e5746ada1a68a14152e6c19f5081b7107645a1e",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/09-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/09-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/10-inspect-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/10-inspect-final.stdout",
+      "sha256": "80f8c6be76b1160ade3028655e385bb98e1b04da93194c44aa653c3d4a0efe80",
+      "bytes": 1294
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/11-logs.stderr",
+      "sha256": "e158cae50a39e1b8ab4219dbe412ea6616449156540ee48343b301a18cc9dc69",
+      "bytes": 348
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/11-logs.stdout",
+      "sha256": "2d8b7463bc96aef1cfcb7ac88622573988ce8c9630abed7c03083303b536df9a",
+      "bytes": 21
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/12-remove-owned-checker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/12-remove-owned-checker.stdout",
+      "sha256": "0fe95c81896e139ba159205d7e5746ada1a68a14152e6c19f5081b7107645a1e",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/exited-container.json",
+      "sha256": "807d87a5cfda73af8800f146cffa3b876d8a7d390bed941f6736f9a8d6b06b71",
+      "bytes": 1618
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/outer-receipt.json",
+      "sha256": "dfd7809db2e8b81cf8f5f107307e5e4870ff8e466847b72ef86dbb9a7c946916",
+      "bytes": 14477
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/physical-output.json",
+      "sha256": "311e9d33545eac00b72b0e62d4ce8cb4b004d493efe0405cb648e62e05d0ed3f",
+      "bytes": 5162
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/reader-admission.json",
+      "sha256": "b6904f49994c3033c1a9ca71452d80291a2904bdf924c036e222733b17c05ad7",
+      "bytes": 4779
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/01/supervisor-claim.json",
+      "sha256": "23a548a9847654023c11b29e0c2fe94710ec1822309451812b14bbe46b90de84",
+      "bytes": 144
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/01-running-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/01-running-before.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/02-image.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/02-image.stdout",
+      "sha256": "9fa84e8683a9f53fcb93c1e2e4147070ab06aa1bf5ddbaabe146322569127834",
+      "bytes": 72
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/03-volume.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/03-volume.stdout",
+      "sha256": "a4ea179cbfbf1acc8c9757ecd838be857ee83af4006f5efc68e79a0229cd3fcb",
+      "bytes": 23
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/04-running-before-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/04-running-before-create.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/05-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/05-create.stdout",
+      "sha256": "66d3cb809d5899fa020d0b54f31a901b051310f354aeadbdfb0893dbf2a135ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/06-inspect-created.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/06-inspect-created.stdout",
+      "sha256": "124863f29bddb16ec2fa846c26c050cc9939a72760d480a67553a9a42416ee6c",
+      "bytes": 1275
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/07-running-before-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/07-running-before-start.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/08-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/08-start.stdout",
+      "sha256": "66d3cb809d5899fa020d0b54f31a901b051310f354aeadbdfb0893dbf2a135ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/09-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/09-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/10-inspect-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/10-inspect-final.stdout",
+      "sha256": "7b64265ca97d586bb7a1c3ac1fff4ae62b1d08e895678a47fd31fee2058b6f8f",
+      "bytes": 1294
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/11-logs.stderr",
+      "sha256": "e158cae50a39e1b8ab4219dbe412ea6616449156540ee48343b301a18cc9dc69",
+      "bytes": 348
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/11-logs.stdout",
+      "sha256": "2d8b7463bc96aef1cfcb7ac88622573988ce8c9630abed7c03083303b536df9a",
+      "bytes": 21
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/12-remove-owned-checker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/12-remove-owned-checker.stdout",
+      "sha256": "66d3cb809d5899fa020d0b54f31a901b051310f354aeadbdfb0893dbf2a135ef",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/exited-container.json",
+      "sha256": "b981fe5a2b0452f455fda63e84cc8a74406977178adaa3dd4d5fbd4e684a2a22",
+      "bytes": 1618
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/outer-receipt.json",
+      "sha256": "40b2e6c68d3cce1920f5f5f121989d2b00c630d7fff2885071238af44cb0fefa",
+      "bytes": 14477
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/physical-output.json",
+      "sha256": "8aa7884e219689cc98ad66e192b67ef37bc5724433547650ef27781244da9e0e",
+      "bytes": 5161
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/reader-admission.json",
+      "sha256": "d824bb5b7517727257d646b89a51c3c5c14dfc095d03420701f6c2db07807a88",
+      "bytes": 4791
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/02/supervisor-claim.json",
+      "sha256": "0845ed0dd93a14f8a5f38b0d3d5acea897345813aaebdddd9270e89ad3f67fb5",
+      "bytes": 144
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/01-running-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/01-running-before.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/02-image.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/02-image.stdout",
+      "sha256": "9fa84e8683a9f53fcb93c1e2e4147070ab06aa1bf5ddbaabe146322569127834",
+      "bytes": 72
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/03-volume.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/03-volume.stdout",
+      "sha256": "a4ea179cbfbf1acc8c9757ecd838be857ee83af4006f5efc68e79a0229cd3fcb",
+      "bytes": 23
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/04-running-before-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/04-running-before-create.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/05-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/05-create.stdout",
+      "sha256": "1f3b7d6031ada928464e7cb05bb1cd2c46eb49bfef277a646ec03cdfebb89436",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/06-inspect-created.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/06-inspect-created.stdout",
+      "sha256": "4cac57fbaf788fb2ff9422ba5c670fbc6fde6deb5add6f1abbc106f2d3185861",
+      "bytes": 1275
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/07-running-before-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/07-running-before-start.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/08-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/08-start.stdout",
+      "sha256": "1f3b7d6031ada928464e7cb05bb1cd2c46eb49bfef277a646ec03cdfebb89436",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/09-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/09-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/10-inspect-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/10-inspect-final.stdout",
+      "sha256": "c494f7dd723a8b66039ed41ee2eb15c0f758d77c770acf273c5ec15bd5ba0387",
+      "bytes": 1293
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/11-logs.stderr",
+      "sha256": "e158cae50a39e1b8ab4219dbe412ea6616449156540ee48343b301a18cc9dc69",
+      "bytes": 348
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/11-logs.stdout",
+      "sha256": "2d8b7463bc96aef1cfcb7ac88622573988ce8c9630abed7c03083303b536df9a",
+      "bytes": 21
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/12-remove-owned-checker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/12-remove-owned-checker.stdout",
+      "sha256": "1f3b7d6031ada928464e7cb05bb1cd2c46eb49bfef277a646ec03cdfebb89436",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/exited-container.json",
+      "sha256": "053fa5e6adb1a1cf5d80cc48c868d6c8a540cca2cde6a84f82bfbd29028c22c6",
+      "bytes": 1617
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/outer-receipt.json",
+      "sha256": "f7e053e364bf839b469e097eade605634282481abe72940411d29537fe0f289d",
+      "bytes": 14476
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/physical-output.json",
+      "sha256": "58764d708d29c8eeee0672ab5268d13403e4b480fd46082c81e1cfd57659a630",
+      "bytes": 5161
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/reader-admission.json",
+      "sha256": "375000547c20e177db3e02ea82a984c765976d84844d6358bc2cd636ce50df4a",
+      "bytes": 4779
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/03/supervisor-claim.json",
+      "sha256": "67761964c8f2a74641af23534aa479e196bb7220a7a16d86d736e75c7f7e91af",
+      "bytes": 144
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/01-running-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/01-running-before.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/02-image.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/02-image.stdout",
+      "sha256": "9fa84e8683a9f53fcb93c1e2e4147070ab06aa1bf5ddbaabe146322569127834",
+      "bytes": 72
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/03-volume.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/03-volume.stdout",
+      "sha256": "a4ea179cbfbf1acc8c9757ecd838be857ee83af4006f5efc68e79a0229cd3fcb",
+      "bytes": 23
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/04-running-before-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/04-running-before-create.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/05-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/05-create.stdout",
+      "sha256": "4f7db74b5967b91bc304f6c5451af1eb702f727d1f3d7d1d1861432bb2b0f001",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/06-inspect-created.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/06-inspect-created.stdout",
+      "sha256": "a7285ef0eeb7b2502114c1d37f35fd558e2d05392b52d9bfac9dea2598e61413",
+      "bytes": 1275
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/07-running-before-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/07-running-before-start.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/08-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/08-start.stdout",
+      "sha256": "4f7db74b5967b91bc304f6c5451af1eb702f727d1f3d7d1d1861432bb2b0f001",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/09-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/09-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/10-inspect-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/10-inspect-final.stdout",
+      "sha256": "d373519cea157544d2c9936673cfb0f754741959a3c9d69f60a018dcaf42bd96",
+      "bytes": 1294
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/11-logs.stderr",
+      "sha256": "e158cae50a39e1b8ab4219dbe412ea6616449156540ee48343b301a18cc9dc69",
+      "bytes": 348
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/11-logs.stdout",
+      "sha256": "2d8b7463bc96aef1cfcb7ac88622573988ce8c9630abed7c03083303b536df9a",
+      "bytes": 21
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/12-remove-owned-checker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/12-remove-owned-checker.stdout",
+      "sha256": "4f7db74b5967b91bc304f6c5451af1eb702f727d1f3d7d1d1861432bb2b0f001",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/exited-container.json",
+      "sha256": "2fd1b6c72bd68c96a0a1ecb79eab95e6e1a17ff11caa72b896b8485d76d97e2e",
+      "bytes": 1618
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/outer-receipt.json",
+      "sha256": "7463957824369a90d15027a6bbf2c2cd8e25cea9f8d58df3d0d1ea1991fdc53c",
+      "bytes": 14477
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/physical-output.json",
+      "sha256": "1ca716f824b8681064a150c85061ab10b757ed3fbd660004297c9ea6819f7caa",
+      "bytes": 5162
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/reader-admission.json",
+      "sha256": "0190e06d245cd8d5691d0316faccf2eca759e7add6127bc3aafae7822a15f550",
+      "bytes": 4791
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/04/supervisor-claim.json",
+      "sha256": "f4b54e1e66fb146e4dc6876b652c3c89ff7d8decc40d33583c5cadbe80d3beb1",
+      "bytes": 144
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/01-running-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/01-running-before.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/02-image.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/02-image.stdout",
+      "sha256": "9fa84e8683a9f53fcb93c1e2e4147070ab06aa1bf5ddbaabe146322569127834",
+      "bytes": 72
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/03-volume.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/03-volume.stdout",
+      "sha256": "a4ea179cbfbf1acc8c9757ecd838be857ee83af4006f5efc68e79a0229cd3fcb",
+      "bytes": 23
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/04-running-before-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/04-running-before-create.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/05-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/05-create.stdout",
+      "sha256": "265da4423dd7806b1cf2e47d542159d1b9ad9d13d5ec98219d0a5394d7095581",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/06-inspect-created.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/06-inspect-created.stdout",
+      "sha256": "57e4131aec2c45cf8dd33ee94bc72fed10b5123122180e63e260d5ead2020a30",
+      "bytes": 1275
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/07-running-before-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/07-running-before-start.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/08-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/08-start.stdout",
+      "sha256": "265da4423dd7806b1cf2e47d542159d1b9ad9d13d5ec98219d0a5394d7095581",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/09-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/09-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/10-inspect-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/10-inspect-final.stdout",
+      "sha256": "bd6e3293afc572feecb509e4d9ddabd24692918ec9f380a0ec129fed2830dbe8",
+      "bytes": 1293
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/11-logs.stderr",
+      "sha256": "e158cae50a39e1b8ab4219dbe412ea6616449156540ee48343b301a18cc9dc69",
+      "bytes": 348
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/11-logs.stdout",
+      "sha256": "2d8b7463bc96aef1cfcb7ac88622573988ce8c9630abed7c03083303b536df9a",
+      "bytes": 21
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/12-remove-owned-checker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/12-remove-owned-checker.stdout",
+      "sha256": "265da4423dd7806b1cf2e47d542159d1b9ad9d13d5ec98219d0a5394d7095581",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/exited-container.json",
+      "sha256": "c261ee3d562d63e3ef869c4f757a70eea12c3bbe366863600acd06d7b437d7e0",
+      "bytes": 1617
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/outer-receipt.json",
+      "sha256": "e3b31a42f3b945e4272aa46932f48979cac9c7eb05e1e23240d7ea9ae1aaf06a",
+      "bytes": 14476
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/physical-output.json",
+      "sha256": "27bdd0bfbe568da212279dd0fc1961687b59dd75b6052dfe4da53217a11ff37c",
+      "bytes": 5161
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/reader-admission.json",
+      "sha256": "27fe0b27d1250b23dccef70f9073880cd0dba6d9cb3300564af8a987b5b5b0cc",
+      "bytes": 4791
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/05/supervisor-claim.json",
+      "sha256": "5ab7e406f5e8a762061ae847dc1f2b56dfe335d95d63086ce782dbe339cb923c",
+      "bytes": 144
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/01-running-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/01-running-before.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/02-image.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/02-image.stdout",
+      "sha256": "9fa84e8683a9f53fcb93c1e2e4147070ab06aa1bf5ddbaabe146322569127834",
+      "bytes": 72
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/03-volume.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/03-volume.stdout",
+      "sha256": "a4ea179cbfbf1acc8c9757ecd838be857ee83af4006f5efc68e79a0229cd3fcb",
+      "bytes": 23
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/04-running-before-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/04-running-before-create.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/05-create.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/05-create.stdout",
+      "sha256": "9a1c2f9fd5b64ee7bc3831eec97e9fc2910fef33d0e2fc98141390388a378a72",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/06-inspect-created.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/06-inspect-created.stdout",
+      "sha256": "4e7c6576b0aa5ed3c15bd482a47ad8c60726ee61ba20f2e2f9643074f77be037",
+      "bytes": 1275
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/07-running-before-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/07-running-before-start.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/08-start.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/08-start.stdout",
+      "sha256": "9a1c2f9fd5b64ee7bc3831eec97e9fc2910fef33d0e2fc98141390388a378a72",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/09-wait.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/09-wait.stdout",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/10-inspect-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/10-inspect-final.stdout",
+      "sha256": "d38a61ad8d54e6213f94f57e218742fb26b3dd42806a61d03ddc02ca72872fc0",
+      "bytes": 1294
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/11-logs.stderr",
+      "sha256": "e158cae50a39e1b8ab4219dbe412ea6616449156540ee48343b301a18cc9dc69",
+      "bytes": 348
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/11-logs.stdout",
+      "sha256": "2d8b7463bc96aef1cfcb7ac88622573988ce8c9630abed7c03083303b536df9a",
+      "bytes": 21
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/12-remove-owned-checker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/12-remove-owned-checker.stdout",
+      "sha256": "9a1c2f9fd5b64ee7bc3831eec97e9fc2910fef33d0e2fc98141390388a378a72",
+      "bytes": 65
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/exited-container.json",
+      "sha256": "a1d0cf7a55cf61a4842c3bc131091741cc25bfcb7e1e78afd35835c9f504fea0",
+      "bytes": 1618
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/outer-receipt.json",
+      "sha256": "a49d050eb7862d8d21b016ec54fad843ba9fcc24aaadf6394728edbb65d6748f",
+      "bytes": 14477
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/physical-output.json",
+      "sha256": "b371c59c6a1dfba21c91b6fe71d884df177cbcfedad3d084e6ae3ac67a545afb",
+      "bytes": 5162
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/reader-admission.json",
+      "sha256": "6c878bab39b986c2e2e1eda0e26d51c644e64f66949c96d85ba90694a8efcf37",
+      "bytes": 4779
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/06/supervisor-claim.json",
+      "sha256": "c9e47f8f27f198a30a3a47c5d907ea032b83ef10d94461ba44d0eccd7abb4f75",
+      "bytes": 144
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/launch.json",
+      "sha256": "09560d17bd0627f0f0211cc7354896571d5f4e16e9b03ae54876d9c04d957e0f",
+      "bytes": 893
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/serial-claim.json",
+      "sha256": "b0b77334cde6f9d2dae552ef6de817e3eea040793b73ef39c840bf3efde1379e",
+      "bytes": 129
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/serial-receipt.json",
+      "sha256": "744ad10960bb60fb766705f1e711dd804141abd8bca95f8e112f192fc1b1c11d",
+      "bytes": 7112
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/serial.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/evidence/serial.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/intent.json",
+      "sha256": "26225084bbc1be47e3c65f48b2d2761c2d68b683f181b69991881fc38834fc7e",
+      "bytes": 4387
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/launch.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/launch.stdout",
+      "sha256": "7187f85b4b32acecc9f446289dd3f2b479b4475790e6c73ab292808f412bc02d",
+      "bytes": 134
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/poll01.json",
+      "sha256": "c041455fa5b98c2ae7d0775437fd4f81b74704204302212fbdd114ada728d18e",
+      "bytes": 6654
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/remote-new-directory.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/remote-new-directory.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/stage.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/stage.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-execution/staging-launch.json",
+      "sha256": "6213acd684eba8dccb989de962bb47bd969a63b3a662807541db5cf1b398df32",
+      "bytes": 9320
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/baseline-v4/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/baseline-v4/prepare.py",
+      "sha256": "e2af7e75557c1dcc61839175ca505e227fe02262f3bd28c819f91c47c1d9c909",
+      "bytes": 7157
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/baseline-v4/supervise.py",
+      "sha256": "25815183fb9bc471cabf977cc3bb567b9ed4a0407fcd305a0b5316868e17ef69",
+      "bytes": 16213
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/controls01-receipt.json",
+      "sha256": "37156ee9a5fce8b7a4fb4d5ab42b67c93d89f27126d7ab7ceca64bea05ad0100",
+      "bytes": 1766
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/controls01.stderr",
+      "sha256": "221b5b6f1d3bec5b320a7c7ed242f160b5649ab83f3f0b659bd8db010c74ce78",
+      "bytes": 3820
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/controls01.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/independent-root-review.json",
+      "sha256": "774f207fcd3907444956e88ff3d782097cd7f290aff918877f583fafe71f78bb",
+      "bytes": 3077
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/pair-version-delta.patch",
+      "sha256": "6bc6b876d653698198c309b137514227e2524f72c2b0c0b88a06c2106918ecb0",
+      "bytes": 17811
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/preparation.json",
+      "sha256": "7736b8e3b71a9f06a5dc880b7a3bb990ebeb94e056da66af0129894cab03a8b9",
+      "bytes": 6198
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/prepare_pair.py",
+      "sha256": "1a628140690bcb0ea3d617e61a4444b7a299be04ccd639cb3c0b0c97ffd9bd84",
+      "bytes": 9000
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/run_pair.py",
+      "sha256": "e0dcd737124d0b4e87f33c25871580be892af54d92b0b441f50c4a6562b79e9a",
+      "bytes": 9060
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/supervise.py",
+      "sha256": "a8901e146f83ee2031a0262ee20d67bdb68ca4623d5f2a817ebbd518c0e3d70b",
+      "bytes": 16517
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/supervisor-policy-delta.patch",
+      "sha256": "442a6f0c2124e823723ac58793fc9049c9478effea5cb9ad128a2cf316803a16",
+      "bytes": 3288
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/physical-preparation-v4/test_pair.py",
+      "sha256": "2a27aa51f55d70a3ec99692b1bec7ff3ec2e15d3fa30c8b4a371f0064055103d",
+      "bytes": 13400
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/pre-final-prose/README.md.txt",
+      "sha256": "8645bbcefe1fe362faf00a4a6ed6e805edd36cbef1bdf625f827e01d69f5a8dc",
+      "bytes": 12358
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/pre-final-prose/manifest.json",
+      "sha256": "72e88d3ddb3be7305318ec83b83a84ac30be16f22dd0bb6b639cc1ac0a8e38d3",
+      "bytes": 80049
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/pre-final-prose/revision.json",
+      "sha256": "6bd3cabed81b15d4a8d42794043ff101e22c5c883ef8dbb1ed3826ab1508fede",
+      "bytes": 589
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/pre-final-prose/self-audit.json",
+      "sha256": "f1a5fc9fb24fb1e56c15bf4710ba5ddcb3ef0cdc762d7b2e9773975fa202710b",
+      "bytes": 2483
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/baseline-v2/container_check.py",
+      "sha256": "4ab83d7fc8be79e45c915b829b4bef542b822f169cc9703a20a10db3f67c1999",
+      "bytes": 5280
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/baseline-v2/prepare.py",
+      "sha256": "85710ab9dadc60347947b1e021dcc91700325c92d10021dd612ce82864ae93ed",
+      "bytes": 6846
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/baseline-v2/supervise.py",
+      "sha256": "7c9411e1ce99e4dba67018642e03a8122c296a2aad9bab0b971c31bc07ade479",
+      "bytes": 14281
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/container_check.py",
+      "sha256": "4ab83d7fc8be79e45c915b829b4bef542b822f169cc9703a20a10db3f67c1999",
+      "bytes": 5280
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/independent-root-review.json",
+      "sha256": "486e0d7f4b40dbf73e5675ca41e87ed5581b96376916cb727a8f07cc9ca34940",
+      "bytes": 3840
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/local-controls.stderr",
+      "sha256": "4d83847345290baf9a86c1cd99d2da4213de06120818a8d6537481f318df9eec",
+      "bytes": 2622
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/local-controls.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/preparation.json",
+      "sha256": "4d037b2591d3961ae0b099e053f507c25178434b2af8cca20165e3a8d61fc4d1",
+      "bytes": 3295
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/prepare_pair.py",
+      "sha256": "afb2ed28bd97fba7f7fce7e1b39b8b5e0ae9fe68c77848b08ae8824a79aeaabc",
+      "bytes": 8776
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/run_pair.py",
+      "sha256": "790c4ec9568e9fff2e68e82a9ddac0e82a59a387b6be43711e9458df3c3b5b6c",
+      "bytes": 8995
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/supervise.py",
+      "sha256": "f5049ec1298b6968ad8a0b5b0c4a204ac028e8f37f7075f58231d36a9a4f0a7a",
+      "bytes": 14585
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/supervisor-policy-delta.patch",
+      "sha256": "c0ed8c01ba6169a095caba05e040bc77a01c54b905ec5c0c09fc0582043771fd",
+      "bytes": 3141
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/prior-physical-preparation-v2/test_pair.py",
+      "sha256": "5a2f99e5736811d5bf94666929a29eca2bafe67709306624cef943b6ef5f49cd",
+      "bytes": 12239
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/01-closed-cell.json",
+      "sha256": "bf66d8fc50eb043538941657bf9cdc489569828a349c84e94afc3ef1c2de86ec",
+      "bytes": 7084
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/02-closed-cell.json",
+      "sha256": "605b13f5f06636e612c6f6dc7884df8a2895d822735b945aaa3633fa37e81d74",
+      "bytes": 7081
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/03-closed-cell.json",
+      "sha256": "bfa43dd961d82a9a3d91f0bd6835b9d8a59f1a3f768c1a4612d679b57f231144",
+      "bytes": 7082
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/04-closed-cell.json",
+      "sha256": "23a56278914e3e43762580565c16c77a2df48305e3a012ed5d5a624dae4ec05b",
+      "bytes": 7084
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/05-closed-cell.json",
+      "sha256": "c991523449bc167c210f1d9d9a8b94ef9ceb499c617f274b9c027050c19dce7f",
+      "bytes": 7080
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/06-closed-cell.json",
+      "sha256": "70d338eb72313cfff05b413ef531d02ec508c510ecf09c97554a65e6b2459097",
+      "bytes": 7082
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/all-six-closures.json",
+      "sha256": "e5cbd2e81246e4622c5e1f232e88a34c0654f89b77e12e048d4b4630b7fc35e6",
+      "bytes": 161040
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/all-six-closures.json",
+      "sha256": "e5cbd2e81246e4622c5e1f232e88a34c0654f89b77e12e048d4b4630b7fc35e6",
+      "bytes": 161040
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/audit_output.py",
+      "sha256": "4c5fe87d0eb0b3f4aec3e70841bc7db968017f952dda6978840d101d2f2f7872",
+      "bytes": 17014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/closed-audit.json",
+      "sha256": "bf66d8fc50eb043538941657bf9cdc489569828a349c84e94afc3ef1c2de86ec",
+      "bytes": 7084
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/configuration.json",
+      "sha256": "ea46b643191ed3028be5944956755020fd6d915cf689025a8adf6d28b386d2c5",
+      "bytes": 2689
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/pair-plan.json",
+      "sha256": "d51e9f4d5a1d16fb18c36e93fcb3d641c017610a7319ee56a203676800dbe1ab",
+      "bytes": 15151
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/producer-receipt.json",
+      "sha256": "3380dbc98899689903eb8adfd6a23dfcc2b2b9065e7210e10255c3a0329580be",
+      "bytes": 110657
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/request.json",
+      "sha256": "bf32769032f6da809d02c3e10df785f39b8c41be87082c8dfb7f181782733a37",
+      "bytes": 2530
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/01/supervise.py",
+      "sha256": "a8901e146f83ee2031a0262ee20d67bdb68ca4623d5f2a817ebbd518c0e3d70b",
+      "bytes": 16517
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/all-six-closures.json",
+      "sha256": "e5cbd2e81246e4622c5e1f232e88a34c0654f89b77e12e048d4b4630b7fc35e6",
+      "bytes": 161040
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/audit_output.py",
+      "sha256": "4c5fe87d0eb0b3f4aec3e70841bc7db968017f952dda6978840d101d2f2f7872",
+      "bytes": 17014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/closed-audit.json",
+      "sha256": "605b13f5f06636e612c6f6dc7884df8a2895d822735b945aaa3633fa37e81d74",
+      "bytes": 7081
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/configuration.json",
+      "sha256": "d0db66f24036f1644293fec129b90f4f7a5c13d39b19f8c778276de8f82caf83",
+      "bytes": 2695
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/pair-plan.json",
+      "sha256": "d51e9f4d5a1d16fb18c36e93fcb3d641c017610a7319ee56a203676800dbe1ab",
+      "bytes": 15151
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/producer-receipt.json",
+      "sha256": "cddc7220dad88cc69e54e261ebd504d7a29f94e5d9f973bd9bc259219312e8f1",
+      "bytes": 110271
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/request.json",
+      "sha256": "552315d58f28208da5378d9eddf4cd897d50ae1d86cb9e8e60df4a9edcc12028",
+      "bytes": 2530
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/02/supervise.py",
+      "sha256": "a8901e146f83ee2031a0262ee20d67bdb68ca4623d5f2a817ebbd518c0e3d70b",
+      "bytes": 16517
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/all-six-closures.json",
+      "sha256": "e5cbd2e81246e4622c5e1f232e88a34c0654f89b77e12e048d4b4630b7fc35e6",
+      "bytes": 161040
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/audit_output.py",
+      "sha256": "4c5fe87d0eb0b3f4aec3e70841bc7db968017f952dda6978840d101d2f2f7872",
+      "bytes": 17014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/closed-audit.json",
+      "sha256": "bfa43dd961d82a9a3d91f0bd6835b9d8a59f1a3f768c1a4612d679b57f231144",
+      "bytes": 7082
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/configuration.json",
+      "sha256": "ecb63e3c0cada304822fcfaff2327d682708139501fe1e8f5091ac29ebce7a1e",
+      "bytes": 2689
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/pair-plan.json",
+      "sha256": "d51e9f4d5a1d16fb18c36e93fcb3d641c017610a7319ee56a203676800dbe1ab",
+      "bytes": 15151
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/producer-receipt.json",
+      "sha256": "6053dea46206b02efd359e25c514e22018e1174a831ec6bf179e395ceb2b96ae",
+      "bytes": 110674
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/request.json",
+      "sha256": "7e0066c1a282e83e399203be3172452f5e5bb02002e64a3d408a0552692f7992",
+      "bytes": 2530
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/03/supervise.py",
+      "sha256": "a8901e146f83ee2031a0262ee20d67bdb68ca4623d5f2a817ebbd518c0e3d70b",
+      "bytes": 16517
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/all-six-closures.json",
+      "sha256": "e5cbd2e81246e4622c5e1f232e88a34c0654f89b77e12e048d4b4630b7fc35e6",
+      "bytes": 161040
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/audit_output.py",
+      "sha256": "4c5fe87d0eb0b3f4aec3e70841bc7db968017f952dda6978840d101d2f2f7872",
+      "bytes": 17014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/closed-audit.json",
+      "sha256": "23a56278914e3e43762580565c16c77a2df48305e3a012ed5d5a624dae4ec05b",
+      "bytes": 7084
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/configuration.json",
+      "sha256": "a37c3ae7bbc94be07898060e5b8bed8bcd20a47f6754a34bbdf99be2752b5b7f",
+      "bytes": 2695
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/pair-plan.json",
+      "sha256": "d51e9f4d5a1d16fb18c36e93fcb3d641c017610a7319ee56a203676800dbe1ab",
+      "bytes": 15151
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/producer-receipt.json",
+      "sha256": "8e760153d836c41b830d08e40854fde4db1d267425bdc77a95d86c5abdd21cf5",
+      "bytes": 110492
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/request.json",
+      "sha256": "7617775444e493feb2bcfd032c7c93ddd110387763901630e2c427ebb28c8736",
+      "bytes": 2530
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/04/supervise.py",
+      "sha256": "a8901e146f83ee2031a0262ee20d67bdb68ca4623d5f2a817ebbd518c0e3d70b",
+      "bytes": 16517
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/all-six-closures.json",
+      "sha256": "e5cbd2e81246e4622c5e1f232e88a34c0654f89b77e12e048d4b4630b7fc35e6",
+      "bytes": 161040
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/audit_output.py",
+      "sha256": "4c5fe87d0eb0b3f4aec3e70841bc7db968017f952dda6978840d101d2f2f7872",
+      "bytes": 17014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/closed-audit.json",
+      "sha256": "c991523449bc167c210f1d9d9a8b94ef9ceb499c617f274b9c027050c19dce7f",
+      "bytes": 7080
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/configuration.json",
+      "sha256": "337e776244720b06aaac73cab7f8ea048ede7d38675332f6cb462ed4ba5f0083",
+      "bytes": 2695
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/pair-plan.json",
+      "sha256": "d51e9f4d5a1d16fb18c36e93fcb3d641c017610a7319ee56a203676800dbe1ab",
+      "bytes": 15151
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/producer-receipt.json",
+      "sha256": "7b228ad2475163a851713888d8a756aa1a8e8877987638905f033ffceb9eaf95",
+      "bytes": 110663
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/request.json",
+      "sha256": "6cd02ca818637c1eee5565077334a92b6fecd2058d848ab38323e8930c8f987a",
+      "bytes": 2530
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/05/supervise.py",
+      "sha256": "a8901e146f83ee2031a0262ee20d67bdb68ca4623d5f2a817ebbd518c0e3d70b",
+      "bytes": 16517
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/all-six-closures.json",
+      "sha256": "e5cbd2e81246e4622c5e1f232e88a34c0654f89b77e12e048d4b4630b7fc35e6",
+      "bytes": 161040
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/audit_output.py",
+      "sha256": "4c5fe87d0eb0b3f4aec3e70841bc7db968017f952dda6978840d101d2f2f7872",
+      "bytes": 17014
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/closed-audit.json",
+      "sha256": "70d338eb72313cfff05b413ef531d02ec508c510ecf09c97554a65e6b2459097",
+      "bytes": 7082
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/configuration.json",
+      "sha256": "54c1e7bfe2b9c9a8eb442a4075a86761c03aaa1a2f13fec5f9ced4440d9227b9",
+      "bytes": 2689
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/container_check.py",
+      "sha256": "099628a53cc7349c993f41c2f1508a3bca745969c13481bc4c1c08a69e92facd",
+      "bytes": 6508
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/pair-plan.json",
+      "sha256": "d51e9f4d5a1d16fb18c36e93fcb3d641c017610a7319ee56a203676800dbe1ab",
+      "bytes": 15151
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/pair_policy.py",
+      "sha256": "ea3df6e1626aa334c9402bd74810ba99361a7240d250c95a5d23c645e4b4c17c",
+      "bytes": 5124
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/producer-receipt.json",
+      "sha256": "ebc0c9675232cdec8184a6efe8b44b41a80eaead8b7972e3576358880e642957",
+      "bytes": 110468
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/request.json",
+      "sha256": "a27bb943f82804e82762eeeb8c9fea9073d9d388aef52d8656f1a686f85ec1e7",
+      "bytes": 2530
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/bundles/06/supervise.py",
+      "sha256": "a8901e146f83ee2031a0262ee20d67bdb68ca4623d5f2a817ebbd518c0e3d70b",
+      "bytes": 16517
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/pair-collected-evidence.json",
+      "sha256": "d143d124abe75f42218e04273088db5aab399929b2115c528e4fc403d1e67ddb",
+      "bytes": 104775
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/pair-requests.json",
+      "sha256": "55941c6758529696dc088eec37077cbddd3d1fbf8f4868d182435c04c062c5e4",
+      "bytes": 2917
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/preparation-receipt.json",
+      "sha256": "23f9f675df6d0ca07017947f24c046e77fd9de739acf531674ec4f852fd12647",
+      "bytes": 1334
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/sealed-physical-bundle/run_pair.py",
+      "sha256": "e0dcd737124d0b4e87f33c25871580be892af54d92b0b441f50c4a6562b79e9a",
+      "bytes": 9060
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/self-audit-attempt01/README.md.txt",
+      "sha256": "3acdd87c80942c0488835ce15ece6e2ec407dffae2a543f0f0fd072099dc7417",
+      "bytes": 12388
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/self-audit-attempt01/failure.json",
+      "sha256": "24e2ace9d103474b639085867b649634512bc8eb99f2aae6dd04954d3aff7998",
+      "bytes": 515
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/self-audit-attempt01/manifest.json",
+      "sha256": "26d233a3e3edc805d2809e08e0663c714b30b546745125482f3b9feb5d84f871",
+      "bytes": 79433
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/self-audit-attempt01/verify.py",
+      "sha256": "1b28d33878ff7c29bc173e608531ebaade8512457fe05cc33d96ed5d6d90f29d",
+      "bytes": 5476
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/self-audit.json",
+      "sha256": "be25965f27d301df251ea3cec786a4fddb8ae8c6219159ca50bf2ea0246e7dc0",
+      "bytes": 2483
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/01.inventory-before.json",
+      "sha256": "a87825810bcb701e9e9729d81ef19d0010ddf4d48d621f1fdbae05b2191d5384",
+      "bytes": 98
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/01.inventory.json",
+      "sha256": "1ecd5ac42c88ec4435e1dd6c3e99ad9111e1532c397fa7c0ae35882ff0fe4c5b",
+      "bytes": 2116
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/01.preflight.json",
+      "sha256": "72e4b76cb65356616352b9bdf931e022bba2f710718db1a4b76364fbdeb00dcf",
+      "bytes": 10918
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/01.preflight.log",
+      "sha256": "26e6650da65ce535f7105e8a4b901f3c0da348f243b56333846a1b9029e5fe5e",
+      "bytes": 170
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/01.result.json",
+      "sha256": "6d18392b4d6e262c1e2affc35c9ff3e60502261ee62970fc4fa8a7c4e689730b",
+      "bytes": 8428
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/01.runner.log",
+      "sha256": "a02e3c5d30f87088257691918df0e00cbb32b48c33f6d3e53a66e85553e4a319",
+      "bytes": 188
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/01.started.json",
+      "sha256": "21c8ce4c3455cc9e192abc52956645e5a6423e145de59ebb1196a34fa3be76e5",
+      "bytes": 582
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/02.inventory-before.json",
+      "sha256": "0390696ea5ee88cade43f9f0e2805065560f465b8fa0b501452ee4d86a091527",
+      "bytes": 98
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/02.inventory.json",
+      "sha256": "d0b3506af87450a942a9a773d5b2f699094fa41d810e49e2b79006c0914ba03a",
+      "bytes": 1644
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/02.preflight.json",
+      "sha256": "936fe6231bdcd65e4d36c7750d03366544e6c757e4c35475b22d82c88107d109",
+      "bytes": 10924
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/02.preflight.log",
+      "sha256": "a0be23905aa3c3c0ab8e78272da7eefbe8fc11938adbc4dba6678fae78001b59",
+      "bytes": 170
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/02.result.json",
+      "sha256": "aae37113d3fb9d32fdadc1a30eeecd2ea170e12b2e3350c402aff61b7a5f81ab",
+      "bytes": 8428
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/02.runner.log",
+      "sha256": "3f24321257f43d26fa9c3ae1475b1fd62cdd08900f43f8695341e21bcc57066c",
+      "bytes": 188
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/02.started.json",
+      "sha256": "12f47a3b98069f3360bb4cde97385de7c4e4bf011fd4e4e6199e2e0e9069e939",
+      "bytes": 582
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/03.inventory-before.json",
+      "sha256": "f33a5507473831e6240851879a132252eda3d5804d567da6dde6859c097843ed",
+      "bytes": 98
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/03.inventory.json",
+      "sha256": "8ee6eb4975cb9509711d6f95bc09978e3872ec34bb2b106dce45e6990c228993",
+      "bytes": 2119
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/03.preflight.json",
+      "sha256": "ae9ca113e7144b8af634052799f6ea9f2cd62c6d0c2be370e65cdb34bca4b1c3",
+      "bytes": 10918
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/03.preflight.log",
+      "sha256": "4ab9731c228779dc4c01a22eef799d3ef20b0391364ac1ebe0357e2a156fd86c",
+      "bytes": 170
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/03.result.json",
+      "sha256": "61e55059ea7064c4113ff88623fd59dfc50b743fb8a50a2734f4e54f5401089f",
+      "bytes": 8432
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/03.runner.log",
+      "sha256": "259855f1a28c19e418540d195c9fd056f4323bbf415d0e507ae092ad8ad1d54e",
+      "bytes": 188
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/03.started.json",
+      "sha256": "9e2b7747505b1bc0431fe246037742abfaefb77f7b5d2ff26ae4cdb0058e7745",
+      "bytes": 587
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/04.inventory-before.json",
+      "sha256": "514d1c80b0998c3b2af2da27728497cd1b7b5ae3035679e451f01617252cabca",
+      "bytes": 98
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/04.inventory.json",
+      "sha256": "fdce3d845fee2a657d234d93514617a6f52fb81ec9c726f384e263526b360c29",
+      "bytes": 1640
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/04.preflight.json",
+      "sha256": "427f18e0b2d063205996d5ee845f4bdef1b79a3edc9f3844519ea91a41ec546d",
+      "bytes": 10924
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/04.preflight.log",
+      "sha256": "b59b369b61d1a98fd822c81f47b453af8935ebebc308be5e6a5eb276f1e71a19",
+      "bytes": 170
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/04.result.json",
+      "sha256": "b61e7f0c1b8c939ae4262a24b416a3368f654efc074675bc46b48ff0fc1ad175",
+      "bytes": 8442
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/04.runner.log",
+      "sha256": "052f5e71ebeda1f4b899100fd9b6de0ab3a441a58be604b91edfcb3bec576339",
+      "bytes": 188
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/04.started.json",
+      "sha256": "971294a738ff5e128b342a27e03a8ffa0608aaae6d35c3b350d5f06570f7ff70",
+      "bytes": 587
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/05.inventory-before.json",
+      "sha256": "daa4b9757936ca8d14a6977a038ae288388e91176c5f760d12e963e0a81a4a30",
+      "bytes": 98
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/05.inventory.json",
+      "sha256": "820cea6e7987f737adbf3d712ce08ce9738dd6b752aaca1892782909a7348911",
+      "bytes": 1635
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/05.preflight.json",
+      "sha256": "7024637ec6627462f4997e30567a9932a8686459bb31df382db88ac0714aa700",
+      "bytes": 10924
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/05.preflight.log",
+      "sha256": "66e58ed2cf117d009bbb21637ceb45aeff687e0b4c3f53c94c3b97272c481259",
+      "bytes": 170
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/05.result.json",
+      "sha256": "828db38c81ac244df662cd01cc18dfb79ce431d117475a90f1fd8a4f28d60a75",
+      "bytes": 8430
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/05.runner.log",
+      "sha256": "e4f145a8910b6b99ef3b617f5d6d2ef865e4fef836377a5eba8e28ad249ec429",
+      "bytes": 188
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/05.started.json",
+      "sha256": "a55b8890d835972ad2006f36029eb865b07d9b096fecb2a68f2c62b06e1a7ecd",
+      "bytes": 587
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/06.inventory-before.json",
+      "sha256": "6bcaf5e9706d80d807d963c91eab74dafaed7612c65abe7f7224334cc5962724",
+      "bytes": 98
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/06.inventory.json",
+      "sha256": "aedd9ffe288db036d735cae18c32c8acc18e79dd049691bd3aea57bccb57a139",
+      "bytes": 2274
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/06.preflight.json",
+      "sha256": "159a72b86906e1178ff9ea6c1a795a44886c85e785f1b197fb4fe95ade2b77dc",
+      "bytes": 10918
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/06.preflight.log",
+      "sha256": "92a9e9588e9729e2e51986529e66b571e2f95e04ce1cc3789f568cb898d9846d",
+      "bytes": 170
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/06.result.json",
+      "sha256": "395ad37cf9859b6f3b17dc18426c7bcb25ae488512ee54ba3ae4e8efb57076dc",
+      "bytes": 8432
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/06.runner.log",
+      "sha256": "efdec08f31f593f5db2860bdb5679ceeec4c8344c07a1582231ebb9eda895bd4",
+      "bytes": 188
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/06.started.json",
+      "sha256": "997e5c52cda286d2ee9a0c0d288b09a7da03d243e9c3c29ccfc79f641bd6bcc4",
+      "bytes": 587
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/cell/container.log",
+      "sha256": "a4f99aae5b27df4bc70ed17f9e7f2e902a40b9c1e32f581ededea4cef93978b0",
+      "bytes": 262
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/cell/orchestration.json",
+      "sha256": "1cac297c093c02016593fde2d240cac0f3591e1331bb2186066c20369e2728de",
+      "bytes": 3677
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/collection.json",
+      "sha256": "60c0e38d1de6702e0e4047f7e392e8d3e1167769eacbf981e9bab46a62fb8102",
+      "bytes": 1166
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/configuration.json",
+      "sha256": "ea46b643191ed3028be5944956755020fd6d915cf689025a8adf6d28b386d2c5",
+      "bytes": 2689
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/diagnostics/memory-samples.jsonl",
+      "sha256": "4da9a5f366e052d2f37590c0f511d58be9523a2ddd29af2535df57676cd5e705",
+      "bytes": 194370
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/diagnostics/receipt.json",
+      "sha256": "3380dbc98899689903eb8adfd6a23dfcc2b2b9065e7210e10255c3a0329580be",
+      "bytes": 110657
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/diagnostics/server-settings.json",
+      "sha256": "18688fb5f728030eba0610f10bb4b83d34591bffd2b4570472619d0bbc21624e",
+      "bytes": 287
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/diagnostics/server.log",
+      "sha256": "50a12a8ca2ac339cedfa1e1d78be0c4a35a4e14b9bd71e351d87360dc822b641",
+      "bytes": 2168895
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/host-before.json",
+      "sha256": "77e73c6bcb4546197b37cf2b9d55fc3a7eb7a282a3018b44ae9cbcfdf66a368c",
+      "bytes": 82673
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/plan.json",
+      "sha256": "b1c1b2d0b32062dfcca352d4fd55be5d92dc0dd8ba0923211e572beb8dcdcd4d",
+      "bytes": 1804
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/preflight-1790819439882999000/container.log",
+      "sha256": "0c1432ca1143165f74f6420714d484abdb7d12ce371e3f9369aa57b9624fc13f",
+      "bytes": 17
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/preflight-1790819439882999000/orchestration.json",
+      "sha256": "2fceda30be3a3c360f8aaac921377133da87d014624469c257ed152c63ba60d7",
+      "bytes": 2956
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-01-a/result.json",
+      "sha256": "3d78045c6eecb4e2c31bff791d70e7a552d41b8ed55ef79059cb5939ecf5283f",
+      "bytes": 749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/cell/container.log",
+      "sha256": "a4f99aae5b27df4bc70ed17f9e7f2e902a40b9c1e32f581ededea4cef93978b0",
+      "bytes": 262
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/cell/orchestration.json",
+      "sha256": "8f2893580da075d34d8e518836f97e80a76a2ef4471a366aebc31d8a6c1c6529",
+      "bytes": 3686
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/collection.json",
+      "sha256": "f7de4599c4baf881ceb5a802cbee7941096833dd0e414a0d8666ef533867f1bb",
+      "bytes": 1166
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/configuration.json",
+      "sha256": "d0db66f24036f1644293fec129b90f4f7a5c13d39b19f8c778276de8f82caf83",
+      "bytes": 2695
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/diagnostics/memory-samples.jsonl",
+      "sha256": "4766d1dde864bd49534be964652ce96b06bbe315314736db0668b8e94b5d619b",
+      "bytes": 130248
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/diagnostics/receipt.json",
+      "sha256": "cddc7220dad88cc69e54e261ebd504d7a29f94e5d9f973bd9bc259219312e8f1",
+      "bytes": 110271
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/diagnostics/server-settings.json",
+      "sha256": "18688fb5f728030eba0610f10bb4b83d34591bffd2b4570472619d0bbc21624e",
+      "bytes": 287
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/diagnostics/server.log",
+      "sha256": "cde8699587dd2d9b35f2a890c983260e9276559d137b51a572e7a62b43273ffa",
+      "bytes": 2165354
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/host-before.json",
+      "sha256": "bbe59470de99d28bbe335eb7843e3024ae7a6471824c0cdc8522fac298872ca5",
+      "bytes": 82702
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/plan.json",
+      "sha256": "ad95cd1befded0405ef94123ccc5a63426776b44f3025f6956c7e179e360db67",
+      "bytes": 1810
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/preflight-1790819470460749000/container.log",
+      "sha256": "0c1432ca1143165f74f6420714d484abdb7d12ce371e3f9369aa57b9624fc13f",
+      "bytes": 17
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/preflight-1790819470460749000/orchestration.json",
+      "sha256": "19f99c86c5610f975d911181d50c33b24db59790b4e556294c12efda55d27946",
+      "bytes": 2960
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-02-b/result.json",
+      "sha256": "614dc40f5d83cdcd5b9034a981e052642af8481f7ee932029c985ead910e4957",
+      "bytes": 749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/cell/container.log",
+      "sha256": "a4f99aae5b27df4bc70ed17f9e7f2e902a40b9c1e32f581ededea4cef93978b0",
+      "bytes": 262
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/cell/orchestration.json",
+      "sha256": "c8d62c416debab4b46b8563c5c5519928adcd31de94bc82a0bc8e9bd19105d3b",
+      "bytes": 3679
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/collection.json",
+      "sha256": "648086ced0707f33f3a8cf80a940a493e3ca52411ab787fbfa97f834fdda8b28",
+      "bytes": 1166
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/configuration.json",
+      "sha256": "ecb63e3c0cada304822fcfaff2327d682708139501fe1e8f5091ac29ebce7a1e",
+      "bytes": 2689
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/diagnostics/memory-samples.jsonl",
+      "sha256": "4d6dd3564eb8d6814ff04dea8f06cc0981d4b3e0c4c121c49b0fa73e7d5725aa",
+      "bytes": 196810
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/diagnostics/receipt.json",
+      "sha256": "6053dea46206b02efd359e25c514e22018e1174a831ec6bf179e395ceb2b96ae",
+      "bytes": 110674
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/diagnostics/server-settings.json",
+      "sha256": "18688fb5f728030eba0610f10bb4b83d34591bffd2b4570472619d0bbc21624e",
+      "bytes": 287
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/diagnostics/server.log",
+      "sha256": "7f098cb3fccd323e63c288c3463bb5469b96e5912931c0145cf45b93cd9c3f3e",
+      "bytes": 2166942
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/host-before.json",
+      "sha256": "378513ba14df15743116aa89294c6ed0cd9265fa8d01723fe656377fa27460e1",
+      "bytes": 85379
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/plan.json",
+      "sha256": "2dac08c22832045228d9ccdc01d47902843599eb6d1d8b5f49d0120f0efe0beb",
+      "bytes": 1804
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/preflight-1790819494876876000/container.log",
+      "sha256": "0c1432ca1143165f74f6420714d484abdb7d12ce371e3f9369aa57b9624fc13f",
+      "bytes": 17
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/preflight-1790819494876876000/orchestration.json",
+      "sha256": "0e0a0175160bad72ee19a5a47b77ca393cdd0b4b559632ae020a60cabfba3af6",
+      "bytes": 2950
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-03-a/result.json",
+      "sha256": "0f1d1d054ba5475f88c5547bf8b20eff0708e7cdc8cda6cb525872e6528c7146",
+      "bytes": 749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/cell/container.log",
+      "sha256": "a4f99aae5b27df4bc70ed17f9e7f2e902a40b9c1e32f581ededea4cef93978b0",
+      "bytes": 262
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/cell/orchestration.json",
+      "sha256": "ae03cf4f81b4c399c484a8a260783916b16f2c59098f0b63fdb4d86102d14ba8",
+      "bytes": 3683
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/collection.json",
+      "sha256": "21cc89dc21020a277c51c57cc60ca0055ba94910f110abd23a2e48297dce2e26",
+      "bytes": 1166
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/configuration.json",
+      "sha256": "a37c3ae7bbc94be07898060e5b8bed8bcd20a47f6754a34bbdf99be2752b5b7f",
+      "bytes": 2695
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/diagnostics/memory-samples.jsonl",
+      "sha256": "2b46a8a860c2870141bb8a48616e3ad69b0a3f0b4ce54a97f48172a4f7e33c5f",
+      "bytes": 133279
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/diagnostics/receipt.json",
+      "sha256": "8e760153d836c41b830d08e40854fde4db1d267425bdc77a95d86c5abdd21cf5",
+      "bytes": 110492
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/diagnostics/server-settings.json",
+      "sha256": "18688fb5f728030eba0610f10bb4b83d34591bffd2b4570472619d0bbc21624e",
+      "bytes": 287
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/diagnostics/server.log",
+      "sha256": "1bf6cce7c5efe76ae9bfe4a6e524ef7883a306a85d6b856227e3bc26ed89b239",
+      "bytes": 2166653
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/host-before.json",
+      "sha256": "ab43550f593b4ce53c1da0f900786429522054413cc4cd36663668ad9c83a582",
+      "bytes": 84039
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/plan.json",
+      "sha256": "83a1d721f05071245855de309eb69bf2c0014a104350befcc9db45f3ab95c5fd",
+      "bytes": 1810
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/preflight-1790819525362419000/container.log",
+      "sha256": "0c1432ca1143165f74f6420714d484abdb7d12ce371e3f9369aa57b9624fc13f",
+      "bytes": 17
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/preflight-1790819525362419000/orchestration.json",
+      "sha256": "aae240af9684e8ede5192a7b24f77d0fd9a64f4e3bf5be60169a1414cf235243",
+      "bytes": 2960
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-04-b/result.json",
+      "sha256": "6d25926fe442963bb4912d8e14f8db9ce56a63daaa6290ffd79008a59332a81e",
+      "bytes": 749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/cell/container.log",
+      "sha256": "a4f99aae5b27df4bc70ed17f9e7f2e902a40b9c1e32f581ededea4cef93978b0",
+      "bytes": 262
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/cell/orchestration.json",
+      "sha256": "240bf10466ae2448b0352181cac6fef2584defea1d217b1fb6fdb640804197d8",
+      "bytes": 3684
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/collection.json",
+      "sha256": "084c9595f57ac3bbf7df39a1ef86ad26e5205d847696b7f38ca9857692765a56",
+      "bytes": 1166
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/configuration.json",
+      "sha256": "337e776244720b06aaac73cab7f8ea048ede7d38675332f6cb462ed4ba5f0083",
+      "bytes": 2695
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/diagnostics/memory-samples.jsonl",
+      "sha256": "b5360acbaf1c4064900d7ab2c201f1306124a1e1806c265b0dba890847b805a0",
+      "bytes": 132631
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/diagnostics/receipt.json",
+      "sha256": "7b228ad2475163a851713888d8a756aa1a8e8877987638905f033ffceb9eaf95",
+      "bytes": 110663
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/diagnostics/server-settings.json",
+      "sha256": "18688fb5f728030eba0610f10bb4b83d34591bffd2b4570472619d0bbc21624e",
+      "bytes": 287
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/diagnostics/server.log",
+      "sha256": "48245fb3e0c66a830cb26a7c0cf2d0b1959412aa2180855affc1303c0dfefc1c",
+      "bytes": 2166155
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/host-before.json",
+      "sha256": "9b3fdae8856076a4af77fdd524fc076003977c1231a196993f339e5acfef2536",
+      "bytes": 82834
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/plan.json",
+      "sha256": "3c74529a0d85ade0bb5753e00d22ab2d0ea585d7ede7a5e6f4ff0f28b0ac63bb",
+      "bytes": 1810
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/preflight-1790819549789278000/container.log",
+      "sha256": "0c1432ca1143165f74f6420714d484abdb7d12ce371e3f9369aa57b9624fc13f",
+      "bytes": 17
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/preflight-1790819549789278000/orchestration.json",
+      "sha256": "b8c58333f746bd02535cc5bff57ebbc67d6b4b38e4fd3d833cafcaf7bc16bf0c",
+      "bytes": 2958
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-05-b/result.json",
+      "sha256": "3838a62a719bbba51c3357dcccafda45eeaca3b467bc739ec09d71ad8f3fa108",
+      "bytes": 749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/cell/container.log",
+      "sha256": "a4f99aae5b27df4bc70ed17f9e7f2e902a40b9c1e32f581ededea4cef93978b0",
+      "bytes": 262
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/cell/orchestration.json",
+      "sha256": "621e67a59441566343a00622688d8ac311f801a62a885a69cf5b665ed76e1c9f",
+      "bytes": 3681
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/collection.json",
+      "sha256": "01708b6f51d0ea565030e8de4cb4bdf311848cda90f38db3580696ae2955d431",
+      "bytes": 1166
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/configuration.json",
+      "sha256": "54c1e7bfe2b9c9a8eb442a4075a86761c03aaa1a2f13fec5f9ced4440d9227b9",
+      "bytes": 2689
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/diagnostics/memory-samples.jsonl",
+      "sha256": "36511027f1dfa35f41fbfddb71e990cb683f88095320654653df4f94b0597690",
+      "bytes": 206645
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/diagnostics/receipt.json",
+      "sha256": "ebc0c9675232cdec8184a6efe8b44b41a80eaead8b7972e3576358880e642957",
+      "bytes": 110468
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/diagnostics/server-settings.json",
+      "sha256": "18688fb5f728030eba0610f10bb4b83d34591bffd2b4570472619d0bbc21624e",
+      "bytes": 287
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/diagnostics/server.log",
+      "sha256": "5d69d7284c9dd44c150b2291833b01b51d84a0b6bcd22c07c85a1266dcf5fbad",
+      "bytes": 2167843
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/host-before.json",
+      "sha256": "bca4279fbb632a8f43decb5a18960eccad56af5ac00b23c3a5d594f6954ed2bd",
+      "bytes": 82405
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/plan.json",
+      "sha256": "8d8437b6061ce452111066fa14dced9192cc971fdbea583f603746f9347f3924",
+      "bytes": 1804
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/preflight-1790819574120772000/container.log",
+      "sha256": "0c1432ca1143165f74f6420714d484abdb7d12ce371e3f9369aa57b9624fc13f",
+      "bytes": 17
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/preflight-1790819574120772000/orchestration.json",
+      "sha256": "b2aa16422037511b85012d81f60a1d1b585f10a60007e33e0f0186535e965d37",
+      "bytes": 2956
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/cells/pair16k-20260930201356-06-a/result.json",
+      "sha256": "922476a5752f072372c4c6a0023f7e515fe02de696abd4ca232229526f27346d",
+      "bytes": 749
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/sequence.json",
+      "sha256": "70cb75bfb3b726eacb1f0f8ed04ddbed5dee6c5d944dbee9ffaa314c4720edef",
+      "bytes": 55680
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/study/summary.json",
+      "sha256": "57df0153b604800b18f5f1cb09fa21230ee3e30e27972e62e950e0ca000926cb",
+      "bytes": 56774
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication/verify.py",
+      "sha256": "1b28d33878ff7c29bc173e608531ebaade8512457fe05cc33d96ed5d6d90f29d",
+      "bytes": 5476
+    },
+    {
+      "path": "docs/reviews/sail-stream-experiments-2026-09-30/host-pair-publication-root-review.json",
+      "sha256": "69254f6458e541e77a98e5812b0478d7dc5041d45f1bb933a4b5ed2e114c4ca2",
+      "bytes": 2483
     },
     {
       "path": "docs/reviews/sail-stream-experiments-2026-09-30/independent-artifact-scan.json",
@@ -16314,7 +19987,7 @@
       "bytes": 720
     }
   ],
-  "source_copy_guard": "Only authorized exact source bytes/sizes/modes copied; shared coordination never copied. All prior evidence immutable except the two selected current root prose files and a candidate-only coordination append.",
+  "source_copy_guard": "Only authorized exact source bytes/sizes/modes copied; shared coordination never copied. All prior evidence immutable except the selected current RESULTS and STREAM-LOSS status prose and a candidate-only coordination append.",
   "publication_link_correction": {
     "recorded_utc": "2026-09-30T18:59:06.302498+00:00",
     "path": "docs/reviews/sail-graphs-2026-09-30/REVIEW.md",
@@ -16847,7 +20520,7 @@
     }
   ],
   "generated_fixture_exclusion_policy": "Only generated local test fixtures/scratch outputs are excluded. Their source files remain intact in shared evidence, including deliberately malformed bytes. Top-level scripts, exact source identities, attempt/final audit receipts and all captured outcome result JSON remain published; these exclusions remove no observed engine failures.",
-  "current_snapshot_cutoff": "Closed original producer/collection; single physical checker attempt03 and independentf9ae review; package146f frozen with11controls/exact14file restoration and independent056e review; SSSPfc094a exact141core/55native ordinary+loaded gate and pushed delivery. Pair observations and new certificate implementation excluded.",
+  "current_snapshot_cutoff": "All six producer/reference/parent checks and later physical scans closed; pair package12d0b46d frozen and independently checked. Certificatecab6bacc exact module-isolated gate and independent audit pass,337unit plus67actualSQL and4pure argument cases; both fork refs verified. Failed earlier exact gate remains failed.",
   "archived_markdown_link_contexts": {
     "docs/reviews/sail-stream-experiments-2026-09-30/documentation-validation-publication/preparation-attempt01/RESULTS.md": {
       "original_path": "docs/reviews/sail-stream-experiments-2026-09-30/RESULTS.md",
