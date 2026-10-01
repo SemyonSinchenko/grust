@@ -86,7 +86,7 @@ capacity claim. Sem's spill pool is FairSpillPool; our existing harness uses a
 greedy pool. Effective settings and physical plans must accompany the result.
 Native reservations and queued transport memory need their own accounting.
 
-## Next work in order
+## Plan for the next working day
 
 1. Run original and fused randomized WCC on the verified cit-Patents bytes,
    with local and two-worker modes, common resources, and full oracle checks.
@@ -105,6 +105,34 @@ Native reservations and queued transport memory need their own accounting.
    proportional-input weak scaling. Record the busiest worker's arcs/work,
    queued bytes, network, driver load and checkpoint-store throughput. A single
    fast node does not demonstrate distributed scaling.
+
+## Current preparation and storage handoff
+
+The [four-cell WCC pilot](../sem-wcc-pilot-2026-10-01/README.md) now has a
+source-pinned adapter, a complete physical-output oracle check, eleven passing
+offline controls and independent source review. Original inputs and the oracle
+have been copied and rehashed in Morrobay's benchmark volume. No WCC producer
+has run yet. An initial host-wrapper attempt stopped before container creation
+because the default macOS Python lacked required hashing/tar APIs; explicit
+`/usr/local/bin/python3.12` has now passed the compatibility probe. That failed
+preparation attempt remains recorded.
+
+The user requested disk cleanup before the next launch. Cargo build caches and
+completed build-container layers are being inventoried; datasets, benchmark
+results, source and pinned runtimes are retained. The user also offered
+`/Volumes/Apo` on Morrobay in about four hours, with 6 TB free. It is future
+storage, not currently admitted capacity. When available, verify the mounted
+filesystem and free space, expose it to the Linux VM, measure the resulting
+read/write path, and place new dataset/checkpoint/spill namespaces there. Record
+that storage change as a new profile; do not silently compare its I/O timings
+with the current volume. Existing input identities and results remain pinned.
+
+The next delivery to Sem should be the four complete WCC cells and their phase
+breakdown, followed by one measured optimization at a time. The prepared
+scale-25 capacity sequence follows the pilot; scale 26 and larger remain
+conditional on exact answers and measured memory/storage admission. The plan
+above is ordered work, not a promise that all B–F implementations finish in one
+day.
 
 ## What scale 26 and above require
 
@@ -133,3 +161,5 @@ The current pilot budgets—two data jobs per round, a one-second round floor,
 five-second setup, and 30-second cit-Patents WCC on a qualified host—remain
 unachieved. The next report should contain the measured WCC cells and a
 component breakdown, including regressions, rather than another inferred cause.
+
+Preparation status updated UTC: 2026-10-01T05:38:31.028280+00:00

@@ -72,3 +72,9 @@ round timing, setup and reverse expansion before choosing an optimization.
 Run B1's checkpoint-repartition opt-out separately; it is not loaded here.
 Matched repeats, an external CLI control, richer spill/pool counters and a
 dedicated host remain necessary for broader performance conclusions.
+
+The Morrobay host wrapper requires explicit `/usr/local/bin/python3.12`.
+The default macOS Python is 3.9.6 and lacks the required `hashlib.file_digest`
+and filtered tar-extraction APIs. The first wrapper attempt failed before
+container creation; its logs and the successful interpreter capability probe
+are retained. It is a preparation failure, not a WCC result.
