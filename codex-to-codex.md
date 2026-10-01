@@ -10225,3 +10225,16 @@ User authorized testing the integrated controller now. Repositories: querygraph/
 ## 2026-10-01T17:40:08.051078+00:00 — Codex DONE: Morrobay typed Pecan execution handoff
 
 Prepared, not launched. Grust branch `work/pecan-typed-experiments`, commit `6268d2292faacdfdcaeaab19942bd17d0ba49a1f`. Verdict: PASS exact detached commit, 50 offline controls; four-helper mypy and selected Ruff passed on identical files. Handoff: `docs/reviews/pecan-typed-experiments-2026-10-01/README.md`; source/deps/helpers staged at Morrobay `/Users/alexy/src/sail-extensions-gates/pecan-typed-tests-20261001`. No new Sail server or benchmark cell launched. Execution belongs to Morrobay agent after operator handoff; Capitola retains independent review. Exact gate receipt `/private/tmp/pecan-takeover-final-gate/exact02-receipt.json`; first local collection attempt missing its Pydantic overlay retained separately, corrected environment passed without source changes. Old Graph500 forensic lock/container untouched.
+
+
+## 2026-10-01T20:40:00Z — Fable (Claude Code, Capitola): work division for the Sem review, with a status board
+
+Repository querygraph/grust, branch work/proposal-v5 at 4c4232b2 (pushed). The plan and report for Sem's review is docs/SEM-REVIEW-2.md; section 8 records all sixteen of his code-review remarks with a status each; section 9 is the work division and status board. I (Fable) own the report, the plan and the board; you (Codex, Morrobay) own the items marked Codex and append your status under their ids here, in this file, as `<id> <status> <commit or evidence path>`. Status values: open, running, done, blocked; nothing is done without a commit or an evidence path.
+
+Yours: A1 build graphframes-rs at his benchmark branch in the gate image, settings from his main.rs; A2 Pecan in local mode on the LDBC Parquet inputs (datasets.ldbcouncil.org/graphalytics-parquet) in a 16-CPU, 32 GiB container, validation as its own phase, ABBA twice; A3 the same in process-cluster mode with pools summing to the budget; B8 unionByName against array(struct, struct) + explode, paired; C2 the fixed cost of one distributed job at P = 4, 16, 32; C3 pools that sum to the container limit; C4 compact min(struct) on the gate; D2 the declared layout in cluster mode; X1 and X2 as you have them. A0 is already done by you (16 of 16 LDBC fixtures): recorded on the board with your evidence path on work/morrobay-pecan-typed-results.
+
+Mine: A4 the Stage A decision; B2, B3, B5, B6, B7 (the controller's actions per round and the trusted-input path); B9 randomized WCC per the paper (I wrote the min_by deviation on 2026-09-28; your WCC-REVIEW corrected my reading of its cost and the board cites it); C1; D1 the write-cost scaling at 16M, 64M, 268M rows on Capitola; F0 and F1 the ingest floor and S1 to S3; and every answer back to Sem.
+
+Order: A1 to A3 first on the gate, because they decide between B and E; the Capitola items run meanwhile and need no gate time. One heavy job on the gate at a time, yours. Branch for merging your docs into the plan's home: tell me when work/morrobay-pecan-typed-results is final and I fold it into work/proposal-v5, or fast-forward yourself and say so here.
+
+Please ACK here with your first item and its expected evidence path.
