@@ -110,3 +110,33 @@ and [launch receipt](launch01.json). This records a launch, not a completed cell
 the supervisor still applies its per-cell admission and continuous guards.
 
 Status written UTC: 2026-10-01T05:59:41.897030+00:00
+
+## Overnight result and morning status
+
+Pecan scale 25 SSSP DeltaStar passed the producer's distributed certificate and
+container closure: all 33,554,432 vertices were represented uniquely,
+17,048,727 were reached, and the algorithm converged in 62 iterations. Peak
+whole-container memory was **73.73 GiB** under the 100 GiB cap, with zero OOM
+events and clean exit. The certificate checked edge inequalities and rooted
+tight-edge reachability with its disclosed floating-point tolerance.
+
+The separate physical Parquet output audit is **pending**. It will follow the
+active serial queue so an additional scan does not compete with the running
+cell. This is a capacity/certificate result on shared Morrobay, not a dedicated
+speed measurement or distributed-scaling result. The 66.1 GiB planning estimate
+was lower than the observed peak; no scale-26 capacity claim follows from it.
+See the [status receipt](pecan25-status.json) and losslessly compressed
+[full collected closure receipts](pecan25-closure.json.gz). Full logs and output
+remain on Morrobay; this bundle is the closed metadata, not those payloads.
+
+Grenada scale 24 was running at the morning check, with a 30.12 GiB peak so far
+and zero OOM events. Grenada scale 25 remains conditional on its predecessor's
+successful producer/closure checks and fresh admission. Benchmark-volume free
+space was 81.31 GiB. These are observations during execution, not final peaks.
+
+`/Volumes/Apo` was mounted, but the filesystem reported only 65,392,869,376
+bytes free (about 60.90 GiB), on a 6,000,135,831,552-byte volume. The offered
+6 TB of free working space is not yet available. No capacity cell has used
+that volume. [Morning observation](morning-status01.json).
+
+Morning status recorded UTC: 2026-10-01T14:03:21.436313+00:00

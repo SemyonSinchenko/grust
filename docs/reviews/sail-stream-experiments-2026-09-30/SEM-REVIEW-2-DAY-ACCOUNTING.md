@@ -129,8 +129,9 @@ runtime, native library and WCC helper hashes matched; 1,199 other files and
 artifacts passed metadata checks. Results and source were outside the deletion
 scope; cleanup did not perform a full content audit of those trees.
 
-The user also offered `/Volumes/Apo` on Morrobay for later availability, with
-6 TB free. It is future storage, not currently admitted capacity. When available,
+The user offered `/Volumes/Apo` with 6 TB free. The morning check found it
+mounted but with only 60.90 GiB free; it is not admitted as the expected extra
+working capacity. When that space is available,
 verify the mounted filesystem and free space, expose it to the Linux VM,
 measure the resulting read/write path, and place new dataset/checkpoint/spill
 namespaces there. Record that storage change as a new profile; do not silently
@@ -140,7 +141,10 @@ results remain pinned.
 The four complete WCC cells and phase breakdown are linked above. The next
 delivery should isolate one measured optimization at a time. The guarded
 [Pecan scale-25 / Grenada scale-24/25 SSSP capacity supervisor](../graph500-next-scale-2026-10-01/README.md)
-was launched after the pilot and fresh admission; its results are pending. Scale 26 and larger remain
+was launched after the pilot and fresh admission. Pecan scale 25 passed its
+distributed certificate and clean closure at a 73.73 GiB peak, with 62
+iterations and no OOM. Its independent physical-output audit is pending.
+Grenada scale 24 is running; scale 25 remains conditional. Scale 26 and larger remain
 conditional on exact answers and measured memory/storage admission. The plan
 above is ordered work, not a promise that all B–F implementations finish in one
 day.
@@ -157,7 +161,8 @@ observation on another input/profile, not our measured capacity requirement.
 Pecan's 33.05 GiB scale-24 SSSP peak extrapolates to 66.1 GiB at scale 25 and
 132.2 GiB at scale 26 **only if it scales linearly**. Those estimates are neither
 measurements nor WCC estimates. Scale 25 is worth trying under the existing
-100 GiB cap. Scale 26 needs fresh memory and disk admission from actual phase
+100 GiB cap, and its new observed peak was 73.73 GiB. The earlier linear
+planning estimate was low. Scale 26 needs fresh memory and disk admission from actual phase
 peaks; adding memory alone would leave redundant jobs and traffic unresolved.
 
 The completed [disk cleanup](../morrobay-disk-cleanup-2026-10-01/README.md)
@@ -176,4 +181,4 @@ unachieved. The next report should add controlled repeats and isolated
 component experiments to the four-cell breakdown, retaining regressions and
 unexplained outcomes.
 
-Status updated UTC: 2026-10-01T05:59:41.895959+00:00
+Status updated UTC: 2026-10-01T14:03:21.436919+00:00
