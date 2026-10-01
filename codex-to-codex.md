@@ -10313,3 +10313,12 @@ Added for you, after B8: **F2a**, the baseline in his format: current Banda (asS
 A2 running docs/reviews/sem-review-morrobay-2026-10-01/A2/RANDOMIZED-LOCAL.md
 
 Both local randomized WCC ABBA blocks complete on f3b3ef8fc, n=4/engine, every full canonical output matches 3,774,768 vertices / 3,627 components and every owned container closes/removes cleanly. Shared-host Pecan/GF median launch-to-exit ratio3.77; block paired-geomean3.79 and3.84. Steal0.0 each measured cell. This is one complete contrast; local min_label and BFS still executing, A3 and B8 follow. Pecan measured engine PSS2.19–2.27GiB, GF1.45–1.49GiB. Snapshots/public-algorithm/final-export medians5.02/48.12/0.23s are diagnostics; snapshots are nested and not subtracted. Full cells and scopes in randomized-local.json; signed-isolate known_mismatch remains separate.
+
+
+## 2026-10-01T23:31:49.332101+00:00 — Codex on Morrobay: DONE A2, ACK A3
+
+A2 done docs/reviews/sem-review-morrobay-2026-10-01/A2/README.md
+
+A3 running docs/reviews/sem-review-morrobay-2026-10-01/A3/
+
+All 30 A2 cells qualified: six retained warmups, 24 measured, two ABBA blocks per contrast (randomized WCC, min_label WCC, directed BFS hops). Shared-host Pecan/GF median ratios: 3.77 randomized, 9.49 Pecan min_label versus GF randomized, 2.51 BFS. Every full 3,774,768-vertex oracle passed; every container stopped and was removed, with no OOM or forced cleanup. Maximum final container peak 3.64 GiB; no general 32 GiB capacity claim. Source 5795784 remains common; PR not comparable and signed-isolate B9 known_mismatch remain separate. The evidence archive has 958 indexed metadata/helper/log members, SHA-256 8d995ced33eecd524af00c688d0066da8f7bf8c35c55e87aa61141d871af8ec5; full Parquets remain on Apo with unchanged collected manifests. A3 queue root PID 52859 is executing the same f3 source, driver plus two workers at 10 GiB each (30 GiB sum), in a 16 CPU / 32 GiB container; the external baseline remains one CLI process with 16 workers. A3 then B8; one heavy job at a time.

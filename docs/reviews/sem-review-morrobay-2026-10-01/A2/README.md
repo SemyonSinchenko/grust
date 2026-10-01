@@ -1,145 +1,60 @@
-# A2 and A3: matched Parquet input/output experiment
+# A2: cit-Patents shared-host comparison
 
-This directory contains the frozen plan and execution helpers. **Inputs
-validated; compatibility adapter correction in progress; measured cells are pending.** Completed receipts will
-supersede this preparation status. Grust's root `AGENTS.md` governs this work;
-the experiment directory is evidence, not a repository policy source.
+All 30 A2 cells qualified by retained host/producer/full-oracle receipts: 24 measured cells and six warmups. Warmups remain in the evidence and are excluded from ratios. This is a receipt audit, not a new physical payload comparison.
 
-## Scope and pins
+Execution: Pecan local runtime; graphframes remains one CLI process with 16 workers. Morrobay is a shared host. Only within-class ratios are reported; raw seconds in the [detailed report](REPORT.md) are diagnostics.
 
-The comparison is on Morrobay, a shared host. Publish ratios within an execution
-class; raw times are diagnostics, not dedicated-host performance results.
+## Ratios
 
-| Layer | Fixed identity |
-| --- | --- |
-| Pecan controller, including B9 and B10 | `querygraph/sail` `work/wcc-affine`, `f3b3ef8fc054ce7788ec2b46ec8b034ccec1f98a` |
-| graphframes-rs source | `b4da56dabe20bba8e29563e06acc5179b2113ce3` |
-| graphframes-rs release ELF SHA-256 | `b2a7fc0f077fafc158aaa8a45ac32e5f2af5b3d96b8050c348421fa79442722f` |
-| Sail runtime source | `56194b170155301ba91077f0ba3df31fe2c78b6b` |
-| Sail release ELF SHA-256 | `5b7f506c19afd76a28b84c1459397b4ab30ff4cfc761f4195789425b963facec` |
-| Native package source | `ffcfbd5690e3f3681ef9ac18ba959bc231cf9f73` |
-| Native library SHA-256 | `eb0be839de652e059799dea3bba22cc0908998bd97cfa2f4cf04c67817e2ee50` |
-| A1 container image | `sha256:f3518d652fbea8b9b9f9ebf9849277ca3bd39d0c21bb2c6e36fbaeaa2dc2678e` |
-| Frozen runtime and measurement harness | `6ae2e43a903c2cee02da170465c922c72b76198e` |
-| Guest interpreter | `/targets/graph-nuts-ffcfbd569/venv/bin/python`, Python 3.12.14 |
-| Guest dependencies | PySpark 4.0.1, Pydantic 2.11.10, NumPy 2.5.3, PyArrow 21.0.0 |
+Pecan / graphframes, three significant digits; four measured samples per engine per contrast, in two ABBA blocks.
 
-This tests a new Python controller on the existing pinned runtime and native
-package. It does not claim a runtime rebuilt from `f3b3ef8fc`. The source audit
-records the unchanged protocol/runtime bridge; actual compatibility controls
-must pass before the larger cells.
+| Comparison | Median ratio | Paired geometric mean, block 1 | Block 2 |
+| --- | ---: | ---: | ---: |
+| Pecan randomized WCC / graphframes randomized contraction WCC | 3.77 | 3.79 | 3.84 |
+| Pecan min_label WCC / graphframes randomized contraction WCC | 9.49 | 9.16 | 9.53 |
+| Pecan frontier BFS / graphframes directed unweighted shortest-path hops | 2.51 | 2.59 | 2.49 |
 
-## Algorithms and contracts
+The median ratio compares the four-sample medians. Each block pairs adjacent runs (Pecan position 2 / graphframes position 1, Pecan position 3 / graphframes position 4). n=4, ordered blocks, filesystem cache warming and shared-host activity limit inference. No absolute-performance or multihost claim follows.
 
-Read [SOURCE-CONTRACTS.md](SOURCE-CONTRACTS.md) and the complete
-[source audit](source-contract-audit.json).
+## Contract and resources
 
-- WCC: Pecan `randomized` and `min_label`, canonical minimum original IDs;
-  graphframes-rs randomized contraction, seed 42. The `wcc-min-label` name in
-  a graphframes cell identifies its comparison, not a graphframes method.
-- BFS: directed unweighted hops from the same raw vertex ID, `5795784`.
-  The first phase refused absent source `750000`; selection of the existing
-  source used maximum outgoing edge-row count, ties by minimum raw ID, before
-  any timing. Pecan's frontier
-  implementation also computes parents and a convergence certificate
-  internally; only full ID/distance output is compared. The additional work
-  remains in its timer.
-- PageRank: **not comparable pending a matching contract/B11**. Source review
-  found different initial and terminal coefficients even with a fixed cap and
-  zero graphframes threshold. Normalization does not repair the difference.
-  No PageRank timing is admitted by this plan.
+Each fresh engine container has 16 CPUs, cpuset 0–15, 32 GiB memory and no swap. graphframes has a 30 GiB FairSpillPool with SnMalloc. Pecan local has a 30 GiB greedy pool with mimalloc; in A3, driver and two workers each have 10 GiB, summing to 30 GiB. Each Pecan process prepays its 256 MiB native quota from its pool. Pool sums do not guarantee a physical memory bound.
 
-The B9 source audit identified a signed-ID/isolate collision. A separate tiny
-control checks vertices `[1, 2, -7694170072594669674]` and edge `1 -> 2` at seed
-42. Its expected partition is `{1,2}` plus the isolate. An exact reproduction
-of the predicted false merge is retained as `known_mismatch`, never as a
-correctness pass. The cit-Patents experiment may proceed only with independently
-verified zero isolates and a full oracle on every cell. This is not a general
-signed-ID WCC qualification. No algorithm is patched in this experiment.
+The timer spans engine process launch through completed exit, including startup, input reads, Pecan snapshots, algorithm, full Parquet export, cleanup and shutdown. Hashing, input/reference construction, full physical oracle and parent final observations are outside. Pecan input_snapshot is nested in public_algorithm: raw phase medians below overlap and must not be added or subtracted from the launch-to-exit ratio. graphframes has no corresponding structured phase breakdown.
 
-## Input validation and references
+Sampled engine PSS excludes the supervisor and PID 1; sampled container PSS includes them. Cgroup lifetime peaks include page cache and earlier identity reads, and final peaks also include the parent oracle. Per-cell observations, sampling coverage and guest steal are preserved in [report.json](report.json).
 
-The original LDBC cit-Patents Parquet inputs remain unchanged:
+Original cit-Patents inputs remain pinned. Validation observed zero isolated vertices. The former source 750000 was absent; its failed validation is retained. The explicit common BFS source is **5795784**, chosen before timing by maximum outgoing edge-row count (770), ties by minimum raw vertex ID. This does not reproduce the historical landmark.
 
-| File | SHA-256 |
-| --- | --- |
-| `cit-Patents-v.parquet` | `0969ea9ede0969e18e76a2c70191ed7ccecaecb9f1da6d954093dbefbc8958aa` |
-| `cit-Patents-e.parquet` | `70bcba17b5a7762ef5a0c3d16c1dc37a352461b83e338f550ae897d844f0268f` |
-| Independent WCC membership | `b07f8665c87f94286da7beb1ac5a9d13c4932fea31d8f1a382f9ecb1d3c0c8dc` |
+The signed/isolate B9 control remains **known_mismatch**, with exact observed and expected rows retained. Dataset qualification is restricted to zero-isolate cit-Patents with a full oracle in every cell; generic signed-ID WCC is not qualified. PageRank remains **not comparable pending B11**; no PR timing is included.
 
-There are 3,774,768 vertices and 16,518,947 directed edges. The WCC reference
-was constructed locally by independent union-find; it is not a downloaded
-official ground truth. Its construction evidence is retained with the earlier
-cit-Patents experiment.
+Controller source is f3b3ef8fc054ce7788ec2b46ec8b034ccec1f98a, on retained runtime 56194b170155301ba91077f0ba3df31fe2c78b6b and native source ffcfbd5690e3f3681ef9ac18ba959bc231cf9f73; this does not claim a runtime rebuilt from the controller pin. graphframes source is b4da56dabe20bba8e29563e06acc5179b2113ce3. Exact byte pins are retained in the plan and JSON report.
 
-[prepare_inputs.py](prepare_inputs.py) runs once outside all engine timers:
-schema, uniqueness, nulls, endpoint membership, source membership, and an
-independent NumPy CSR/deque BFS with edge and predecessor certificates. Its
-portable references are little-endian signed 64-bit IDs and hop counts in the
-same sorted ID order; `-1` denotes unreachable. Reference and original input
-hashes are checked before and after. Dataset-specific positive-ID assumptions
-are explicit; they do not narrow Pecan's public BIGINT contract.
+## Phase diagnostics
 
-The [physical output oracle](output_oracle.py) verifies every vertex after
-the engine exits: exact schema, IDs, coverage, uniqueness, WCC partition and
-BFS hops. Engine-specific unreachable sentinels are decoded only in the oracle;
-original output bytes are retained. No validation job is added to an algorithm.
+Pecan measured phase medians in seconds, for explanation only; input_snapshot overlaps public_algorithm. Each named phase sums its own completed occurrences within a cell before taking its median.
 
-## Resource and timing boundary
+| Pecan method | Input snapshot | Public algorithm (includes snapshot) | Result export | Server startup | Server shutdown |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Pecan randomized WCC | 5.023 | 48.12 | 0.2284 | 0.06675 | 0.1696 |
+| Pecan min_label WCC | 5.228 | 124.3 | 0.2302 | 0.06908 | 0.1954 |
+| Pecan frontier BFS | 5.232 | 18.27 | 0.1686 | 0.0681 | 0.1695 |
 
-Every engine gets a fresh process and container: 16 CPUs, cpuset `0-15`, 32 GiB
-cgroup, no swap, 16 partitions. graphframes uses its 30 GiB FairSpillPool and
-SnMalloc; Pecan uses a 30 GiB greedy pool and mimalloc in local mode. In A3,
-driver plus two workers each get 10 GiB; their total is 30 GiB. Each native
-256 MiB quota is prepaid from its process pool. Pool accounting is not a proof
-of a 32 GiB RSS bound: cgroup peaks, OOM events and headroom are observed.
+## Memory and steal diagnostics
 
-The compared timer is **immediately before engine `Popen` through its completed
-wait and certain exit**. It includes startup, input reads, Pecan's existing
-snapshot rewrite, algorithm, complete Parquet output, cleanup and shutdown.
-Hashing, reference construction, physical oracle and parent observation are
-outside that timer. Identity reads can warm filesystem caches for both engines;
-fresh processes do not imply cold storage. Snapshot and other phases are reported separately without
-subtracting them from the stated launch-to-exit measurement.
+Ranges cover the four measured cells per engine and contrast. Peaks are observations within their labelled boundaries, not future capacity guarantees.
 
-Sampled engine PSS excludes the supervisor. Whole-container sampled memory and
-cgroup lifetime peaks have separately labelled boundaries, including page
-cache and parent observations. Guest steal and admission pressure are retained.
-A3 runs Pecan's driver and two workers inside one container on one host.
-Its graphframes control remains a single CLI process with 16 workers; the
-comparison's `process-cluster` label does not turn graphframes into a cluster.
-This experiment does not measure multiple hosts.
+| Contrast / engine | Sampled engine PSS GiB range | Final container lifetime peak GiB range | Guest steal % range |
+| --- | ---: | ---: | ---: |
+| wcc-randomized / graphframes | 1.45–1.49 | 1.71–1.74 | 0–0 (4/4 observed) |
+| wcc-randomized / pecan | 2.19–2.27 | 2.53–2.62 | 0–0 (4/4 observed) |
+| wcc-min-label / graphframes | 1.47–1.49 | 1.72–1.75 | 0–0 (4/4 observed) |
+| wcc-min-label / pecan | 2.95–3.41 | 3.23–3.64 | 0–0 (4/4 observed) |
+| bfs / graphframes | 0.974–1.12 | 1.22–1.37 | 0–0 (4/4 observed) |
+| bfs / pecan | 1.07–1.1 | 1.33–1.39 | 0–0 (4/4 observed) |
 
-## Staging observation
+## Retained evidence
 
-The `stage01` producer passed at `f3b3ef8fc`, with unchanged binary and payload
-hashes. Its host verdict is retained as `error`: the absence parser rejected
-Docker's lowercase `no such object` message after successful removal. A fresh
-name/ID inspection and idle-context observation confirmed closure; the closed
-lock was archived, preserving its original owner record. See the
-[closure review](stage01-closure-review.json). No algorithm ran in that attempt.
+[evidence.tar.gz](evidence.tar.gz) contains finalized JSON/JSONL, logs, plans, helpers and offline controls. [evidence-index.json](evidence-index.json) records every archive member's exact name, byte count, SHA-256 and original path. Historical run01–03 failed preflights and phase attempts remain distinct; they are not counted as algorithm results.
 
-The parser now handles either case and continues to reject other inspection
-errors. The corrected host driver is indexed separately under `controller-v2`;
-the staged guest payload and its `0f4d700c` helper tree remain immutable.
-Validation uses a fresh phase ID, rechecking every staged identity.
-
-## Sequence and retained evidence
-
-[plan.json](plan.json) fixes 60 steps: A2 local first, then A3 process cluster;
-for each of randomized WCC, min-label WCC and BFS, one warmup per engine and
-two measured ABBA blocks. There are 48 measured cells and 12 warmups.
-
-One heavy gate job runs at a time. The host wrapper admits each cell afresh,
-pins its container identity, copies the complete output tree, and verifies
-certain closure before releasing the lock. Stop on any unexpected outcome,
-failed oracle, OOM, timeout or uncertain closure. Retain failed IDs, logs,
-receipts and locks; use a fresh explicit ID for any later attempt.
-
-The [current plan](plan.json) records the active namespace; the
-[initial plan](plan-initial.json) is retained. Failed preparation attempts are
-under `A2-run01`, `A2-run02` and `A2-run03` in
-`/Volumes/Apo/graph-tests/results/sem-review-20261001/`.
-The host archive keeps large result Parquet files; Git keeps indexed portable
-receipts, helper sources, gates and reports. After A2 and A3 close, B8 requires
-its own paired plan and admission on cit-Patents and official scale-24 inputs.
+Full Parquet outputs, binary references and other physical payloads remain on Apo. Their unchanged collected manifests are linked by `physical_payloads` in [report.json](report.json), with copies indexed in the archive. This generator does not read or rehash those payloads.
