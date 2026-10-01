@@ -10,7 +10,16 @@ relational path (Pecan) and the worker-partitioned path (Argentea).
 
 This file is the current set of instructions for reviewers. It is kept in
 step with the fork: when the review target moves, this file moves with it.
-Last updated 2026-09-29 (branch-only review; Sedona entry).
+Last updated 2026-09-30 (thirty-minute entry added; branch-only review; Sedona entry).
+
+## If you have thirty minutes
+
+Read [`EXTENSIONS-ONE-PAGER.md`](EXTENSIONS-ONE-PAGER.md): the design in
+eight modules, each with its purpose, minimum contract, alternatives and
+what is deliberately out, plus the roadmap and five review questions. Its
+sample code is the branch's own `examples/extensions/sedona/src/lib.rs`
+(170 lines, a complete extension), the Nutmeg manifest (47 lines) and the
+minimal client in `WRITING-AN-EXTENSION.md` (45 lines).
 
 ## If you are here for Sedona
 
