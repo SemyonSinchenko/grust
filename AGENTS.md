@@ -213,6 +213,14 @@ engine; the checks were measured as a visible share of the time at scale.
 - **Do not reintroduce input validation into the algorithms.** A validation
   pass, if a caller wants one, is a separate, explicit utility that runs once
   before the algorithm, outside its timer.
+- **Sem's rule, verbatim in translation (2026-10-01): if a check requires an
+  operation over the data, the check does not run by default.** Arguments
+  are assumed valid too; checking that "the user is not an idiot" shifts the
+  cost of the 1% onto the 99%, so only free, in-memory argument checks exist.
+- **Code is navigable by people, not only by grep.** Type hints on every
+  definition so go-to-definition and find-references work; no function-local
+  imports (the import-structure test enforces it); structured values are
+  models, not dicts.
 - **Python in the extensions is typed.** Every definition has type hints,
   structured records are Pydantic models or slotted dataclasses, and `mypy`
   and `ruff` pass on the package before it is committed. Generated protobuf
