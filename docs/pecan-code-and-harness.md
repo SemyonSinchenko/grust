@@ -4,31 +4,42 @@ Pecan's implementation and benchmark harness live in the public
 [`querygraph/sail`](https://github.com/querygraph/sail) fork. Grust holds the
 review reports. Start with the DeltaStar loop and the timed adapter below.
 
+There are three layers, with different responsibilities:
+
+1. **Algorithm:** Python DataFrame operations in `pyspark_pecan` build and run
+   the SSSP iterations. Start at `traversal_stepping.py`.
+2. **Measurement:** `traversal_cell.py` calls the algorithm and records elapsed
+   time; `measurement.py` samples process/container memory.
+3. **Engine optimization:** `compact_struct_min.rs` changes how our Sail fork
+   stores one SQL aggregate's state. Its purpose and evidence appear below.
+
 ## Which version to read
 
 | Purpose | Source |
 |---|---|
-| Published Pecan review version | [`cab6bacc`, package directory](https://github.com/querygraph/sail/tree/cab6bacc0ad0d1fc8b3070e9e4267e99751909fe/examples/extensions/graph-algorithms/src/pyspark_pecan), published on `work/stream-review-followup` |
+| Integrated typed Pecan review version | [`6ae2e43a9`, package directory](https://github.com/querygraph/sail/tree/6ae2e43a903c2cee02da170465c922c72b76198e/examples/extensions/graph-algorithms/src/pyspark_pecan), published on `work/stream-review-followup` |
 | Exact Python implementation and harness used for the 33.05 GiB scale-24 result | [`3a9028057`, package directory](https://github.com/querygraph/sail/tree/3a9028057c6c6c5034492845926fc4bc18f9626f/examples/extensions/graph-algorithms/src/pyspark_pecan) |
-| Sail runtime used for that result | [`56194b170`, compact grouped struct MIN](https://github.com/querygraph/sail/blob/56194b170155301ba91077f0ba3df31fe2c78b6b/crates/sail-function/src/aggregate/compact_struct_min.rs) |
+| Sail runtime used for that result | [`56194b170`, Sail fork commit](https://github.com/querygraph/sail/commit/56194b170155301ba91077f0ba3df31fe2c78b6b); includes the engine optimization explained below |
 
-These are intentionally separate pins. The measured Python version predates
-the combined weighted-overflow aggregation and the optional checkpoint
-repartition switch. The published review version includes those changes;
-checkpoint repartition still defaults to enabled.
+These are intentionally separate pins. The current code integrates the Pydantic
+rewrite with the newer runtime, ownership and certificate fixes. It assumes
+valid graph input, removes input-audit queries, and retains the optional
+checkpoint repartition switch (enabled by default). The scale-24 result
+predates these Python changes. See the [integration evidence](reviews/pecan-validation-2026-10-01/README.md) for the exact tested boundary.
 
 ## Current Pecan code
 
 All paths below are under `examples/extensions/graph-algorithms/src/pyspark_pecan/`
-at `cab6bacc`.
+at `6ae2e43a9`.
 
 | Read | File and responsibility |
 |---|---|
-| 1 | [`algorithms.py:292–308`](https://github.com/querygraph/sail/blob/cab6bacc0ad0d1fc8b3070e9e4267e99751909fe/examples/extensions/graph-algorithms/src/pyspark_pecan/algorithms.py#L292-L308): public `GraphAlgorithms.sssp` parameters and dispatch |
-| 2 | [`traversal.py:9–41`](https://github.com/querygraph/sail/blob/cab6bacc0ad0d1fc8b3070e9e4267e99751909fe/examples/extensions/graph-algorithms/src/pyspark_pecan/traversal.py#L9-L41): input checks, undirected edge expansion, adjacency materialization |
-| 3 | [`traversal_stepping.py`](https://github.com/querygraph/sail/blob/cab6bacc0ad0d1fc8b3070e9e4267e99751909fe/examples/extensions/graph-algorithms/src/pyspark_pecan/traversal_stepping.py): complete DeltaStar loop, active bucket, label updates and pending queue; 54 lines |
-| 4 | [`traversal_relaxation.py`](https://github.com/querygraph/sail/blob/cab6bacc0ad0d1fc8b3070e9e4267e99751909fe/examples/extensions/graph-algorithms/src/pyspark_pecan/traversal_relaxation.py): `state.unionByName(candidates)`, grouped `min(struct(...))` and overflow reduction; 27 lines |
-| 5 | [`staging.py:26–78`](https://github.com/querygraph/sail/blob/cab6bacc0ad0d1fc8b3070e9e4267e99751909fe/examples/extensions/graph-algorithms/src/pyspark_pecan/staging.py#L26-L78): checkpoint repartition, Parquet write/read and generation cleanup |
+| 1 | [`algorithms.py:310–329`](https://github.com/querygraph/sail/blob/6ae2e43a903c2cee02da170465c922c72b76198e/examples/extensions/graph-algorithms/src/pyspark_pecan/algorithms.py#L310-L329): public `GraphAlgorithms.sssp` parameters, Pydantic validation and dispatch |
+| 2 | [`types.py`](https://github.com/querygraph/sail/blob/6ae2e43a903c2cee02da170465c922c72b76198e/examples/extensions/graph-algorithms/src/pyspark_pecan/types.py): typed options, events and contraction records; arguments are validated once |
+| 3 | [`traversal.py`](https://github.com/querygraph/sail/blob/6ae2e43a903c2cee02da170465c922c72b76198e/examples/extensions/graph-algorithms/src/pyspark_pecan/traversal.py): weight schema, undirected edge expansion, adjacency materialization and reference/frontier loops |
+| 4 | [`traversal_stepping.py`](https://github.com/querygraph/sail/blob/6ae2e43a903c2cee02da170465c922c72b76198e/examples/extensions/graph-algorithms/src/pyspark_pecan/traversal_stepping.py): complete DeltaStar loop, `state.unionByName(candidates)`, grouped `min(struct(...))`, label updates and pending queue; 67 lines |
+| 5 | [`traversal_state.py`](https://github.com/querygraph/sail/blob/6ae2e43a903c2cee02da170465c922c72b76198e/examples/extensions/graph-algorithms/src/pyspark_pecan/traversal_state.py): lazy one-row seed with exact BIGINT literals; no vertex scan |
+| 6 | [`staging.py`](https://github.com/querygraph/sail/blob/6ae2e43a903c2cee02da170465c922c72b76198e/examples/extensions/graph-algorithms/src/pyspark_pecan/staging.py): checkpoint repartition, Parquet write/read, ownership and generation cleanup |
 
 The DeltaStar method selects the lowest pending distance bucket and relaxes
 all outgoing edges of its selected vertices. It is not classical light/heavy
@@ -74,10 +85,33 @@ breakdown. The host was shared, so recorded durations are diagnostic observation
 Evidence: [closed measurement review](https://github.com/querygraph/grust/blob/6bdd55748fa0e9233a051d52c6b0965786947676/docs/reviews/sail-stream-experiments-2026-09-30/logging03-closed-review/README.md)
 and [completed physical-output check](https://github.com/querygraph/grust/blob/6bdd55748fa0e9233a051d52c6b0965786947676/docs/reviews/sail-stream-experiments-2026-09-30/COMPACT-REPLAY-AND-SSSP.md).
 
+## Why `compact_struct_min.rs` exists
+
+Pecan selects the best label for each vertex with ordinary
+`groupBy("id").agg(min(struct("distance", "hops", "parent")))`. Distance is
+compared first, then hop count, then parent ID. This keeps ties deterministic.
+
+The [Rust file](https://github.com/querygraph/sail/blob/56194b170155301ba91077f0ba3df31fe2c78b6b/crates/sail-function/src/aggregate/compact_struct_min.rs)
+is an optimization we added to the Sail fork's SQL engine. For the exact
+`Struct<Float64, Int64, Int64>` shape, it replaces the original DataFusion
+accumulator's separately owned singleton Arrow structures with a 32-byte inline
+record per group. It preserves the original comparison and null behavior.
+It also removes the original accumulator's repeated scan over all resident
+groups on each input batch.
+
+In the isolated 100,000-group allocation test, retained requested memory was
+204,831,488 bytes for the original accumulator and 4,194,304 bytes for the
+compact one (the vector had capacity for 131,072 groups). This excludes the
+graph, joins, group keys and the rest of the query. The
+[allocation report](https://github.com/querygraph/grust/blob/6bdd55748fa0e9233a051d52c6b0965786947676/docs/reviews/sail-stream-experiments-2026-09-30/STRUCT-MIN-ALLOCATION.md)
+contains the source analysis, controls and limits. The reported scale-24 run
+used this modified Sail runtime; it is not a stock-Sail measurement.
+
 ## UNION versus EXPLODE/UNNEST review targets
 
 There are two distinct rewrites to test: direct/reverse edge expansion in
-`traversal.py`, and reached-state/candidate merging in `traversal_relaxation.py`.
+`traversal.py`, and reached-state/candidate merging in `traversal_stepping.py`
+and the reference/frontier loop in `traversal.py`.
 The latter is not a mechanical substitution of one operator: an equivalent
 EXPLODE formulation may change joins and duplicate intermediate self labels.
 Compare exact results and physical plans before comparing time and memory.
