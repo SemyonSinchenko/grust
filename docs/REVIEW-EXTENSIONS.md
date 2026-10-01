@@ -14,12 +14,23 @@ Last updated 2026-09-30 (thirty-minute entry added; branch-only review; Sedona e
 
 ## If you have thirty minutes
 
-Read [`EXTENSIONS-ONE-PAGER.md`](EXTENSIONS-ONE-PAGER.md): the design in
-eight modules, each with its purpose, minimum contract, alternatives and
-what is deliberately out, plus the roadmap and five review questions. Its
-sample code is the branch's own `examples/extensions/sedona/src/lib.rs`
-(170 lines, a complete extension), the Nutmeg manifest (47 lines) and the
-minimal client in `WRITING-AN-EXTENSION.md` (45 lines).
+Read [`EXTENSIONS-ONE-PAGER.md`](EXTENSIONS-ONE-PAGER.md), then follow its
+[decision maps](extensions-review/overview.md) and eight linked deep dives.
+The guide separates the scalar foundation, optional stateful relations and
+future distributed native operators. Its coherent Sedona example includes
+246 lines of Rust, Python bootstrap and packaging plus the 20-line client;
+complete tests, build support and protocol/resource interfaces follow.
+
+Download the assembled [Markdown](extensions-review/dist/sail-extensions-review.md),
+[PDF](extensions-review/dist/sail-extensions-review.pdf) or
+[EPUB](extensions-review/dist/sail-extensions-review.epub).
+The separate [host implementation companion](extensions-host-review/manuscript.md)
+compares the prototype with pinned plain Sail, maps design decisions to their
+owners, and includes the complete historical host patch. Its
+[Markdown](extensions-host-review/dist/sail-extensions-host-review.md),
+[PDF](extensions-host-review/dist/sail-extensions-host-review.pdf) and
+[EPUB](extensions-host-review/dist/sail-extensions-host-review.epub) are reference
+editions, outside the thirty-minute path.
 
 ## If you are here for Sedona
 
