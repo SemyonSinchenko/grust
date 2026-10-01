@@ -23,7 +23,11 @@ No cell was run for this document. The gate was building
 identify contract, ownership, accounting and comparison limits. The original
 line references in that review refer to the document hash in its
 [source receipt](reviews/sail-stream-experiments-2026-09-30/sem-review2/source-receipt.json).
-The stages below are proposals; this correction changes no code or defaults.
+The stages below describe the proposed investigation. The later
+[day accounting](reviews/sail-stream-experiments-2026-09-30/SEM-REVIEW-2-DAY-ACCOUNTING.md)
+records every A–F item's completed evidence and remaining work. Compact tuple
+MIN has since passed its traversal controls and large replay; no fresh WCC
+result has yet closed the performance question. Preparation is not a run.
 
 ## 1. What Sem says
 
@@ -146,16 +150,17 @@ does not establish zero spill: record actual spill counters and pool pressure.
 The hosts, resource envelopes, timing boundaries and graph manifests differ.
 The external cit-Patents README lists 16,518,947 edges; ours lists 16,518,948.
 Its Graph500-24 lists 8,870,942 vertices and 260,379,520 edges; ours includes
-16,777,216 vertices and 268,435,456 input edge tuples. The vertex difference
-is not a mistake on either side: the Graph500 Kronecker generator at scale 24
-addresses 2^24 ids of which roughly half receive no edge, LDBC Graphalytics
-keeps only the vertices that occur in an edge, and our generator keeps all
-2^24 ids. Our hub traversal reaches 8,862,601 vertices, which is 99.9% of
-LDBC's 8,870,942, so the giant component is where Sem says it is; the
-"other half" is isolated ids, not unreached ones. The edge difference is the
-generator's duplicate tuples and self-loops, which LDBC removes. Our
-generator also uses its own seeds, so the two graphs are the same family and
-not the same bytes; Stage A reads LDBC's files on both sides. External shortest paths
+16,777,216 vertices and 268,435,456 input edge tuples. The input contracts differ: our generator
+keeps the complete `0..2^24-1` ID domain, while the cited LDBC table reports a
+smaller vertex set. Our hub traversal reaches 8,862,601 vertices. Dividing that
+by LDBC's 8,870,942 gives about 99.9%, but these are differently generated inputs;
+that quotient does not establish our own isolate count or giant-component
+fraction. Our manifest records 2,798 self-loops and explicitly says duplicates
+were not counted. The 8,055,936-edge difference therefore cannot be assigned
+solely to deduplication and self-loop removal. Count endpoints and unreached
+components on the same graph to settle that question. Stage A uses the same
+pinned official LDBC files on both sides instead.
+External shortest paths
 use directed edges and a catalog-derived landmark; the scale-24 Sail cells use
 an explicit hub and undirected edges, and certify parent/hops as well as
 distance. External finite-step PageRank uses thresholded delta propagation
@@ -225,9 +230,16 @@ Pecan's traversals use, retained about 2 KB per group and scanned scratch
 for every resident group on every batch in the exact-source probe. At 100,000
 groups the original/compact retained requested-heap ratio was 48.8, with the
 compact implementation at `56194b170`. This is an isolated macOS allocator
-measurement, not Linux process or whole-query memory. The compact path had
-not yet been replayed on the gate; no whole-query gain is claimed.
-[Probe scope and receipts](reviews/sail-stream-experiments-2026-09-30/STRUCT-MIN-ALLOCATION.md).
+measurement, not Linux process or whole-query memory. The compact path has since passed a small
+matched Pecan SSSP frontier control: compact/original median time 0.6078 and
+sampled execution PSS 0.8389 on shared Morrobay. A scale-24 DeltaStar replay
+also passed its certificate and physical-output check at 33.05 GiB whole-container
+peak. The earlier original replay OOMed at 100 GiB, so that large pair has no
+completed timing or uncapped-memory denominator. These traversal results do
+not establish WCC performance; fused WCC uses a separate `min_by` path.
+[Probe scope](reviews/sail-stream-experiments-2026-09-30/STRUCT-MIN-ALLOCATION.md),
+[paired control](reviews/sail-stream-experiments-2026-09-30/host-pair-publication/README.md),
+[large replay](reviews/sail-stream-experiments-2026-09-30/COMPACT-REPLAY-AND-SSSP.md).
 Separately, the aggregate's output is estimated at O(E) rows, which
 drives join-side and broadcast choices (parity document, section 8).
 
@@ -487,13 +499,15 @@ For Sem (all four answered on 2026-09-30; see section 1):
 2. Settings: pinned in `main.rs`; sort-merge join on; hash join allowed for
    Sail's pilot.
 3. Inputs: the LDBC Graphalytics Parquet files from `datasets.py`; the
-   vertex-count difference is isolated ids (section 2).
+   exact cit-Patents pair is now pinned. Historical Graph500 input counts
+   remain distinct and do not alone establish our isolate count (section 2).
 4. API: the library is `GraphFrame` in `lib.rs`; the CLI is `main.rs`.
 
 Open for him: none at the moment. What he will see next is Stage A's
 pilot on his inputs, with its receipts.
 
-For Astra:
+For Astra (answered in the [detailed response](reviews/sail-stream-experiments-2026-09-30/SEM-REVIEW-2-RESPONSE.md#answers-to-the-five-astra-questions);
+C4's later qualification is reflected above):
 
 1. Is Stage A's container (16 CPUs, 32 GiB, pools summing to 30 GiB) the
    appropriate proposed profile to qualify with nonpool headroom, and should the
@@ -510,8 +524,9 @@ For Astra:
 
 ## 7. Limits
 
-No paired comparison was run for this document, and no Stage B/C speedup or
-safe memory envelope is established. Section 2 preserves observations with
+The initial document contained no paired run. The later C4 traversal control
+and large compact replay are now recorded above; they do not establish WCC
+speed or a general safe memory envelope. Section 2 preserves observations with
 different contracts and hosts; it deliberately supplies no cross-system ratio.
 Stage A can narrow mechanisms only with additional component controls. Local
 qualification does not establish multi-host scaling. The earlier no-OOM stream
