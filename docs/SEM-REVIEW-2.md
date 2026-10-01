@@ -551,6 +551,7 @@ answer lives, and who owns what is still open. Translated from Russian.
 | 20 | On the delta method's per-step materialization of the active set and the second materialization of the state (two screenshots): "why?", "already materialized there, why another?"; on the activity aggregate: "it is essentially a stop condition, why?" | Answered, fix open | The active set is written so the next step reads a stable frontier and the activity scalars come from it; the state write is the checkpoint; the aggregate feeds the frontier threshold and the dangling push. His point stands: GraphX's delta form needs none of this. Open as B11: a delta method without certificates, GraphX's vertex program, the frontier as the only extra relation |
 | 21 | "The people from Google did not worry about 1e-5 (the Pregel paper); why was it decided necessary? In GraphX it is nicer still through delta, and the frontier shrinks." | Recorded | B10 is the paper's form; B11 the GraphX delta form |
 | 22 | "Same point as for SSSP: make a Pregel abstraction, then SSSP, PageRank, K-Core, ArticleRank and every other *Rank, label propagation, strongly connected components. One abstraction is easier to benchmark under different conditions." And: "I have looked at all three algorithms. If you want, I can write down for the agent what I would like checked." | Recorded; offer to accept | E0 gains the list of algorithms the primitive must carry; the offer of a checklist is the cheapest review there is |
+| 23 | His written checklist, "What I want to check" (pull request #31 on the fork, moved verbatim to [`SEM-QUESTIONS-2026-10-01.md`](SEM-QUESTIONS-2026-10-01.md)): (a) explode against `unionByName` on Sail, with numbers; (b) raise again the pre-sorted edge write that lets the merge join skip sort and repartition: vertices are always fewer than edges, so a 3x costlier state write can still win, 16M rows is too small to be more than planner and serde overhead, and vortex may be worth a look; (c) Pecan should be a proper Pregel, built from the best of GraphX, GraphFrames and graphframes-rs, with PageRank and SSSP first (shrinking and growing frontiers), checkpointing by Parquet or by persist, plans analysed and microbenchmarked, run on cit-Patents, kgs and wiki-Talk; even a Rust-level Pregel extension with a PySpark API; (d) WCC: re-implement graphframes-rs cleanly, reach the same single-node class or name the blocker, only then go distributed | Recorded; B8, D1, E0 updated; B9 done | section 9 |
 | 16 | On the WCC pilot table (local against two workers, randomized against fused, 2.3 to 4.0 GiB): "this looks mega-strange; if it is single-source there should be a tiny frontier." | Answered | the table is WCC, not a traversal; the memory is container peak with three processes. The screenshot shows why the reading map was needed |
 
 Two Stage B items follow from this review and are added here:
@@ -582,7 +583,7 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | B5 | tail cutover for the contraction | Fable | open | |
 | B6 | checkpoint every k rounds | Fable | open | |
 | B7 | trusted immutable Parquet inputs: no snapshot rewrite (Sem, "why rewrite the inputs") | Fable | open | |
-| B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remark 11) | Codex | open | |
+| B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remarks 11, 23a); he wants numbers | Codex | open | |
 | B10 | PageRank in the Pregel paper's and GraphX's static form (`method="pregel"`), optional normalization (Sem, remarks 18, 21) | Fable | **done**: tests equal to `power` without dangling vertices, same order with them | `work/wcc-affine` `f3b3ef8fc` |
 | B11 | PageRank delta as GraphX's vertex program: no certificates, the frontier as the only extra relation (Sem, remarks 20, 21) | Fable | open | |
 | B9 | randomized WCC as in the paper: affine ids, plain `min`, inverse maps once at the end (Sem, remarks 14 and 17) | Fable | **done**, pending Codex's gate measurement: 176 Pecan and 337 harness tests pass; paired debug-build control on Capitola (2M vertices, 4M edges, identical labels): new 24.2 and 23.8 s against old fused 29.5 and 27.8 s and old randomized 39.3 and 31.0 s, about 30% less per round | `querygraph/sail` `work/wcc-affine` `7475dfc03` on top of `6ae2e43a9` |
@@ -590,9 +591,9 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | C2 | fixed cost of one distributed job at P = 4, 16, 32 | Codex | open | |
 | C3 | pools that sum to the container limit | Codex | open | |
 | C4 | compact `min(struct)` accumulator on the gate; `min_by` probed the same way | Codex | running | `work/compact-struct-min` |
-| D1 | sorted-Parquet write cost at 16M, 64M, 268M rows, paired (Sem, remark 12) | Fable | open | |
+| D1 | sorted-Parquet write cost at 16M, 64M, 268M rows, paired (Sem, remarks 12, 23b): his argument that a 3x costlier state write wins when it removes the shuffle and sort, since V is much smaller than E; vortex as an alternative format | Fable | open | |
 | D2 | declared layout measured in cluster mode on the gate | Codex | open | |
-| E0 | the loop inside the server: Pregel-style one plan per superstep (Sem, remark 15) against embedding graphframes-rs; decided after A4 | both, design | source review done (Codex): the proposed expansion already exists in the frontier method; the gain is in actions per round, not the join | `PREGEL-REVIEW.md` on the same branch |
+| E0 | a proper Pregel (Sem, remarks 15, 22, 23c): PageRank and SSSP first, from the best of GraphX, GraphFrames and graphframes-rs, Parquet or persist checkpoints, plans microbenchmarked on cit-Patents, kgs and wiki-Talk; a Rust-level extension with a PySpark API as the far option | both, design | source review done (Codex): the proposed expansion already exists in the frontier method; the gain is in actions per round, not the join | `PREGEL-REVIEW.md` on the same branch |
 | F0 | native-only CSR build from `edges.parquet` as the ingest floor (Sem, remark 9 of his first review) | Fable | open | |
 | F1 | S1, S2/`asStaged`, S3 toward the 5 s ingest budget, i64 contract kept | Fable | open | |
 | R1 | typed Pecan, no validation, contract in `AGENTS.md` and README (Sem, remarks 3 to 6) | done | `7145d107c`, `6ae2e43a9`, `5aa755b9`, `71fc8c90` | |
@@ -601,11 +602,14 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | X1 | Argentea two-host scale-24 failure: first cause with worker-side logging, then one rerun | Codex | running | `sail-stream-experiments-2026-09-30` |
 | X2 | the relational stream loss (`STREAM-LOSS-STATUS.md`) | Codex | running | same |
 
-Branch for pull requests from Sem: `pecan` on `querygraph/sail`, which
-Fable keeps fast-forwarded to the current Pecan tip (today `f3b3ef8fc`, the
-typed controller with B9 and B10 on Codex's integrated runtime); PRs touch
-`examples/extensions/graph-algorithms`, and Fable merges them and
-refreshes the branch.
+Where Sem's contributions go, corrected 2026-10-01 after his first pull
+request: **documents, questions and checklists go to `querygraph/grust`**,
+under `docs/`, on `work/proposal-v5`, because the review's documents live in
+grust and nothing of the kind may sit in a Sail tree, upstream or fork. Only
+a change to Pecan's code itself goes to the fork, as a pull request against
+`pecan` on `querygraph/sail` (kept at the current Pecan tip, today
+`f3b3ef8fc`), because that is where `examples/extensions/graph-algorithms`
+lives; that directory is fork-only and is not part of any upstream merge.
 
 Order: A0 first, because no timing is reported on an unverified answer;
 then A1 to A3, which decide between B and E; B9, B7, D1 and F0 run on
