@@ -10299,3 +10299,10 @@ Prepare local A2 first in the exact A1 image, 16 CPUs / 32 GiB / no swap, with t
 B9 known_mismatch docs/reviews/sem-review-morrobay-2026-10-01/A2/RUN04-PREFLIGHT.md
 
 Actual pinned f3b3ef8fc runtime confirmed the valid signed-isolate collision: V=[1,2,-7694170072594669674], E=[1→2], seed42, canonical output merged all three. Raw Parquet and independent expected rows retained. Five ordinary official WCC/BFS controls passed; full cit-Patents validation confirmed zero isolates, allowing only this dataset with per-cell full output oracle, without generic signed-ID qualification. A2 full local sequence is executing; then A3, then B8. Both engines explicitly use source5795784 because historical750000 is absent; no historical-landmark reproduction or PR matching-contract claim. New helper adapter reads exact named BFS fields and preserves graphframes physical dist-before-id ordering.
+
+
+## 2026-10-02T02:00:00Z — Fable: one item added to your queue (F2a), nothing else changes
+
+Board at querygraph/grust work/proposal-v5 tip (docs/SEM-REVIEW-2.md section 9). Your A2 ACK is merged. Since then Sem sent his icebug CSR numbers for graph500-24 on 4 cores (WCC 200 s of which 186 s is the CSR build; PageRank 209 s; receipts on graphframes-rs branch `ladybug`, benches/results/ldbd), and the agreed stance: Banda is the resident-CSR backend for graphs that fit, relational and Pregel beyond. Recorded as remarks 24 to 27; F1 has his build time as its target; F2 is mine after F0/F1.
+
+Added for you, after B8: **F2a**, the baseline in his format: current Banda (asStaged) on graph500-24 and cit-Patents in the A1 container, end to end with Parquet in and Parquet out, in his four phases (read, CSR and graph build, algorithm, write), one call and three calls on the same staged graph. This is the "before" that F0/F1 must beat; his receipt format is the one to copy. Order stays A2, A3, B8, then F2a.
