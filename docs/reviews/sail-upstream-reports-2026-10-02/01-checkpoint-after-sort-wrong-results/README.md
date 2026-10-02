@@ -37,7 +37,7 @@ rows = spark.range(4_000_000).select(
 | (no checkpoint) | 4,000,000 | 1,000,003 | 1,000,003 | |
 | `repartition(10, k)` | 4,000,000 | 1,000,003 | 1,000,003 | correct |
 | `repartition(10, k).sortWithinPartitions(k)` | 4,000,000 | **4,000,000** | **4,000,000** | wrong |
-| `orderBy(k)` | 4,000,000 | **3,965,222** | **3,965,222** | wrong |
+| `orderBy(k)` | 4,000,000 | **3,960,618** | **3,960,618** | wrong |
 
 The wrong aggregate's plan has no sort and aggregates in sorted mode:
 
@@ -49,7 +49,7 @@ A sorted-mode aggregate closes a group when the key changes. Over unsorted input
 
 Reading the checkpoint's Parquet files directly shows that none is sorted by `k`. The `orderBy` count varies a little between runs; that it is wrong does not.
 
-With `SAIL_OPTIMIZER__PREFER_HASH_JOIN=false` a join on `k` over such a checkpoint becomes a sort-merge join with no `SortExec`, and returns a small fraction of the rows. Window functions partitioned by `k` are wrong in the same way. With the default hash join the join is correct, because it does not use the order.
+With `SAIL_OPTIMIZER__PREFER_HASH_JOIN=false` a join on `k` between the sorted checkpoint and a sorted checkpoint of the 1,000,003 keys becomes a sort-merge join with no `SortExec`, and returns **139 rows instead of 4,000,000** (the reproducer's last line). The same join over the unsorted checkpoint returns 4,000,000. With the default hash join the join is correct, because it does not use the order.
 
 ## Expected
 

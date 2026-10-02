@@ -77,4 +77,15 @@ with sail(sys.argv[1], SAIL_EXECUTION__CHECKPOINT__PATH=checkpoints.as_uri()) as
         if verdict == "WRONG":
             for line in plan_lines(frame.groupBy("k").count(), "AggregateExec", "SortExec"):
                 print("    plan:", line)
+
+# The same checkpoint under a sort-merge join: the join trusts the recorded order too.
+with sail(sys.argv[1], SAIL_EXECUTION__CHECKPOINT__PATH=checkpoints.as_uri(), SAIL_OPTIMIZER__PREFER_HASH_JOIN="false") as (spark, root):
+    rows = spark.range(4_000_000).select(((F.col("id") * 2654435761) % 1_000_003).alias("k"), F.col("id").alias("v"))
+    keys = spark.range(1_000_003).select(F.col("id").alias("k2")).repartition(10, "k2").sortWithinPartitions("k2").checkpoint()
+    for label, frame in (("repartition(10, k).checkpoint()", rows.repartition(10, "k").checkpoint()),
+                         ("repartition(10, k).sortWithinPartitions(k).checkpoint()",
+                          rows.repartition(10, "k").sortWithinPartitions("k").checkpoint())):
+        joined = frame.join(keys, frame.k == keys.k2)
+        print(f"prefer_hash_join=false, {label} JOIN keys ON k: {joined.count():,} rows (truth 4,000,000); "
+              f"SortExec in plan: {len(plan_lines(joined, 'SortExec'))}")
 shutil.rmtree(checkpoints, ignore_errors=True)

@@ -27,6 +27,14 @@ DataFusion 55.1.0), release build, macOS on an Apple M1 Max, with PySpark
 The order is by severity: answers that are wrong first, then failures, then
 behaviour, then speed.
 
+## Filing
+
+[`issues/`](issues/) holds a title and a body per report, ready to file: the
+report's text with its reproducer and output inlined, and no link to
+anything outside the issue. `issues/file_issues.sh` files them in order with
+`gh issue create` and records the URLs in `issues/filed.txt`. It is meant to
+be run by a person.
+
 ## Running a reproducer
 
 ```sh
