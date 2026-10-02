@@ -49,15 +49,17 @@ exit:
 | Pecan, default (copies the inputs first) | 5.0 s | 30.4 s |
 | Pecan, inputs read in place | 4.1 s | 20.3 s |
 | Banda on Grust 0.23.0, text ids: first call | 8.4 s | 139 s |
-| Banda on Grust 0.24.0, integer ids, 8 build workers: first call | 1.4 s | 6.8 s |
-| Banda, each further call | 0.24 s | 1.5 s |
+| Banda on Grust 0.24.0, integer ids, 8 build workers: first call | 1.4 s | 7.3 to 8.2 s |
+| Banda, each further call | 0.28 s | 1.2 to 2.0 s |
 
 On Grust 0.23.0 the relational path won a single call, because Banda's
 projection took 136 s on one thread through a string map. Grust 0.24.0
-(release in progress) takes integer ids as integers and builds in parallel,
+(released 2026-10-02) takes integer ids as integers and builds in parallel,
 and Banda is then first from the first call at both sizes. So the short
 answer below stands again for a graph that fits one process, **provided the
-ids are staged as integers and the extension is built on Grust 0.24.0**; with
+ids are staged as integers (`ids` = `int64`), the extension is built on Grust
+0.24.0 and `NUTMEG_WORKERS` is set**; the Banda row is three runs on the
+released crates (one run on the release candidate gave 6.8 s). With
 text ids on 0.23.0, read it as "Banda when the same graph is queried five
 times or more". Pecan and Grenada remain the paths for a graph that does not
 fit one process, and they are within about 1.2 times graphframes-rs on this

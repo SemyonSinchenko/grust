@@ -123,10 +123,10 @@ extension at `=0.23.0`, so they need a Grust release and a re-vendoring.
 
 ## After: Grust 0.24.0 and integer identity in the extension
 
-The change was made and measured the same day. Grust 0.24.0 "Tanaid"
-(`origin/work/int64-projection`, release candidate `fa49fbb7`, passing every
-gate on macOS; not yet on crates.io when this was written) does items 1 to 4
-above inside `grust-algorithms`:
+The change was made and measured the same day. Grust 0.24.0 "Tanaid" does
+items 1 to 4 above inside `grust-algorithms`. The table below was measured on
+its release candidate `fa49fbb7` through a path patch; the release itself and
+the repeat on the released crates are in the next section.
 
 - `from_arrow_batches` accepts Int64 `node_id`, `source` and `target` and
   resolves endpoints through a direct table or a sorted lookup;
@@ -136,7 +136,7 @@ above inside `grust-algorithms`:
 - work is charged a batch at a time, to the same totals as 0.23.0.
 
 The extension needed two things on top, on the fork branch
-`work/nutmeg-int64-identity` (uncommitted until the crates are published):
+`work/nutmeg-int64-identity` (`querygraph/sail` `4b88c8fb4`):
 a staging option `ids` = `int64` that keeps integer ids as Int64 instead of
 casting them to text, off by default because it changes the canonical order
 of integer ids from text order to numeric; and `NUTMEG_WORKERS`, which gives
@@ -175,13 +175,68 @@ because the build uses eight workers. Sem's reference build, 179 to 186 s on
 4 cores, is 27 times this one's one-call total; the hosts and the thread
 counts differ, so that is an order of magnitude, not a ratio.
 
+## Released: Grust 0.24.0 on crates.io, and the repeat on it
+
+| What | Where |
+|---|---|
+| Release source | `querygraph/grust` `1cfd03be` (lockfile fix on `fa49fbb7`) |
+| Packaged commit, tag, `main` | `d2668ec7`, `v0.24.0` |
+| Crates | 20 at 0.24.0, each checked with `cargo info` outside the workspace |
+| macOS gate | `ci-local: PASSED every gate at 1cfd03b on Darwin arm64 in 1854s`, Rust 1.99.0 |
+| Linux gate | `ci-local: PASSED every gate at 1cfd03b on Linux aarch64 in 1320s`, Rust 1.99.0, `rust:1-trixie` container on Capitola, 2 build jobs |
+| Extension | `querygraph/sail` `work/nutmeg-int64-identity` `4b88c8fb4`, pins `=0.24.0`, lockfiles from crates.io |
+
+Two things happened on the way, both recorded because a gate that passes
+only on the second try has to say why.
+
+- The Linux gate on `fa49fbb7` failed at Workspace Clippy. The container's
+  Rust was 1.99.0 and the macOS gate's was 1.97.1. Clippy 1.99 rejects a bare
+  `#[must_use]` that `async-trait` 0.1.89 puts on generated methods: 19
+  errors in `grust-core`, none in code this release touched. The lockfile
+  moved to `async-trait` 0.1.92, and both gates were rerun on the new commit
+  with Rust 1.99.0.
+- The first Linux rerun was killed in the test stage: the linker ran out of
+  the container's 19 GiB with six build jobs. With two build jobs it passed.
+  That is a memory limit of the host, not a test result.
+
+No x86-64 Linux gate was run. The Linux verdict is arm64.
+
+Banda end to end on the released crates, with a wheel built from the fork
+commit's lockfile, integer ids, 8 build workers, `asStaged`. cit-Patents is
+one run; graph500-24 is three. The machine had been building for two hours
+(the 5-minute load average was 70 just after the last run), so read them as
+an upper side.
+
+| Phase | cit-Patents | graph500-24, three runs |
+|---|---|---|
+| Server start and session | 0.38 | 0.38 to 0.54 |
+| Read Parquet and stage | 0.33 | 1.58 to 1.86 |
+| First WCC call, written to Parquet | 0.64 | 5.24 to 6.05 |
+| of which the projection build | 0.39 | 3.32 to 3.99 |
+| Second WCC call | 0.28 | 1.18 to 1.98 |
+| PageRank, 10 steps | 0.44 | 3.72 to 4.39 |
+| **One call, launch to exit** | **1.4** | **7.3 to 8.2** |
+| Staged rows | 0.41 GiB | 5.95 GiB |
+| One projection | 0.57 GiB | 4.65 GiB |
+
+The release candidate's single run gave 6.8 s for graph500-24. The released
+crates give 7.3 to 8.2 s. The code is the same apart from the lockfile, so
+the likeliest cause is the machine's load; that was not isolated. Read the
+figure as "7 to 8 s". The conclusion does not move: the relational paths
+take 20 to 30 s here.
+
+Tests on the released crates: 86 vendored Rust tests, 204 Pecan tests and
+443 harness tests pass (30 harness tests skip for want of control binaries).
+The extension-level integration suite has 43 passing and 5 failing; all five
+fail because the Sedona extension is not installed in this environment
+(`unknown function: ST_Point`, `No module named 'sail_sedona'`).
+
 ## Limits
 
 - One run per cell, a laptop, a warm cache. The gate numbers are from the
   September campaign and Stage A, on other builds and in a VM.
-- The after-numbers use an unreleased Grust build through a path patch and
-  an uncommitted extension change. They are to be repeated on the released
-  crates.
+- The first after-table used the release candidate through a path patch. The
+  repeat on the released crates is the section above.
 - The sample is of cit-Patents only.
 - WCC only for the three-path table. BFS and PageRank were not compared
   across paths here.
@@ -192,3 +247,4 @@ counts differ, so that is an order of magnitude, not a ratio.
 
 `banda_phases.py`, `banda-cit-asStaged.json`, `banda-g500-asStaged.json`
 (phases, stage receipt, projection builds, native status).
+`banda-024-released-*.json`: the runs on the released crates.

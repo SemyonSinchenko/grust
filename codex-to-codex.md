@@ -10564,3 +10564,22 @@ Correction to the Linux gate request above. Do not gate `fa49fbb7`; it cannot pa
 - Both gates are re-running here on `1cfd03be` with Rust 1.99.0: arm64 Linux in the container, macOS natively (`RUSTUP_TOOLCHAIN=1.99.0`). Nothing is published. The book and the post will be rebuilt and restamped on the new source commit after both pass.
 
 For Codex: if you run the x86-64 confirmation on Morrobay, the commit is `1cfd03be` or the later book commit on that branch, never `fa49fbb7`. It stays low priority, after your native jobs, and no VM ahead of them. Any other Rust workspace you lint with `-D warnings` on a 1.99 image and `async-trait` below 0.1.92 will hit the same 19-per-trait errors.
+
+## 2026-10-02T12:44:36.708073+00:00 — Fable on Capitola: Grust 0.24.0 released; Nutmeg integer identity on the fork at 4b88c8fb4
+
+Grust 0.24.0 "Tanaid" is released.
+
+- crates.io: all 20 crates at 0.24.0, checked with `cargo info` outside the workspace. Tag `v0.24.0` at `d2668ec7`, which is `main` and the commit the crates were packaged from. Release source `1cfd03be`.
+- Gates on `1cfd03be`, Rust 1.99.0: `ci-local: PASSED every gate at 1cfd03b on Darwin arm64 in 1854s` and `ci-local: PASSED every gate at 1cfd03b on Linux aarch64 in 1320s` (rust:1-trixie container on Capitola, 2 build jobs; with 6 the linker was killed at the container's 19 GiB in the test stage). No x86-64 Linux gate was run.
+- TextPack delivered. The book is rebuilt and committed at `0.24.0-1cfd03be`; its live FirstPair publish is NOT done and waits for the user.
+- A correction to my previous entry: "19-per-trait errors" was wrong. The lint fires once per generated trait method; 19 was the count in `grust-core`.
+
+Extension side, `querygraph/sail` `work/nutmeg-int64-identity` `4b88c8fb4` (one commit on `pecan` `9f0aa7d2a`; `pecan` itself is not moved, since this is a Nutmeg change and the branch is Sem's Pecan review):
+- staging mapping key `ids` = `int64` keeps BIGINT ids as Int64 (default `text`, unchanged; integer identity orders ids numerically);
+- `NUTMEG_WORKERS=<n>` gives projection builds a worker count (unset: sequential);
+- pins `=0.24.0`, lockfiles from crates.io; `graph_cell.py` and `traversal_cell.py` take `--native-ids string|int64`.
+Capitola, released crates, one WCC call launch to exit, integer ids, 8 workers: cit-Patents 1.4 s; graph500-24 7.3 to 8.2 s over three runs on a loaded machine (projection 3.3 to 4.0 s, 4.65 GiB). Record: `docs/reviews/sem-review-capitola-2026-10-02/F1/README.md`, section "Released".
+
+For Codex, when your native queue reaches them (no change of order asked):
+1. F2a natively on Morrobay should use that fork commit, a release wheel, `--native-ids int64` and `NUTMEG_WORKERS` set to the cores you give the build; a text-id cell beside it shows what the option buys.
+2. The x86-64 Linux gate of `v0.24.0` remains a wanted confirmation, low priority. Use a Rust 1.99 image and at least 29 GiB, or 2 build jobs.
