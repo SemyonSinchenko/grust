@@ -369,6 +369,49 @@ graph500-24 comparison is not made yet, and B8's scale-24 adjacency build
 ran out of a 32 GiB container where his WCC peaks at 14 GB, so memory at
 scale 24 is the next thing to measure, before any claim there.
 
+### Stage A repeated on Capitola (2026-10-02): the reading above is corrected
+
+The reading "the remainder is its per-round actions" does not hold. The same
+contrast was repeated on Capitola with release builds of both engines, the
+same LDBC files, the same launch-to-exit boundary, two ABBA blocks and an
+oracle on every pair
+([`reviews/sem-review-capitola-2026-10-02/A2-local/README.md`](reviews/sem-review-capitola-2026-10-02/A2-local/README.md)).
+
+| | Gate (A2) | Capitola |
+|---|---|---|
+| graphframes-rs randomized WCC | 13.75 s | 3.66 s |
+| Pecan randomized WCC | 51.8 s | 5.00 s |
+| Pecan over graphframes-rs, WCC | 3.77 | **1.37** |
+| Pecan over graphframes-rs, PageRank (B11 against his `page-rank`, 10 steps) | not measured | **1.28** |
+| Pecan round 1 of 16 | 23.2 s | 1.43 s |
+| Pecan rounds 5 to 16 | 3.2 s | 0.26 s |
+
+What this changes:
+
+- On Capitola Pecan is within 1.3 to 1.4 times graphframes-rs on
+  cit-Patents, with the client-driven controller and two writes and one
+  count per round. The controller's actions are not what separates them.
+- The gate slows graphframes-rs by 3.8 and Pecan by 10.4 relative to
+  Capitola. Something on the gate costs Sail about 2.8 times more than it
+  costs his binary. Both engines use the same volume there.
+- A2's own per-round data already showed it: round 1 is 23 s of the 48 s
+  call, and the twelve tail rounds together are 3 s. The time is in the
+  heavy rounds' engine work, not in the number of round trips.
+- Stage B's knobs, measured on Capitola: no keyless repartition saves 11%,
+  inputs in place 13%, both with hashed labels 22%. Preferring sort-merge
+  joins changes nothing at this size. These are refinements, not the gap.
+
+What is open, and it comes before any further Stage B work: why Sail is
+slower on the gate. The first suspect is the gate's Sail binary. The
+extension build script builds the host with the dev profile, the gate
+binary's build command is not in the evidence, and a dev-profile host on
+Capitola reproduces the gate's shape (a 12.6 s first round, tail rounds of
+0.1 to 0.2 s). If the binary is a true release build, the second suspect is
+Sail on x86 Linux in that VM, and one profiled cell in the A1 container
+separates engine time from write time from round trips. Until that is
+answered, the gate's 3.8, 2.5 and 9.5 should be read as upper bounds on
+Pecan's distance from graphframes-rs, not as the distance.
+
 ### Stage B. Reduce redundant round work without weakening checkpoints
 
 Each item is a separate opt-in candidate. Run the relevant unit tests plus
@@ -615,7 +658,8 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | A1 | graphframes-rs at the benchmark branch built in the gate image; his settings read from `main.rs` | Codex | **done**: `b4da56d` built with `--release --locked` in the gate image, 16 CPUs, 32 GiB; settings audited: seed 42, 16 partitions, 30 GiB FairSpillPool, sort-merge preferred; his PageRank is thresholded delta Pregel and his shortest paths are per-landmark unweighted hops, so they are not LDBC's fixed-step power PR and weighted SSSP | `work/morrobay-sem-review`, `docs/reviews/sem-review-morrobay-2026-10-01/A1/` |
 | A2 | Pecan in local mode on cit-Patents in the A1 container, against his binary there, two ABBA blocks, n = 4 per engine, full oracle on every cell | Codex | **done**: Pecan over graphframes-rs, launch to exit: randomized WCC (B9) **3.77**, frontier BFS against his directed hops **2.51**, min-label WCC against his randomized 9.49; engine PSS 2.2 against 1.5 GiB for WCC, equal for BFS; PageRank not compared (contracts differ until B11) | `docs/reviews/sem-review-morrobay-2026-10-01/A2/README.md` |
 | A3 | the same in process-cluster mode: driver and two workers, 10 GiB pool each, 16 partitions | Codex | **done**: randomized WCC **4.74**, BFS **2.99**, min-label 12.1; so cluster mode costs 19 to 27% over local at this size | `.../A3/README.md` |
-| A4 | the decision table of Stage A applied, written into section 4 | Fable | **done**: L is 2.5 to 3.8, C is 1.2 to 1.3: the controller's actions per round are the gap, not cluster execution; Stage B is next, Stage E is not triggered | section 4, "Stage A result" |
+| A4 | the decision table of Stage A applied, written into section 4 | Fable | **done, then corrected on 2026-10-02**: the first reading (the controller's actions per round are the gap) does not hold. Repeated on Capitola with release builds, Pecan is 1.37 (WCC) and 1.28 (PageRank) times graphframes-rs, against 3.77 on the gate; the gate slows Sail 2.8 times more than his binary. A5 decides why | section 4, "Stage A result" and "Stage A repeated on Capitola"; `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
+| A5 | why Sail is slower on the gate than on Capitola relative to graphframes-rs: (1) the gate Sail binary's exact cargo command, profile and size; (2) if it is a true release build, one `profile_wcc.py` cell in the A1 container; (3) the A2 WCC contrast again on a host built with `cargo build --release --locked -p sail-cli` at `0d1ef2ca3`, with the PageRank contrast added | Codex (gate), Fable (reading) | open; before further Stage B work | |
 | B1 | keyless repartition toggle (`repartition_checkpoints`) | done | `6ae2e43a9` | integration |
 | B2 | write receipt from the host's graph-utils service instead of read-back counts | Fable | open | |
 | B3 | round scalars folded into the state write | Fable | open | |

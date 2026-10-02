@@ -1,0 +1,131 @@
+# Stage A repeated on Capitola: Pecan against graphframes-rs on one laptop
+
+Measured on 2026-10-02 on Capitola (Apple M1 Max, 10 cores, macOS, native
+arm64 builds). It repeats the gate's A2 contrast with the same inputs and
+the same boundary, and adds a step-level profile of Pecan's WCC.
+
+## Why
+
+The gate's A2 report gives Pecan's rounds one by one. On cit-Patents the
+randomized WCC takes 16 rounds, and round 1 alone is 23 s of a 48 s call.
+graphframes-rs runs the same plan shape per round: a union, a grouped
+minimum, two joins and a distinct. So the question was whether Sail is that
+much slower on the same plan, or whether something on the gate is.
+
+## Setup
+
+| | Pecan | graphframes-rs |
+|---|---|---|
+| Source | `querygraph/sail` `0d1ef2ca3` | `ba2fdd8` |
+| Build | `cargo build --release --locked -p sail-cli` (full LTO) | `cargo build --release` |
+| Execution | Sail local mode, parallelism 10, 30 GiB greedy pool | one process, `--num-workers 10 --max-memory 30G` |
+| WCC | `method="randomized"`, seed 42, canonical labels, snapshot and repartition on (A2's settings) | `wcc --seed 42` |
+| PageRank | `method="pregel_delta"`, tolerance 0.01, 10 steps, normalized | `page-rank --tol 0.01 --max-iter 10` |
+| Input | LDBC `cit-Patents-{v,e}.parquet`, read in place | the same files |
+
+The timer runs from just before the engine process is started to its exit.
+For Pecan that includes server start, session, the algorithm, the Parquet
+export and shutdown. Two ABBA blocks, four samples per engine. Every pair is
+checked: WCC labels equal on all 3,774,768 vertices; PageRank within 1e-12
+on every vertex.
+
+## Result: launch to exit
+
+| Contrast | Pecan, median | graphframes-rs, median | Pecan over graphframes-rs | Oracle |
+|---|---|---|---|---|
+| Randomized WCC | 5.00 s | 3.66 s | **1.37** | 3,627 components, 0 label mismatches |
+| PageRank, 10 delta steps | 5.12 s | 4.00 s | **1.28** | largest difference 2.2e-19 absolute, 3.6e-15 relative |
+
+Raw records: [`a2-launch-to-exit.json`](a2-launch-to-exit.json). The first
+graphframes-rs sample of the run was 4.68 s (cold); the others were 3.59 to
+3.72 s.
+
+## The same contrast on the two hosts
+
+| | Gate (A2) | Capitola | Gate over Capitola |
+|---|---|---|---|
+| graphframes-rs WCC, launch to exit | 13.75 s | 3.66 s | 3.8 |
+| Pecan WCC, launch to exit | 51.8 s | 5.00 s | 10.4 |
+| Pecan over graphframes-rs | 3.77 | 1.37 | |
+| Pecan round 1 | 23.2 s | 1.43 s | 16 |
+| Pecan rounds 5 to 16, together | 3.2 s | 0.26 s (the writes) | 12 |
+
+Moving from the laptop to the gate slows graphframes-rs by 3.8 and Pecan by
+10.4. Both engines read and write the same volume on the gate, and both are
+x86 Linux builds there. Something on the gate costs Sail about 2.8 times more
+than it costs graphframes-rs. It is not yet known what.
+
+## Result: where Pecan's time goes (release host, warm server)
+
+Median of five runs of the public call. Raw output:
+[`profile-variants.txt`](profile-variants.txt).
+
+| Setting | Call | Round 1 | of which representatives | of which relabel | Rounds 5 to 16 | Back pass |
+|---|---|---|---|---|---|---|
+| Default (A2's settings) | 4.08 s | 1.43 | 0.61 | 0.82 | 0.26 | 0.48 |
+| Sort-merge joins preferred | 4.17 s | 1.38 | 0.61 | 0.77 | 0.26 | 0.66 |
+| No keyless repartition (B1) | 3.62 s | 1.22 | 0.53 | 0.70 | 0.27 | 0.41 |
+| Inputs in place (B7) | 3.57 s | 1.31 | 0.53 | 0.77 | 0.26 | 0.47 |
+| In place, no repartition, hashed labels | 3.18 s | 1.19 | 0.51 | 0.68 | 0.25 | 0.29 |
+| Debug-profile host, default, one run | 37.96 s | 12.59 | 6.09 | 6.49 | 1.40 | 5.53 |
+
+- The counts are free here: Sail answers a count over a written stage in
+  under 10 ms.
+- A tail round costs about 20 ms. Twelve of them are a quarter of a second.
+- Sort-merge joins change nothing at this size.
+- Skipping the snapshot and the repartition saves 11 to 13% each. With the
+  hashed labels kept, the three together save 22%.
+- The debug-profile host is 9 times slower, and its tail round costs 0.1 to
+  0.2 s. The gate's tail rounds cost 0.2 to 0.4 s.
+
+## What it says
+
+- On this laptop Pecan is in graphframes-rs's class on cit-Patents: 1.3 to
+  1.4 times launch to exit, with a client-driven controller and the same
+  number of writes per round.
+- So the gate's 3.8 is not explained by the controller's actions per round.
+  Most of it appears on the gate and not here.
+- Stage B's knobs are worth about 10% each on this graph. None is a large
+  lever.
+
+## What is not known, and the check that decides it
+
+Why Sail loses 2.8 times more than graphframes-rs on the gate. Three
+candidates, in the order to check them:
+
+1. **The gate's Sail binary.** `scripts/build.sh` builds the host with the
+   dev profile; the gate binary is named `…-release`, but its build command
+   is not in the evidence. A dev-profile host on Capitola gives a 12.6 s
+   round 1 and 0.1 to 0.2 s tail rounds, which is the gate's shape. The
+   check: the exact cargo command, the file size (a stripped LTO release is
+   about 134 MB here; a dev build is 930 MB), and a rebuild with
+   `cargo build --release --locked -p sail-cli` if in doubt.
+2. **Sail on x86 Linux in that VM.** If the binary is a true release build,
+   run [`profile_wcc.py`](profile_wcc.py) once in the A1 container. It
+   splits each round into its two writes and its count, which says whether
+   the time is in the engine, in the writes, or in the round trips.
+3. **Partitions.** The gate ran 16 partitions on 16 vCPUs of a shared
+   18-core host. A run at 8 would show whether oversubscription matters.
+
+## Limits
+
+- One graph, 16.5M edges. Nothing here speaks for graph500-24.
+- A laptop with other applications running. The medians are indications.
+- macOS and arm64, not the gate's Linux and x86. The comparison between
+  hosts is of ratios, not of seconds.
+- graphframes-rs here is `ba2fdd8`; the gate built `b4da56d`.
+
+## Reproduce
+
+```sh
+# builds
+cargo build --release --locked -p sail-cli        # in the Sail fork at 0d1ef2ca3
+cargo build --release                             # in graphframes-rs at ba2fdd8
+# launch to exit, both engines, oracle on every pair
+python a2_local.py --out a2-launch-to-exit.json
+# step-level profile against a running server (serve.sh <port>)
+python profile_wcc.py --remote sc://127.0.0.1:50178 --vertices cit-Patents-v.parquet \
+  --edges cit-Patents-e.parquet --src source --dst target --partitions 10
+```
+
+The scripts carry Capitola's paths at the top; change them for another host.
