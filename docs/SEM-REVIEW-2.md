@@ -333,6 +333,42 @@ publish absolute timing results only on a qualified dedicated host.
 Maintain the independent multi-host placement, strong-scaling and weak-scaling
 matrix in [CLUSTER-PREPARATION.md](reviews/sail-stream-experiments-2026-09-30/CLUSTER-PREPARATION.md).
 
+### Stage A result (A4, 2026-10-02)
+
+Codex ran A1 to A3 on the gate: his binary and Pecan (typed, no validation,
+B9) in the same 16-CPU, 32 GiB container on the LDBC cit-Patents files, two
+ABBA blocks, four measured samples per engine, a full output oracle on every
+cell, launch to exit including input read and output write.
+
+| Contrast | Local mode | Process-cluster mode | Cluster over local |
+|---|---|---|---|
+| Pecan randomized WCC over graphframes-rs randomized WCC | 3.77 | 4.74 | 1.26 |
+| Pecan frontier BFS over his directed unweighted hops | 2.51 | 2.99 | 1.19 |
+| Pecan min-label WCC over his randomized WCC | 9.49 | 12.1 | 1.27 |
+
+Sampled engine memory: 2.2 against 1.5 GiB for randomized WCC, equal for
+BFS. Pecan's public algorithm call took 48 s for randomized WCC of which
+5 s is the input snapshot; 18 s for BFS.
+
+Reading, by the decision table: the local ratio is between 2.5 and 3.8,
+so the client-driven controller is in or near his class in one process,
+and the remainder is its per-round actions, which is Stage B. The cluster
+ratio is 1.2 to 1.3, so cross-process execution is a quarter of the cost at
+this size, not the tenfold the earlier cross-host indication suggested;
+Stage C is not the priority. Stage E's trigger (a local ratio above 20) did
+not fire: the loop inside the server is a design choice to make on its
+merits, not a rescue.
+
+What moved the number from the campaign's 66 to 120 times to 3.8: no
+validation jobs, the paper's contraction (B9), 16 partitions instead of 32,
+pools that fit the container, and his binary measured on our host instead of
+his instance's published time.
+
+Limits: one graph with no isolated vertices, a shared host, n = 4. The
+graph500-24 comparison is not made yet, and B8's scale-24 adjacency build
+ran out of a 32 GiB container where his WCC peaks at 14 GB, so memory at
+scale 24 is the next thing to measure, before any claim there.
+
 ### Stage B. Reduce redundant round work without weakening checkpoints
 
 Each item is a separate opt-in candidate. Run the relevant unit tests plus
@@ -577,9 +613,9 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 |---|---|---|---|---|
 | A0 | LDBC Graphalytics `test-*` graphs with their reference outputs as Pecan's correctness oracle (BFS, PageRank, SSSP, WCC), before any timing (Sem, remark 13) | Codex | **done**: 16 of 16 supported cases pass against the official references (CDLP and LCC recorded unsupported) | `work/morrobay-pecan-typed-results`, `docs/reviews/pecan-ldbc-semantics-2026-10-01/README.md`, commit `cec260d6` |
 | A1 | graphframes-rs at the benchmark branch built in the gate image; his settings read from `main.rs` | Codex | **done**: `b4da56d` built with `--release --locked` in the gate image, 16 CPUs, 32 GiB; settings audited: seed 42, 16 partitions, 30 GiB FairSpillPool, sort-merge preferred; his PageRank is thresholded delta Pregel and his shortest paths are per-landmark unweighted hops, so they are not LDBC's fixed-step power PR and weighted SSSP | `work/morrobay-sem-review`, `docs/reviews/sem-review-morrobay-2026-10-01/A1/` |
-| A2 | Pecan in local mode on the LDBC inputs in the A1 container, against his binary there: WCC `randomized` (B9) and `min_label`; BFS against his unweighted shortest paths, hops only; PageRank only once a matching contract exists (his thresholded delta against B11, or his CLI run with a fixed iteration count if it has one); validation as its own phase; ABBA twice | Codex | open, next | |
-| A3 | the same in process-cluster mode with pools summing to the container budget (C3) and 16 partitions | Codex | open, after A2 | |
-| A4 | the decision table of Stage A applied, written into section 4 | Fable | open | |
+| A2 | Pecan in local mode on cit-Patents in the A1 container, against his binary there, two ABBA blocks, n = 4 per engine, full oracle on every cell | Codex | **done**: Pecan over graphframes-rs, launch to exit: randomized WCC (B9) **3.77**, frontier BFS against his directed hops **2.51**, min-label WCC against his randomized 9.49; engine PSS 2.2 against 1.5 GiB for WCC, equal for BFS; PageRank not compared (contracts differ until B11) | `docs/reviews/sem-review-morrobay-2026-10-01/A2/README.md` |
+| A3 | the same in process-cluster mode: driver and two workers, 10 GiB pool each, 16 partitions | Codex | **done**: randomized WCC **4.74**, BFS **2.99**, min-label 12.1; so cluster mode costs 19 to 27% over local at this size | `.../A3/README.md` |
+| A4 | the decision table of Stage A applied, written into section 4 | Fable | **done**: L is 2.5 to 3.8, C is 1.2 to 1.3: the controller's actions per round are the gap, not cluster execution; Stage B is next, Stage E is not triggered | section 4, "Stage A result" |
 | B1 | keyless repartition toggle (`repartition_checkpoints`) | done | `6ae2e43a9` | integration |
 | B2 | write receipt from the host's graph-utils service instead of read-back counts | Fable | open | |
 | B3 | round scalars folded into the state write | Fable | open | |
@@ -587,10 +623,10 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | B5 | tail cutover for the contraction | Fable | open | |
 | B6 | checkpoint every k rounds | Fable | open | |
 | B7 | trusted immutable Parquet inputs: no snapshot rewrite (Sem, "why rewrite the inputs") | Fable | open | |
-| B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remarks 11, 23a); he wants numbers | Codex | open | |
+| B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remarks 11, 23a); he wants numbers | Codex | **interim**: on cit-Patents, 30 cells, array and explode is slower than union in every shape: adjacency 1.02, representatives 1.12, min-label round 1.12 (median elapsed, explode over union); the graph500-24 adjacency union warmup ran out of the 32 GiB container, cause not yet located, so no scale-24 ratio | `.../B8/INTERIM-FINDINGS.md` |
 | B10 | PageRank in the Pregel paper's and GraphX's static form (`method="pregel"`), optional normalization (Sem, remarks 18, 21) | Fable | **done**: tests equal to `power` without dangling vertices, same order with them | `work/wcc-affine` `f3b3ef8fc` |
 | B11 | PageRank delta as GraphX's vertex program: no certificates, the frontier as the only extra relation (Sem, remarks 20, 21) | Fable | open | |
-| B9 | randomized WCC as in the paper: affine ids, plain `min`, inverse maps once at the end (Sem, remarks 14 and 17) | Fable; gate measurement Codex, inside A2 | **done**, pending the gate measurement: 176 Pecan and 337 harness tests pass; paired debug-build control on Capitola (2M vertices, 4M edges, identical labels): new 24.2 and 23.8 s against old fused 29.5 and 27.8 s and old randomized 39.3 and 31.0 s, about 30% less per round | `querygraph/sail` `work/wcc-affine` `7475dfc03` on top of `6ae2e43a9` |
+| B9 | randomized WCC as in the paper: affine ids, plain `min`, inverse maps once at the end (Sem, remarks 14 and 17) | Fable; gate measurement Codex, inside A2 | **measured in A2 and A3; one correctness defect found by Codex and being fixed**: a hashed component label can equal an isolated vertex's original id (three-vertex counterexample in `A2/RUN04-PREFLIGHT.md`), merging two components; the fix labels an isolated vertex by its own image under the composed map, so every label lives in one id space; cit-Patents has no isolates, so A2 and A3 stand. Earlier note: 176 Pecan and 337 harness tests pass; paired debug-build control on Capitola (2M vertices, 4M edges, identical labels): new 24.2 and 23.8 s against old fused 29.5 and 27.8 s and old randomized 39.3 and 31.0 s, about 30% less per round | `querygraph/sail` `work/wcc-affine` `7475dfc03` on top of `6ae2e43a9` |
 | C1 | local mode as the single-host default in harness and guide | Fable | open | |
 | C2 | fixed cost of one distributed job at P = 4, 16, 32 | Codex | open | |
 | C3 | pools that sum to the container limit | Codex | open | |
