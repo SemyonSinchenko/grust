@@ -38,7 +38,8 @@ and the LDBC files, one WCC call launch to exit:
 
 | Path | cit-Patents | graph500-24 (260M edges) |
 |---|---|---|
-| Pecan | 5.0 s | 30.4 s |
+| Pecan, default (copies the inputs first) | 5.0 s | 30.4 s |
+| Pecan, inputs read in place | 4.1 s | 20.3 s |
 | Banda, first call | 8.4 s | 139 s |
 | Banda, each further call | 0.26 s | 1.1 s |
 

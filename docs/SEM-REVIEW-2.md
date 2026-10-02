@@ -740,7 +740,7 @@ under `docs/`, on `work/proposal-v5`, because the review's documents live in
 grust and nothing of the kind may sit in a Sail tree, upstream or fork. Only
 a change to Pecan's code itself goes to the fork, as a pull request against
 `pecan` on `querygraph/sail` (kept at the current Pecan tip, today
-`f3b3ef8fc`), because that is where `examples/extensions/graph-algorithms`
+`d0e4e422a`), because that is where `examples/extensions/graph-algorithms`
 lives; that directory is fork-only and is not part of any upstream merge.
 
 Order: A0 first, because no timing is reported on an unverified answer;
