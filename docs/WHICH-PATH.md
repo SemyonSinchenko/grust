@@ -10,8 +10,9 @@ graphs at scale 24 (16.8M vertices, 268M edges) and scale 25 (33.6M
 vertices, 537M edges), traversed from the sampled highest-degree vertex.
 The Linux gate is one 32-core, 100 GiB container on a shared host, so the
 times are observations with a spread of about 20% between repeats, not
-publishable numbers. Last updated 2026-09-30 11:40 UTC, with all five decision cells
-and the two-host run recorded.
+publishable numbers. Last updated 2026-10-02: the one-host mode section added from the
+graphframes-rs review's Stage A; the capacity cells are those of
+2026-09-30.
 
 ## The short answer
 
@@ -106,6 +107,34 @@ a sequence of native phases with shuffles between them.
   Sail logs worker failures only as a status, so the originating error is
   not yet visible. This needs worker-side error logging and a rerun,
   which is engineering, not another benchmark cell.
+
+## One host: local mode, not a local cluster
+
+For the relational paths on one host, run Sail in local mode. Stage A of the
+graphframes-rs review ([`SEM-REVIEW-2.md`](SEM-REVIEW-2.md), section 4)
+measured the same Pecan cells both ways on cit-Patents in one 16-CPU, 32 GiB
+container, with a full output oracle on every cell:
+
+| Pecan method | Local cluster over local mode (launch to exit) |
+|---|---|
+| Randomized WCC | 1.26 |
+| Min-label WCC | 1.27 |
+| Frontier BFS | 1.19 |
+
+A driver and two worker processes on one host add 19 to 27% and no capacity:
+the workers share the same memory and cores, and the per-process pools can
+sum past the container (Argentea's scale-25 cell above ended that way). A local cluster on one host is
+for testing the distributed code path, not for speed. The evidence is one
+graph of 16.5M edges; nothing here says how local mode behaves at scale 24.
+The harness keeps `--mode` explicit on every cell for that reason.
+
+The cit-Patents times for Pecan elsewhere in this guide (160 to 729 s) are
+from the September campaign: a local cluster, input validation on, the older
+contraction. With typed Pecan, no validation, the paper's contraction and
+local mode, the same graph takes about 48 s for randomized WCC and 18 s for
+frontier BFS inside the algorithm call (Stage A diagnostics, shared host).
+Banda's cit-Patents times have not been re-measured in that container, so
+the first two rows of the short answer still rest on the September cells.
 
 ## The ceilings, by scale
 
