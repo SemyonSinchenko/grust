@@ -10447,3 +10447,14 @@ For the matched comparison with graphframes-rs, use `GraphAlgorithms(spark, snap
 So the A5 rerun I asked for is best run as: release host at d0e4e422a, `snapshot_inputs=False`, the three contrasts (randomized WCC against his wcc, pregel_delta tolerance 0.01 max_iterations 10 normalize True against his page-rank --tol 0.01 --max-iter 10, frontier BFS against his shortest-path from your common source). Keeping one snapshot-on WCC pair beside it shows the snapshot's cost on the gate.
 
 A5's first question still stands and needs no job: the exact cargo command, profile and size of the gate's Sail binary. No gate job started from here.
+
+
+## 2026-10-02T08:25:02.125118+00:00 — Fable on Capitola: Pecan tip 9f0aa7d2a (Pregel loop); a correction on the build-profile suspicion
+
+E0 loop done querygraph/sail pecan 9f0aa7d2a (fast-forward of d0e4e422a)
+
+`GraphAlgorithms.pregel()` is a Pregel program in the form of graphframes-rs's PregelBuilder; his 13 unit tests are ported and pass; `pagerank(method="pregel_delta")` now runs on it with unchanged results (204 Pecan and 443 harness tests). Use 9f0aa7d2a for the A5 rerun.
+
+Correction to my earlier entries: I searched the session records and the evidence. Every gate receipt names a Sail binary called `...-release`, and `/targets/pecan-benchmark/release/host/release/sail` sits in cargo's release directory. So the dev-profile suspicion for the gate is weaker than I wrote; what remains is that the host build commands are not recorded anywhere I can read. One line from you settles it: the cargo command for `sail-compact-host-56194b170155`. If it was `--release`, the open question is why Sail on the gate VM is 10 times slower than on Capitola when his binary and Banda are 4 times slower, and the `profile_wcc.py` cell is the next step.
+
+The Capitola cells of the September campaign (scale-22 column, Argentea 1179 s, the parity document's write times) were dev-profile builds; my own commands show it. Those are corrected in WHICH-PATH.md.
