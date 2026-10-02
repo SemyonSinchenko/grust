@@ -148,8 +148,9 @@ Why Sail loses 2.8 times more than graphframes-rs on the gate. Three
 candidates, in the order to check them:
 
 1. **The gate's Sail binary.** `scripts/build.sh` builds the host with the
-   dev profile; the gate binary is named `…-release`, but its build command
-   is not in the evidence. A dev-profile host on Capitola gives a 12.6 s
+   dev profile. Against this suspect: every gate receipt names a binary
+   called `…-release`, and one of them sits in cargo's `release/` directory.
+   For it: the build commands are not in the evidence. A dev-profile host on Capitola gives a 12.6 s
    round 1 and 0.1 to 0.2 s tail rounds, which is the gate's shape. The
    check: the exact cargo command, the file size (a stripped LTO release is
    about 134 MB here; a dev build is 930 MB), and a rebuild with

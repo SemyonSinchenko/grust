@@ -27,11 +27,18 @@ here, in both directions.
   relational paths are upper bounds.
 - **Build profiles were not recorded per cell.** The extension build script
   (`scripts/build.sh`) builds the host and the native wheels with the dev
-  profile, which is about 9 times slower for the host on this workload. The
-  gate cells of the September campaign were built with `--release` as far
-  as the session records show. The Capitola cells (the scale-22 column, and
-  Argentea's 1179 s) ran x86 builds under Rosetta, at least some of them
-  dev-profile. A future cell records its cargo profile in the receipt.
+  profile, which is about 9 times slower for the host on this workload.
+  What the records show:
+  - Gate cells: every Sail binary a gate receipt names is called
+    `…-release` or sits in cargo's `release/` directory, and the one gate
+    wheel build in the session records used `--release`. The build commands
+    of the hosts themselves are not in the evidence, so this is likely
+    release and not verified. Codex has been asked.
+  - Capitola cells before 2026-10-02 (the scale-22 column, Argentea's
+    1179 s, the write times in `GRAPHFRAMES-RS-PARITY.md`): dev-profile
+    builds, the x86 ones under Rosetta. The commands are in the session
+    records. Those numbers are not performance numbers.
+  - A future cell records its cargo profile in the receipt.
 
 The ranking between paths is exposed too. On Capitola, with release builds
 and the LDBC files, one WCC call launch to exit:
