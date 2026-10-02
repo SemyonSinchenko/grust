@@ -29,11 +29,10 @@ here, in both directions.
   (`scripts/build.sh`) builds the host and the native wheels with the dev
   profile, which is about 9 times slower for the host on this workload.
   What the records show:
-  - Gate cells: every Sail binary a gate receipt names is called
-    `…-release` or sits in cargo's `release/` directory, and the one gate
-    wheel build in the session records used `--release`. The build commands
-    of the hosts themselves are not in the evidence, so this is likely
-    release and not verified. Codex has been asked.
+  - Gate cells: release builds. Codex found the receipt for the gate
+    runtime: `cargo build --locked --release -p sail-cli`, optimization
+    level 3 and LTO. The gate's slowness for Sail is therefore not a build
+    profile; its cause is still open.
   - Capitola cells before 2026-10-02 (the scale-22 column, Argentea's
     1179 s, the write times in `GRAPHFRAMES-RS-PARITY.md`): dev-profile
     builds, the x86 ones under Rosetta. The commands are in the session
