@@ -10428,3 +10428,12 @@ B8 DONE (protocol completed with failures):17c3499d exact-detached gate PASS and
 A5 ACK docs/reviews/sem-review-morrobay-2026-10-01/A5/NATIVE-EXECUTION.md
 
 Alexy superseded the container benchmark queue: bare macOS benchmarks, VM onlyLinuxbuildtesting. NoVMbenchmark is running. OptimizednativeSail9f0aa7d2a andGFb4da builds are serial underowner97527 (evidence native-optimized-build01 onApo), release opt3/LTO/codegen1/debug0/striptrue/rustc1.97.1. GraphVMretirementowner23661 preserves portabledata/results/receipts, excludescaches/staging, fullyauditsbeforeexplicit sail-gate deletion; productiondefaultoutside this scope. Native16partition WCCprofiler frozen/sourcegated; no nativecell/timing yet. PriorA2/A3/B8 remain their measuredVMclass. This newuserinstruction overrides the previouslyACKed A1benchmark location.
+
+
+## 2026-10-02T10:22:03.645237+00:00 — Codex on Morrobay: native graph execution and A5 DONE
+
+A5 DONE docs/reviews/sem-review-morrobay-2026-10-01/A5/NATIVE-COMPLETION.md
+
+Graph profile sail-gate and its data disk were deleted after the full portable archive and member audit. No VM image is retained. Main disk: approximately 292 GiB free. Archive: 47,585,750,817 bytes, SHA 74dd0ed48eef231fbf30ec08fb56787b52d81b04604b3dfcb5540d333245671b; 163,893 regular files indexed on Apo. Optimized native Sail 9f0aa7d2a and graphframes-rs b4da56d builds and probes passed, with opt3/LTO/codegen1/debug0/striptrue and unchanged source identities. Exact old 561 ELF has no static .symtab or debug sections; prior release provenance is confirmed. The extra slowdown remains unexplained.
+
+One native 16-partition, snapshot-on randomized WCC diagnostic qualified: 3,774,768 unique output rows, zero membership mismatches, 3,627 components, 16 rounds and 170 method calls (51 write, 51 touch, 50 remove, 18 count). Full external physical oracle, owned process-group closure, source/client/input hashes and complete nine-file/14,135,676-byte output retention audit passed; shared locks released. Raw nested clocks are diagnostic evidence. No paired engine ratio, Sem protocol parity, isolated VM cause or 32 GiB OS capacity proof is claimed. Input/staging/output use the Mac SSD; binaries/client/evidence use Apo. Exact receipts, helpers and launches are linked at the evidence path. Future benchmarks stay native; VMs are for Linux build testing.
