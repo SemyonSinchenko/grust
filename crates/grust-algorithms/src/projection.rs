@@ -1,7 +1,7 @@
 //! Projection identity and topology validation. Property extraction lives at adapters.
 
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
 
 use grust_core::{EdgeId, NodeId};
 pub use grust_procedures::SnapshotIdentity;
@@ -74,7 +74,10 @@ struct ProjectionData {
     /// Weights may be negative; see [`GraphProjection::require_nonnegative`].
     signed: bool,
     nodes: Buffer<NodeId>,
-    node_by_id: HashMap<NodeId, usize>,
+    /// External id to node row, for [`GraphProjection::source`]. Built with
+    /// the projection when the ids still have to be checked distinct, and on
+    /// first use otherwise; paid for at the build either way.
+    node_by_id: OnceLock<HashMap<NodeId, usize>>,
     edges: EdgeTable,
     outgoing: Adjacency,
     /// Built on first use, then kept as long as the projection: admitted by
@@ -108,6 +111,7 @@ impl GraphProjection {
                 .transpose()?,
             false,
             orientation,
+            Distinct::Unchecked,
             context,
         )
     }
@@ -132,10 +136,12 @@ impl GraphProjection {
             Some(Buffer::adopt(weights, context)?),
             true,
             orientation,
+            Distinct::Unchecked,
             context,
         )
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn from_buffers(
         identity: SnapshotIdentity,
         nodes: Buffer<NodeId>,
@@ -143,6 +149,7 @@ impl GraphProjection {
         weights: Option<Buffer<f64>>,
         signed: bool,
         orientation: Orientation,
+        distinct: Distinct,
         context: &ExecutionContext,
     ) -> Result<Self> {
         context.checkpoint()?;
@@ -169,19 +176,30 @@ impl GraphProjection {
                 .saturating_add(2 * size_of::<usize>());
         }
         let retained = context.reserve(bytes)?;
-        let mut node_by_id = HashMap::new();
-        node_by_id.try_reserve(nodes.len())?;
-        // A duplicate is an error of its own, so the charge stays in step with
-        // the inserts unless the budget covers every node.
-        let charged = crate::parallel::charge_whole(context, nodes.len())?;
-        for (index, id) in nodes.iter().enumerate() {
-            if !charged {
-                context.charge_work(1)?;
-            }
-            if node_by_id.insert(id.clone(), index).is_some() {
-                return Err(ProcedureError::InvalidArguments(format!(
-                    "duplicate node ID: {id}"
-                )));
+        // One unit a node either way, so a budget means what it meant. An
+        // adapter that has already refused duplicate ids leaves the index to
+        // the first kernel that looks a node up by id: on a large graph it is a
+        // visible share of the build, and most kernels never ask.
+        let node_by_id = OnceLock::new();
+        match distinct {
+            Distinct::Checked => crate::parallel::charge_each(context, nodes.len())?,
+            Distinct::Unchecked => {
+                let mut index = HashMap::new();
+                index.try_reserve(nodes.len())?;
+                // A duplicate is an error of its own, so the charge stays in
+                // step with the inserts unless the budget covers every node.
+                let charged = crate::parallel::charge_whole(context, nodes.len())?;
+                for (row, id) in nodes.iter().enumerate() {
+                    if !charged {
+                        context.charge_work(1)?;
+                    }
+                    if index.insert(id.clone(), row).is_some() {
+                        return Err(ProcedureError::InvalidArguments(format!(
+                            "duplicate node ID: {id}"
+                        )));
+                    }
+                }
+                let _ = node_by_id.set(index);
             }
         }
         if weights
@@ -335,9 +353,28 @@ impl GraphProjection {
     }
 
     pub(crate) fn source(&self, id: &str) -> Result<usize> {
-        self.inner.node_by_id.get(id).copied().ok_or_else(|| {
+        self.node_index()?.get(id).copied().ok_or_else(|| {
             ProcedureError::InvalidArguments(format!("source is not selected: {id}"))
         })
+    }
+
+    /// External id to node row, built now if no kernel has asked before. Its
+    /// work was charged and its bytes retained when the projection was built,
+    /// so this charges nothing; it polls, so a cancelled query does not finish
+    /// it. Two queries that ask at once may both build it, and one is kept.
+    fn node_index(&self) -> Result<&HashMap<NodeId, usize>> {
+        if let Some(index) = self.inner.node_by_id.get() {
+            return Ok(index);
+        }
+        let mut index = HashMap::new();
+        index.try_reserve(self.inner.nodes.len())?;
+        for (first, chunk) in self.inner.nodes.chunks(1024).enumerate() {
+            self.context.checkpoint()?;
+            for (offset, id) in chunk.iter().enumerate() {
+                index.insert(id.clone(), first * 1024 + offset);
+            }
+        }
+        Ok(self.inner.node_by_id.get_or_init(|| index))
     }
     pub(crate) fn outgoing(&self) -> &Adjacency {
         &self.inner.outgoing
@@ -551,6 +588,15 @@ fn validate_edges(
         }
     }
     Ok(())
+}
+
+/// Whether the node ids handed to [`GraphProjection::from_buffers`] are already
+/// known to be distinct.
+pub(crate) enum Distinct {
+    /// Raw input: the build checks, and reports a duplicate.
+    Unchecked,
+    /// An adapter that maps ids to rows itself has already refused a duplicate.
+    Checked,
 }
 
 /// Caller-supplied edges as the projection's columns. The vector is admitted

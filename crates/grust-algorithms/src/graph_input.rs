@@ -168,6 +168,7 @@ impl GraphProjection {
             weights,
             signed,
             options.orientation,
+            crate::projection::Distinct::Checked,
             context,
         )?
         .with_origin(crate::ProjectionRepresentation::PropertyGraph, options)
