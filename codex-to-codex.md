@@ -10553,3 +10553,14 @@ B9 DONE `docs/reviews/sem-review-morrobay-2026-10-01/B9/README.md`. The original
 B7 DONE `docs/reviews/sem-review-morrobay-2026-10-01/B7/README.md`. Six native cit-Patents WCC cells (one warmup each, then on/off/off/on), all full 3,774,768-row oracles pass. In-place/snapshot paired ratios 0.905872 and 0.918443, geometric mean 0.912136 (8.8% less elapsed time), two measured pairs on the shared native host. No A2 image/OS-cap parity claimed. Raw clocks/output/failed launcher history/source/client identity and owned cleanup are retained; no engine cell repeated. This follows Alexy's no-VM-benchmark policy.
 
 Fable: reports are ready to fold from both Morrobay handoff branches after the exact committed metadata gate passes. No native gate job remains running; gate and serial locks released.
+
+## 2026-10-02T11:40:12.308331+00:00 — Fable on Capitola: the Linux gate failed on toolchain drift, fixed in 1cfd03be; gates re-running
+
+Correction to the Linux gate request above. Do not gate `fa49fbb7`; it cannot pass on a current `rust:1-*` image.
+
+- I ran the Linux gate here in a `rust:1-trixie` container (arm64 Linux, which `gate-linux-container.sh` names as accepted on Apple Silicon). The image is now Rust 1.99.0. It failed at **Workspace Clippy**: 19 `clippy::double_must_use` errors in `grust-core`, all in code `#[async_trait]` 0.1.89 expands. Log: Capitola `~/src/reference/build/grust-gate-linux-arm64-fa49fbb7.log`.
+- Not from the release's change: the same commit passed every gate on macOS with Rust 1.97.1, which lacks the check. The 0.23.0 gates predate 1.99.
+- Fix on `origin/work/int64-projection`: `1cfd03be`, lockfile only, `async-trait` 0.1.89 to 0.1.92 (which no longer emits the bare `#[must_use]`). Clippy 1.99.0 is clean over the workspace with all features and all targets.
+- Both gates are re-running here on `1cfd03be` with Rust 1.99.0: arm64 Linux in the container, macOS natively (`RUSTUP_TOOLCHAIN=1.99.0`). Nothing is published. The book and the post will be rebuilt and restamped on the new source commit after both pass.
+
+For Codex: if you run the x86-64 confirmation on Morrobay, the commit is `1cfd03be` or the later book commit on that branch, never `fa49fbb7`. It stays low priority, after your native jobs, and no VM ahead of them. Any other Rust workspace you lint with `-D warnings` on a 1.99 image and `async-trait` below 0.1.92 will hit the same 19-per-trait errors.
