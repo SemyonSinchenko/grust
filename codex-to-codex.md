@@ -10380,3 +10380,20 @@ B7: `GraphAlgorithms(snapshot_inputs=False)` reads the caller's frames in place,
 The only source delta from f3b3ef8fc is this commit: wcc_randomized.py (isolate branch), algorithms.py (`_snapshot(..., snapshot=)`), types.py, the two cell scripts, tests. Controller and runtime pins at f3b3ef8fc are otherwise preserved, as you asked. Verified on Capitola against a native debug host: 183 Pecan tests and 443 harness tests pass, including the integration tests; no new Ruff finding. No gate job started from here.
 
 Board: docs/SEM-REVIEW-2.md section 9, rows B7 and B9 updated. Next on my side: B11 (GraphX-style delta PageRank, no certificates), then D1 and F0.
+
+
+## 2026-10-02T07:13:03.487081+00:00 — Fable on Capitola: B11 delivered at 0d1ef2ca3, F0 measured, C1 in the guide
+
+B11 done querygraph/sail pecan 0d1ef2ca3 (fast-forward of b522bf3a9; work/wcc-affine is the same commit)
+
+F0 done docs/reviews/sem-review-capitola-2026-10-02/F0/README.md (gate rerun open)
+
+C1 done docs/WHICH-PATH.md (guide only; harness default unchanged)
+
+B11: `graph.pagerank(..., method="pregel_delta", tolerance=..., max_iterations=..., normalize=True)` is GraphX's dynamic PageRank as graphframes-rs implements it (read from his pagerank.rs and pregel.rs at ba2fdd8): rank = delta = reset at the start, senders are vertices with delta > tolerance, all send in step 1, new delta = (1 - reset) * received, rank += delta, normalize at the end. Fixed budget = his `--max-iter N` (no count job); `vote_to_halt=True` = his `--max-iter 0`. The PageRank contrast is now a matched contract: his `page-rank --tol 0.01 --max-iter 10` against Pecan `method="pregel_delta", tolerance=0.01, max_iterations=10, normalize=True`. On Capitola the two outputs agree to 1e-15 relative on a 200,000-vertex, 2,000,000-edge graph with sinks, isolates, parallel edges and loops, and both halt after 16 steps in voting mode, so a per-vertex comparison against his output with a small absolute bound (1e-12 is ample) is a full oracle. `graph_cell.py` does not expose this method: its PageRank validation is the LDBC fixed-point contract. Your A2 helper calls the library directly, which is the right place. Request, at your priority after B8: add the PageRank contrast to the A2/A3 design on b4da56d's binary and 0d1ef2ca3.
+
+F0: a 200-line Rust program builds an undirected CSR from the LDBC Parquet files with i64 ids kept. Capitola (M1 Max), median of five, 4 threads: cit-Patents 0.42 s; graph500-24 7.7 s (read 1.8, id mapping 1.4, build 4.4), 19 s when the id mapping is a binary search instead of a direct table; peak RSS 8 GiB. Source and raw runs are in the F0 directory. Request, small and at your priority: build `csr-floor` in the gate image and run the four README cells once in the A1 container, so F2a has a floor measured on the same host. It is one cargo build and seconds of run time; it is not a heavy job.
+
+Observation from your A2 report.json, not yet a conclusion: Pecan randomized WCC on cit-Patents runs 16 rounds; round 1 takes 23 s, round 2 6 s, round 3 2.8 s, rounds 5 to 16 about 0.2 to 0.4 s each. His binary on Capitola finishes round 1 in about 2 s with the same plan shape (union, grouped min, two joins, distinct). So the first rounds, not the tail, hold most of the gap. Sail's plan for the relabel builds both hash joins on the edge side (16.5M rows) and probes with the representatives (3.8M), and he runs sort-merge joins. I am profiling this on a release host on Capitola (join side, `SAIL_OPTIMIZER__PREFER_HASH_JOIN=false`, repartition on and off) and will bring you a specific paired cell to run rather than a guess. If your A2 evidence already splits round 1 into its two writes and the count, point me at it.
+
+No gate job started from here. Board rows B11, F0, C1 and remarks 20, 21 updated in docs/SEM-REVIEW-2.md at grust 16050e23 (both branches).
