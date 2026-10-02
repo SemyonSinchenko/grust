@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc 3.10.1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Alexy Khrabrov" />
-  <meta name="dcterms.date" content="2026-09-23" />
+  <meta name="dcterms.date" content="2026-10-02" />
   <title>Grust</title>
   <style>
 
@@ -173,7 +173,7 @@ height: auto;
 <h1 class="title">Grust</h1>
 <p class="subtitle">A Rust Property Graph Architecture</p>
 <p class="author">Alexy Khrabrov</p>
-<p class="date">2026-09-23</p>
+<p class="date">2026-10-02</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -2893,9 +2893,27 @@ as described under “Running without accounting”.
 <code>GraphProjection::from_graph</code> accepts label selection,
 orientation and a weight policy. <code>from_topology</code> accepts
 external IDs and typed edges; <code>from_arrow_batches</code> reads
-typed columns directly. Kernel results share the projection, so dropping
-the caller’s projection handle cannot invalidate IDs. Runnable source
-examples are <code>weighted_paths</code> in
+typed columns directly, with node ids and edge endpoints either all Utf8
+or all Int64. Integer endpoints are resolved through a direct table when
+the ids are compact, or a sorted lookup when they are not, instead of a
+string hash an endpoint, and in parallel when the execution asked for
+workers; a node’s external id is then its id’s decimal text, so results
+and kernel sources read as before. Kernel results share the projection,
+so dropping the caller’s projection handle cannot invalidate IDs.</p>
+<p>Beside the adjacency a projection keeps its edge table, which kernels
+index by edge <em>slot</em> to recover an edge’s endpoints, its original
+ordinal and its external id. The table is columns: two four-byte
+endpoints an edge, an ordinal column only when some edge’s ordinal is
+not its slot, and an id column only when some edge has an id. A graph
+handed over whole, with no label selection and no edge ids, therefore
+keeps eight bytes an edge. <code>GraphProjection::edges()</code> returns
+a view over it — <code>len</code>, <code>get(slot)</code>,
+<code>ordinal(slot)</code>, <code>iter()</code> — that hands out
+<code>EdgeRef { source, target, ordinal, id }</code> by value. The map
+from external id to node row, which only a kernel that takes a source by
+id reads, is built by the first such kernel; its work and its bytes are
+charged when the projection is built, so a budget decides as it did.
+Runnable source examples are <code>weighted_paths</code> in
 <code>grust-algorithms</code> and <code>custom_procedure</code> in
 <code>grust-cypher</code>.</p>
 <h2 data-number="16.2" id="available-operations"><span class="header-section-number">16.2</span> Available operations</h2>
@@ -3121,18 +3139,19 @@ projection</td>
 from snapshot counts, excluding graph storage, ID maps, original edge
 tables, kernel scratch, output and allocator overhead. Selection can
 reduce those counts. The estimate is not total memory admission.</p>
-<p>The adjacency it sizes is narrow. A row bound and an arc target are
-each four bytes, widened on read, so an outgoing arc costs twelve bytes
-unweighted — a four-byte target beside an eight-byte original-edge slot
-— and twenty weighted; a reverse arc, which carries no edge slots, costs
-four unweighted and twelve weighted. Each CSR’s row-bound array is four
-bytes per node plus one. A projection therefore holds at most
-<code>u32::MAX</code> nodes and at most <code>u32::MAX</code> arcs, and
-one that would pass either ceiling is refused with a named
-<code>AlgorithmError::Unsupported</code> at the checked add that would
-otherwise wrap, rather than falling back to eight-byte fields. Louvain’s
-and Leiden’s per-level scratch CSR keeps eight-byte offsets: it is a
-separate structure, not on a pull’s per-node path.</p>
+<p>The adjacency it sizes is narrow. A row bound, an arc target and an
+arc’s original-edge slot are each four bytes, widened on read, so an
+outgoing arc costs eight bytes unweighted — a four-byte target beside a
+four-byte slot — and sixteen weighted; a reverse arc, which carries no
+edge slots, costs four unweighted and twelve weighted. Each CSR’s
+row-bound array is four bytes per node plus one. A projection therefore
+holds at most <code>u32::MAX</code> nodes and at most
+<code>u32::MAX</code> arcs, and one that would pass either ceiling is
+refused with a named <code>AlgorithmError::Unsupported</code> at the
+checked add that would otherwise wrap, rather than falling back to
+eight-byte fields. Louvain’s and Leiden’s per-level scratch CSR keeps
+eight-byte offsets: it is a separate structure, not on a pull’s per-node
+path.</p>
 <p>The common configuration keys are <code>orientation</code>,
 <code>nodeLabels</code>, <code>relationshipTypes</code>,
 <code>weightProperty</code> and <code>defaultWeight</code>. Unknown keys
