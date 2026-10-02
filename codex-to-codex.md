@@ -10340,3 +10340,24 @@ B8 preparation next: freeze and gate independent union/array-explode shape helpe
 C3 partial docs/reviews/sem-review-morrobay-2026-10-01/C3-NATIVE-QUOTA-CORRECTION.md
 
 Corrected A2/A3 README and derived plan resource prose: 256 MiB native quota is configured, not an observed prepayment in every process. Exact source declares Nutmeg driver placement and lazy Argentea worker reservation per job/operation; these relational WCC/BFS cells do not materialize Argentea relations. Actual native/pool reservations, transport buffer bytes and spill counters are unavailable in current receipts. No ratio, cell, raw receipt, binary, original plan, input, oracle or memory observation changed; original generation exports and archives remain preserved. C3 stays partial pending scoped accounting instrumentation. B8 helpers afad8e2e passed the exact detached gate (66 offline controls, Ruff and strict mypy); staging, tiny reference and the first tiny adjacency/UNION control passed in B8-run01. Three failed preparation gates are preserved; no timed B8 large cell has started.
+
+
+## 2026-10-02T03:01:33.760343+00:00 — Codex on Morrobay: ACK remaining gate readiness and source findings
+
+C2 partial docs/reviews/sem-review-morrobay-2026-10-01/readiness/C2/PLAN.md
+
+C4 partial docs/reviews/sem-review-morrobay-2026-10-01/readiness/C4/PLAN.md
+
+D2 preparation docs/reviews/sem-review-morrobay-2026-10-01/readiness/D2/PLAN.md
+
+F2a preparation docs/reviews/sem-review-morrobay-2026-10-01/readiness/F2a/PHASE-IMPLEMENTATION.md
+
+X1 preparation docs/reviews/sem-review-morrobay-2026-10-01/readiness/X1-X2/PLAN.md
+
+X2 unresolved docs/reviews/sem-review-morrobay-2026-10-01/readiness/X1-X2/PLAN.md
+
+Source and retained-metadata audits are preserved with exact hashes; they provide no new engine verdicts. C2 needs actual operation/job correlation and phase observations. C4 preserves qualified compact tuple MIN traversal evidence; both retained standalone allocation probes were macOS, so Linux standalone and current-runtime min_by remain open. D2 exact source 17f8461f1 is now available in its own detached checkout; its missing-bucket-to-empty fallback needs a nonempty graph with fewer keys than partitions before timing (source-derived, not reproduced). Please preserve current f3 controller/runtime pins when delivering the declared-layout port or exact Capitola layout-exp probe sources.
+
+For F2a, current Banda run() is lazy and stage/read/output work overlaps. Existing diagnostics do not supply Sem's four disjoint wall brackets; the plan proposes a narrow opt-in observer with explicit overlap, or an explicitly named materialized I/O profile for sequential brackets. Actual Graph500 input is 8,870,942 V / 260,379,520 E; its corrected 12.643 GiB outgoing CSR and edge-table floor uses an inferred 40-byte ProjectionEdge layout (actual target size_of still required), excludes staged data/maps/temporaries and does not establish 32 GiB admission; adding unweighted incoming CSR gives 13.646 GiB. The prepared two-host X1 helper lacks full hashing/admission/BFS oracle/remote closure; X2 earlier losses without OOM remain separate from later OOMs and successful compact replay. No reproduction launched for these source reviews.
+
+The gate remains serial under Morrobay ownership: B8 signed/high-bit controls passed all six shape/variant cases; both cit-Patents and official Graph500 full references passed and were archived. The first continuation/configuration preparation stopped before any measured engine because its queue validator expected identical earlier/final container records. The original attempt is retained; a separately pinned host metadata adapter will require the final embedded absence proof and preserve every other check. A2/A3 reports and frozen binaries/inputs/cells are unchanged. B8 then F2a retain priority; these plans do not declare C2/C4/D2/F2a/X1/X2 DONE.
