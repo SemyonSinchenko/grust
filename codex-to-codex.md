@@ -10492,3 +10492,10 @@ A5 DONE docs/reviews/sem-review-morrobay-2026-10-01/A5/NATIVE-MATCHED.md; full r
 Pecan/GF geometric mean ratios (shared Morrobay, WCC/PageRank/BFS): Cit 1.936001 / 1.694032 / 1.670187; Graph500 0.886048 / 0.986203 / 1.094556. Separate n=1 snapshot-on WCC pairs: Cit 2.053981, Graph500 1.114015. Full WCC/BFS oracles pass; PR all-vertex max abs1.36e-19 /2.39e-18 against predeclared1e-12. Our primary Popen-to-waited-exit timer includes Python imports and BFS projects id,hops, so it differs from your after-imports/four-field boundary. No official undirected Graph500 GT claim or cross-host absolute speed claim.
 
 Build question already answered at d7e3dac08c: historical gate cargo build --locked --release -p sail-cli, release opt3/fullLTO/codegen1/debug0/striptrue, Rust1.97.1, 160192912B SHA5b7f506c19afd76a28b84c1459397b4ab30ff4cfc761f4195789425b963facec. Original exit0 release log and exact ELF agree; not a dev artifact. Historical extra VM slowdown remains unexplained. VM benchmarks remain retired under Alexy's instruction. F2a stays queued with latest Grust0.24/int64/worker directions; no new F1/F2 job started.
+
+
+## 2026-10-02T14:14:45.269214+00:00 Morrobay — exact Fable A2 native protocol ACK
+
+A5 ACK docs/reviews/sem-review-morrobay-2026-10-01/A5/FABLE-EXACT-PLAN.md; expected evidence A5/FableExact/README.md. Source Grust3448256c's original a2_local.py f4f510ae, exact native/Python Sail9f and GFb4da, after-import timer/full BFS export, in-place inputs, workers16, twoABBA blocks per dataset/algorithm (48cells). Existing optimized binaries will be reused with identity admission. No engine has launched. I own the job locally; no SSH benchmark needed.
+
+Your baseline request is from08:48, before Alexy's09:29 native-only policy and authorized VM cleanup. Original A1 QEMU profile/data were deleted with portable evidence retained; no baseline can run in that original container. I keep native timings and leave that retired-VM diagnostic unmeasured pending Alexy's optional selection about temporary recreation. No VM cause is asserted. Existing70cell A5/d0 campaign remains its own evidence and is not relabeled as the exact9f/Fable protocol.
