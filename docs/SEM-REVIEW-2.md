@@ -412,6 +412,32 @@ separates engine time from write time from round trips. Until that is
 answered, the gate's 3.8, 2.5 and 9.5 should be read as upper bounds on
 Pecan's distance from graphframes-rs, not as the distance.
 
+At graph500-24 on Capitola (one ABBA block, the same oracle): randomized
+WCC 30.4 s for Pecan against 27.7 s for graphframes-rs, ratio **1.10**;
+PageRank, 10 delta steps, 24.5 against 20.5 s, ratio **1.20**; 13 GB at the
+peak. So the class holds at 260M edges on this machine, and the 32 GiB
+failure B8 met on the gate is not Pecan's randomized WCC running out of room
+by itself.
+
+Banda on the same machine and files
+([`reviews/sem-review-capitola-2026-10-02/F1/README.md`](reviews/sem-review-capitola-2026-10-02/F1/README.md)):
+
+| One WCC, launch to exit | cit-Patents | graph500-24 |
+|---|---|---|
+| graphframes-rs | 3.7 s | 27.7 s |
+| Pecan | 5.0 s | 30.4 s |
+| Banda, first call | 8.4 s | 139 s |
+| Banda, each further call | 0.26 s | 1.1 s |
+| CSR floor (F0) | 0.4 s | 7.7 s |
+
+This is Sem's position, measured: for one call the relational path beats the
+resident CSR, by 4.6 times at graph500-24, because the projection build is
+136 s on one thread. Banda pays off from the fifth call on the same staged
+graph. Its ingest is in icebug's class (136 s against 179 to 186 s) and 18
+times the floor. The decision guide's first two rows, which put Banda first
+on every kernel, rest on gate cells where the relational path was the slow
+one; they do not hold on Capitola.
+
 ### Stage B. Reduce redundant round work without weakening checkpoints
 
 Each item is a separate opt-in candidate. Run the relevant unit tests plus
@@ -661,11 +687,11 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | A4 | the decision table of Stage A applied, written into section 4 | Fable | **done, then corrected on 2026-10-02**: the first reading (the controller's actions per round are the gap) does not hold. Repeated on Capitola with release builds, Pecan is 1.37 (WCC) and 1.28 (PageRank) times graphframes-rs, against 3.77 on the gate; the gate slows Sail 2.8 times more than his binary. A5 decides why | section 4, "Stage A result" and "Stage A repeated on Capitola"; `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
 | A5 | why Sail is slower on the gate than on Capitola relative to graphframes-rs: (1) the gate Sail binary's exact cargo command, profile and size; (2) if it is a true release build, one `profile_wcc.py` cell in the A1 container; (3) the A2 WCC contrast again on a host built with `cargo build --release --locked -p sail-cli` at `0d1ef2ca3`, with the PageRank contrast added | Codex (gate), Fable (reading) | open; before further Stage B work | |
 | B1 | keyless repartition toggle (`repartition_checkpoints`) | done | `6ae2e43a9` | integration |
-| B2 | write receipt from the host's graph-utils service instead of read-back counts | Fable | open | |
-| B3 | round scalars folded into the state write | Fable | open | |
+| B2 | write receipt from the host's graph-utils service instead of read-back counts | Fable | **parked**: on Capitola what this removes (counts and schema round trips) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
+| B3 | round scalars folded into the state write | Fable | **parked**: on Capitola what this removes (the per-round count) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
 | B4 | fused contraction as the default | Fable | superseded by B9: `wcc_fused.py` removed, `randomized_fused` is an alias | |
-| B5 | tail cutover for the contraction | Fable | open | |
-| B6 | checkpoint every k rounds | Fable | open | |
+| B5 | tail cutover for the contraction | Fable | **parked**: on Capitola what this removes (the twelve tail rounds) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
+| B6 | checkpoint every k rounds | Fable | **parked**: on Capitola what this removes (per-round writes in the tail) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
 | B7 | trusted immutable Parquet inputs: no snapshot rewrite (Sem, "why rewrite the inputs") | Fable; gate measurement Codex | **done, not yet measured on the gate**: `GraphAlgorithms(snapshot_inputs=False)` reads the caller's vertex and edge frames in place and writes nothing for the inputs; the default keeps the snapshot, because a caller's frame is not known to be immutable. The benchmark cells take `--no-snapshot-inputs` and record `pecan_snapshot_inputs` in the receipt. A test asserts no staging write for the inputs and identical components either way. Stage A put the snapshot at about 5 s of the 48 s public algorithm on cit-Patents; the paired in-place cell is Codex's to run | `querygraph/sail` `pecan` `b522bf3a9` |
 | B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remarks 11, 23a); he wants numbers | Codex | **interim**: on cit-Patents, 30 cells, array and explode is slower than union in every shape: adjacency 1.02, representatives 1.12, min-label round 1.12 (median elapsed, explode over union); the graph500-24 adjacency union warmup ran out of the 32 GiB container, cause not yet located, so no scale-24 ratio | `.../B8/INTERIM-FINDINGS.md` |
 | B10 | PageRank in the Pregel paper's and GraphX's static form (`method="pregel"`), optional normalization (Sem, remarks 18, 21) | Fable | **done**: tests equal to `power` without dangling vertices, same order with them | `work/wcc-affine` `f3b3ef8fc` |
@@ -679,9 +705,9 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | D2 | declared layout measured in cluster mode on the gate | Codex | open | |
 | E0 | a proper Pregel (Sem, remarks 15, 22, 23c): PageRank and SSSP first, from the best of GraphX, GraphFrames and graphframes-rs, Parquet or persist checkpoints, plans microbenchmarked on cit-Patents, kgs and wiki-Talk; a Rust-level extension with a PySpark API as the far option | both, design | source review done (Codex): the proposed expansion already exists in the frontier method; the gain is in actions per round, not the join | `PREGEL-REVIEW.md` on the same branch |
 | F0 | native-only CSR build from `edges.parquet` as the ingest floor (Sem, remark 9 of his first review) | Fable; gate rerun Codex | **done on Capitola, gate rerun open**: a 200-line Rust program (Parquet in, i64 ids kept, dense u32 targets under a checked bound, u64 arc offsets, parallel count and fill, a checksum against the edge list). Median of five, 4 threads, undirected adjacency: cit-Patents **0.42 s**; graph500-24 (260M edges, 521M arcs) **7.7 s**, of which read 1.8, id mapping 1.4, build 4.4; 4.7 s on 10 threads; peak RSS 8 GiB. With sparse ids (binary search instead of a direct table) graph500-24 takes 19 s on 4 threads. Beside Banda's about 28 s and 650 s and icebug's 186 s on 4 cores: the conversion is seconds, so Banda's ingest time is our conversion (Utf8 ids and the string map, the canonical sort, the projection's passes, the FFI crossing), which is F1. Limits: an M1 Max laptop with a warm cache, not the gate; in-memory, not out of core; no neighbour sort | `docs/reviews/sem-review-capitola-2026-10-02/F0/README.md` |
-| F1 | S1, S2/`asStaged`, S3 toward the ingest budget, i64 contract kept; Sem's reference (remarks 24, 25): icebug builds the CSR for graph500-24 in 186 s on 4 cores with i64 indices, so Banda's ingest on 32 cores has to land well under that; today it is about 650 s | Fable | open | |
+| F1 | S1, S2/`asStaged`, S3 toward the ingest budget, i64 contract kept; Sem's reference (remarks 24, 25): icebug builds the CSR for graph500-24 in 186 s on 4 cores with i64 indices | Fable | **first control done; the build itself needs a decision**. On Capitola with release builds Banda's ingest is 7.7 s on cit-Patents and 138 s on graph500-24 (the gate: about 28 and 650 s, so the gate's factor is 4, as for graphframes-rs). The 138 s is the projection: one thread, a string-keyed map with the default hasher for both endpoints of every edge, work accounting per row (18%), a null check per string (14%), 40 bytes an edge, node ids copied twice. That is in icebug's class and 18 times the floor. Closing it means an Int64 identity path and a compact parallel fill in `grust-algorithms` (S1, S3), a published crate the extension pins at `=0.23.0`: a Grust release and a re-vendoring. Two local changes (accounting and null checks per batch) may take a third off without touching identity | `docs/reviews/sem-review-capitola-2026-10-02/F1/README.md` |
 | F2a | the baseline for F2 in Sem's format: current Banda (`asStaged`) on graph500-24 and cit-Patents in the A1 container, end to end with Parquet in and Parquet out, his four phases, one call and three calls on the same staged graph; beside his icebug receipts | Codex, after B8 | open | |
-| F2 | Banda as the resident-CSR backend with stated limits: stage once per session, run many; after F0 and F1, re-measure in Sem's format, end to end with Parquet in and Parquet out, in his four phases (read, CSR and graph build, algorithm, write), for one call and for three calls on the same staged graph, on cit-Patents and graph500-24; state the fit limit at which the relational path takes over (Sem, remarks 26, 27) | Fable | open | his receipts: `benches/results/ldbd/*/M/graph500-24/icebug_mem_12G_threads_4/benchmark.json` on branch `ladybug` |
+| F2 | Banda as the resident-CSR backend with stated limits: stage once per session, run many; after F0 and F1, re-measure in Sem's format, end to end with Parquet in and Parquet out, in his four phases (read, CSR and graph build, algorithm, write), for one call and for three calls on the same staged graph, on cit-Patents and graph500-24; state the fit limit at which the relational path takes over (Sem, remarks 26, 27) | Fable | **first numbers, Capitola**: one WCC call 8.4 s (cit-Patents) and 139 s (graph500-24), each further call 0.26 and 1.1 s, PageRank 10 steps 0.4 and 4.1 s; against Pecan's 5.0 and 30.4 s per call the projection is repaid at the fifth call on graph500-24. Sem's four-phase format on the gate is F2a; the re-measurement after F1 is open | his receipts: `benches/results/ldbd/*/M/graph500-24/icebug_mem_12G_threads_4/benchmark.json` on branch `ladybug` |
 | R1 | typed Pecan, no validation, contract in `AGENTS.md` and README (Sem, remarks 3 to 6) | done | `7145d107c`, `6ae2e43a9`, `5aa755b9`, `71fc8c90` | |
 | R2 | reading map for Sem (remarks 1, 2, 7, 8) | done | `5513e29c` | `pecan-code-and-harness.md` |
 | R3 | every Sem remark recorded with status | done | `71fc8c90` | section 8 |

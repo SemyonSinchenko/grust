@@ -10,9 +10,44 @@ graphs at scale 24 (16.8M vertices, 268M edges) and scale 25 (33.6M
 vertices, 537M edges), traversed from the sampled highest-degree vertex.
 The Linux gate is one 32-core, 100 GiB container on a shared host, so the
 times are observations with a spread of about 20% between repeats, not
-publishable numbers. Last updated 2026-10-02: the one-host mode section added from the
-graphframes-rs review's Stage A; the capacity cells are those of
-2026-09-30.
+publishable numbers. Last updated 2026-10-02: a caution and a Capitola comparison added at
+the top, and the one-host mode section, both from the graphframes-rs
+review; the capacity cells are those of 2026-09-30.
+
+## Read this first: a caution on every time in this guide
+
+Two things found on 2026-10-02 lower the confidence in the absolute times
+here, in both directions.
+
+- **The gate is slow for Sail in a way it is not for a plain DataFusion
+  binary.** Pecan's randomized WCC on cit-Patents takes 5.0 s launch to exit
+  on Capitola and 51.8 s on the gate; graphframes-rs takes 3.7 s and 13.8 s.
+  The cause is not known yet (item A5 of
+  [`SEM-REVIEW-2.md`](SEM-REVIEW-2.md)). Until it is, gate times for the
+  relational paths are upper bounds.
+- **Build profiles were not recorded per cell.** The extension build script
+  (`scripts/build.sh`) builds the host and the native wheels with the dev
+  profile, which is about 9 times slower for the host on this workload. The
+  gate cells of the September campaign were built with `--release` as far
+  as the session records show. The Capitola cells (the scale-22 column, and
+  Argentea's 1179 s) ran x86 builds under Rosetta, at least some of them
+  dev-profile. A future cell records its cargo profile in the receipt.
+
+The ranking between paths is exposed too. On Capitola, with release builds
+and the LDBC files, one WCC call launch to exit:
+
+| Path | cit-Patents | graph500-24 (260M edges) |
+|---|---|---|
+| Pecan | 5.0 s | 30.4 s |
+| Banda, first call | 8.4 s | 139 s |
+| Banda, each further call | 0.26 s | 1.1 s |
+
+There the relational path wins a single call at both sizes, and Banda wins
+from the fifth call on the same staged graph. That contradicts the first two
+rows of the short answer below, which came from gate cells where the
+relational path was the slow one. Until A5 says which host to believe, read
+the short answer as: **Banda when the same graph is queried many times;
+Pecan or Grenada for one pass, or when the graph does not fit one process.**
 
 ## The short answer
 
@@ -135,29 +170,6 @@ local mode, the same graph takes about 48 s for randomized WCC and 18 s for
 frontier BFS inside the algorithm call (Stage A diagnostics, shared host).
 Banda's cit-Patents times have not been re-measured in that container, so
 the first two rows of the short answer still rest on the September cells.
-
-## A caution on every time in this guide
-
-Two things found on 2026-10-02 lower the confidence in the absolute times
-here, in both directions.
-
-- **The gate is slow for Sail in a way it is not for a plain DataFusion
-  binary.** Pecan's randomized WCC on cit-Patents takes 5.0 s launch to exit
-  on Capitola and 51.8 s on the gate; graphframes-rs takes 3.7 s and 13.8 s.
-  The cause is not known yet (item A5 of
-  [`SEM-REVIEW-2.md`](SEM-REVIEW-2.md)). Until it is, gate times for the
-  relational paths are upper bounds.
-- **Build profiles were not recorded per cell.** The extension build script
-  (`scripts/build.sh`) builds the host and the native wheels with the dev
-  profile, which is about 9 times slower for the host on this workload. The
-  gate cells of the September campaign were built with `--release` as far
-  as the session records show. The Capitola cells (the scale-22 column, and
-  Argentea's 1179 s) ran x86 builds under Rosetta, at least some of them
-  dev-profile. A future cell records its cargo profile in the receipt.
-
-The ranking between paths at a given scale was measured within one host and
-one set of builds, so it is less exposed than the seconds are. It still
-needs the rerun the first point calls for.
 
 ## The ceilings, by scale
 

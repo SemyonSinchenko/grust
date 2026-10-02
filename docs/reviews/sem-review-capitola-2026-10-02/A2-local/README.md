@@ -40,6 +40,24 @@ Raw records: [`a2-launch-to-exit.json`](a2-launch-to-exit.json). The first
 graphframes-rs sample of the run was 4.68 s (cold); the others were 3.59 to
 3.72 s.
 
+## Result: graph500-24, launch to exit
+
+The LDBC `graph500-24` files: 8,870,942 vertices, 260,379,520 edges. One
+ABBA block, two samples per engine, the same settings and oracle.
+
+| Contrast | Pecan | graphframes-rs | Pecan over graphframes-rs | Oracle |
+|---|---|---|---|---|
+| Randomized WCC | 31.0, 29.8 s | 26.8, 28.6 s | **1.10** | 2,901 components, 0 label mismatches on 8,870,942 vertices |
+| PageRank, 10 delta steps | 23.9, 25.0 s | 19.5, 21.5 s | **1.20** | largest difference 2.0e-18 absolute, 1.4e-14 relative |
+
+Pecan's WCC took 19 rounds. The largest resident set of any engine process
+in the run was 13.3 GB. Sem's published time for this WCC on a c5d.4xlarge
+is 33.3 s. Raw records:
+[`a2-launch-to-exit-graph500-24.json`](a2-launch-to-exit-graph500-24.json).
+
+Banda on the same machine and files is in [`../F1/README.md`](../F1/README.md):
+about 140 s for its first WCC call, 1.1 s for the second.
+
 ## The same contrast on the two hosts
 
 | | Gate (A2) | Capitola | Gate over Capitola |
@@ -109,7 +127,7 @@ candidates, in the order to check them:
 
 ## Limits
 
-- One graph, 16.5M edges. Nothing here speaks for graph500-24.
+- Two graphs. graph500-24 has one block, two samples per engine.
 - A laptop with other applications running. The medians are indications.
 - macOS and arm64, not the gate's Linux and x86. The comparison between
   hosts is of ratios, not of seconds.
