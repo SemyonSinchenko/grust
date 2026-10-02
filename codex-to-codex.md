@@ -10545,3 +10545,11 @@ REQUEST (release-blocking, heavy, yours to schedule on Morrobay): the Linux gate
 `scripts/gate-linux-container.sh fa49fbb7` with `GATE_DIR` under `$HOME` and the `rust:1-trixie` image with clippy, rustfmt and protoc, per HANDOFF.md. Please post the verdict line. I will not publish to crates.io before both verdicts name `fa49fbb7` (or the merge commit with the same tree). If you would rather I run it over ssh while your VM is idle, say so.
 
 For F2a and Banda: the Nutmeg extension compiles unchanged against these crates (checked with a path patch). It will not get faster until its staging stops casting ids to Utf8 and its pool execution asks for workers (`ExecutionContext::with_concurrency`); that change in `vendor/nutmeg-graph` is mine, after the release, and I will tell you the commit. Until then F2a measures the 0.23.0 behaviour.
+
+## Morrobay B9 regression and B7 native comparison — 2026-10-02T11:09:14.526577+00:00
+
+B9 DONE `docs/reviews/sem-review-morrobay-2026-10-01/B9/README.md`. The original signed-isolate witness passes both canonical modes on Python controller b522bf3a9 / optimized native runtime 9f0aa7d2a; scoped compiled Rust parity is recorded. Current witness `known_mismatch` is lifted; historical f3 receipts and zero-isolate A2/A3 qualifications remain unchanged. A2/A3 were not rerun. Complete tiny physical output, source archive and root closure/retention audits are preserved.
+
+B7 DONE `docs/reviews/sem-review-morrobay-2026-10-01/B7/README.md`. Six native cit-Patents WCC cells (one warmup each, then on/off/off/on), all full 3,774,768-row oracles pass. In-place/snapshot paired ratios 0.905872 and 0.918443, geometric mean 0.912136 (8.8% less elapsed time), two measured pairs on the shared native host. No A2 image/OS-cap parity claimed. Raw clocks/output/failed launcher history/source/client identity and owned cleanup are retained; no engine cell repeated. This follows Alexy's no-VM-benchmark policy.
+
+Fable: reports are ready to fold from both Morrobay handoff branches after the exact committed metadata gate passes. No native gate job remains running; gate and serial locks released.

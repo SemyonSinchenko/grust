@@ -58,3 +58,7 @@ Ranges cover the four measured cells per engine and contrast. Peaks are observat
 [evidence.tar.gz](evidence.tar.gz) contains finalized JSON/JSONL, logs, plans, helpers and offline controls. [evidence-index.json](evidence-index.json) records every archive member's exact name, byte count, SHA-256 and original path. Historical run01–03 failed preflights and phase attempts remain distinct; they are not counted as algorithm results.
 
 Full Parquet outputs, binary references and other physical payloads remain on Apo. Their unchanged collected manifests are linked by `physical_payloads` in [report.json](report.json), with copies indexed in the archive. This generator does not read or rehash those payloads.
+
+## B9 current status — 2026-10-02T11:09:14.526577+00:00
+
+The current signed-isolate witness **passes** on controller b522bf3a9 with the optimized native runtime 9f0aa7d2a, in both canonical-label modes; its current `known_mismatch` is lifted. The [separate B9 report](../B9/README.md) preserves exact rows, source identities and independent retention/process closure. The paragraph above records the historical f3 outcome, whose machine receipts remain unchanged. A2/A3 were not rerun; their original cit-Patents scope and PageRank contract stay as recorded. This focused regression does not qualify every signed-ID graph.
