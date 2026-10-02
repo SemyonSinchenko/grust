@@ -327,14 +327,17 @@ fn the_longest_path_reports_a_cycle_as_an_answer_rather_than_an_error() {
 #[test]
 fn projection_inspection_and_csr_estimates_disclose_their_scope() {
     let word = size_of::<usize>() as i64;
-    // Neither index array is a word: an arc target is four bytes, and so is a
-    // CSR row bound. These byte counts fell twice, once when the targets
-    // narrowed to `u32` and again when the row offsets did. Five four-byte row
-    // bounds plus six arcs of a four-byte target and a word of original-edge
-    // slot, unweighted.
+    // No index array is a word: an arc target is four bytes, and so are a CSR
+    // row bound and an arc's original-edge slot. These byte counts fell three
+    // times: when the targets narrowed to `u32`, when the row offsets did, and
+    // in 0.24.0 when the edge slots did (an edge has at least one arc, so a
+    // slot is below the arc count the offsets already bound). Five four-byte
+    // row bounds plus six arcs of a four-byte target and a four-byte slot,
+    // unweighted.
     let target = 4;
     let offset = 4;
-    let outgoing_arc = target + word;
+    let slot = 4;
+    let outgoing_arc = target + slot;
     assert_eq!(
         run(
             "CALL grust.algorithms.projectionStats({orientation: 'undirected'}) YIELD nodes, edges, arcs, selfLoops, csrBytes RETURN nodes, edges, arcs, selfLoops, csrBytes"

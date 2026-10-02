@@ -15,7 +15,17 @@ Components use the minimum projection node row as their canonical label.
 Build a projection with `GraphProjection::from_graph`, `from_topology`, or the
 optional `arrow` feature's `from_arrow_batches`. Arrow ingestion reads typed
 columns directly, including across multiple batches, without converting them
-to Grust `Value` or property maps. Result `into_arrow_results` methods provide
+to Grust `Value` or property maps. `node_id`, `source` and `target` are Utf8,
+or all three Int64: integer endpoints are resolved through a direct table or a
+sorted lookup rather than a string hash, in parallel when the execution asked
+for workers, and a node's external id is then its id's decimal text.
+
+A projection keeps its edges as columns beside the adjacency: two four-byte
+endpoints an edge, original ordinals only where they differ from the edge's
+slot, and external edge ids only where some edge has one. `edges()` returns an
+`Edges` view: `len`, `get(slot)`, `ordinal(slot)` and `iter()` hand out
+`EdgeRef { source, target, ordinal, id }` by value. `ProjectionEdge` is the
+input type of `from_topology`. Result `into_arrow_results` methods provide
 bounded typed Arrow batches with retained admission. Full paths use LargeList
 arrays; ordinals, counts and iteration counts use Int64, the signed integer
 the registry declares. A column's nullability does not depend on the rows:

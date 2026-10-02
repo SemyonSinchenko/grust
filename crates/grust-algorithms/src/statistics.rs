@@ -120,10 +120,10 @@ impl GraphProjection {
 }
 
 fn csr_bytes(nodes: usize, arcs: usize, weighted: bool) -> Result<usize> {
-    // An arc is a four-byte target and an eight-byte original-edge slot, plus
+    // An arc is a four-byte target and a four-byte original-edge slot, plus
     // its weight where the projection carries one; a row bound is four bytes.
     let arc_bytes =
-        size_of::<Target>() + size_of::<usize>() + if weighted { size_of::<f64>() } else { 0 };
+        size_of::<Target>() + size_of::<Offset>() + if weighted { size_of::<f64>() } else { 0 };
     nodes
         .checked_add(1)
         .and_then(|n| n.checked_mul(size_of::<Offset>()))

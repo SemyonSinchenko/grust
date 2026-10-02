@@ -185,7 +185,8 @@ and packed CSR. It shares external ID payloads where the model permits, but does
 not claim zero-copy topology. Reverse reachability CSR is lazy and contains only
 node offsets and targets; SCC does not duplicate weights or edge slots.
 
-`from_arrow_batches` reads structural Utf8 columns and selected numeric properties
+`from_arrow_batches` reads structural columns (Utf8, or Int64 for `node_id`,
+`source` and `target` together) and selected numeric properties
 without constructing Graph, Value or property maps. `present.<key>` distinguishes
 absence from explicit null in `property.<key>`. Topology validation/indexing/CSR
 still copy. Typed output uses bounded RecordBatches, Int64 ordinals/iterations,

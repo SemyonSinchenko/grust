@@ -35,8 +35,8 @@ history.
 - Fairy — skipped; the name was declined rather than consumed, so it stays
   available for a later release.
 - Mysid — 0.22.0 (2026-09-21)
-- Langoustine — 0.23.0 (2026-09-23) ← current
-- Tanaid
+- Langoustine — 0.23.0 (2026-09-23)
+- Tanaid — 0.24.0 (2026-10-02) ← current
 - Cumacean
 - Remipede
 - Triops

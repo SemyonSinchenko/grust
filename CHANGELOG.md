@@ -6,6 +6,134 @@ reconstructed from Git history, release commits, and the shipped docs.
 
 ## Unreleased
 
+## 0.24.0 — Tanaid — 2026-10-02
+
+Nothing in this release changes an answer. What changed is what a projection
+costs to build and to hold. A graph whose node ids are integers can be handed
+over as integers, and its edges are then resolved without hashing a string; a
+projection keeps its edge table as columns, eight bytes an edge where it kept
+forty; an arc's original-edge slot is four bytes; and the map from external id
+to node row is built by the first kernel that needs it. A work budget means
+what it meant in 0.23.0: six pinned projections charge the identical totals.
+There is one breaking change, `GraphProjection::edges()`, and one figure that
+moves, the bytes `projectionStats` and `estimateCsr` report.
+
+### Graph algorithms
+
+- **Arrow projections accept BIGINT identity.**
+  `GraphProjection::from_arrow_batches` takes `node_id`, `source` and `target`
+  as Utf8, as before, or all three as Int64. With Int64, an endpoint is resolved
+  to its node row through a direct table when the ids span at most sixteen
+  slots a node, and by binary search over the sorted ids otherwise. Neither
+  hashes anything, so neither depends on a hasher's seed or on which ids an
+  input chose. A node's external identity is its id's decimal text, so results,
+  `node_ids()` and kernel sources read exactly as they would have for the same
+  graph handed over as text. Mixing the two, Int64 nodes with Utf8 endpoints or
+  the reverse, is `Unsupported`; a null id is `InvalidArguments`; a duplicate
+  node id is `InvalidArguments` naming the id.
+
+  With no label selection every edge is kept and its position is its ordinal,
+  so the edge table is filled in place, in parallel when the execution asked
+  for workers. With a selection the fill is sequential. **The first offending
+  edge in original order is the error at every width**: each parallel chunk
+  stops at its own first failure and the smallest ordinal is reported, so a
+  missing endpoint or a rejected weight is named the same with one worker and
+  with sixteen. `tests/arrow_int64.rs` holds the Utf8 path as the oracle for
+  node order and identity, every edge's endpoints, ordinal and id, weights,
+  the recorded selection and the first error, through the direct table and the
+  sorted lookup, with no concurrency asked for, with one worker and with four.
+
+- **A projection keeps its edges as columns. Breaking:
+  `GraphProjection::edges()` returns `Edges`, not `&[ProjectionEdge]`.** The
+  table kernels index by edge slot was one `ProjectionEdge` an edge: three
+  `usize` and an optional string, forty bytes. It is now two four-byte endpoint
+  columns, an ordinal column only when some edge's ordinal is not its slot, and
+  an id column only when some edge has an external id. A graph handed over
+  whole, with no label selection and no edge ids, keeps eight bytes an edge.
+  `Edges` has `len`, `is_empty`, `get(slot)`, `ordinal(slot)` and `iter()`, is
+  `IntoIterator`, and hands out `EdgeRef { source, target, ordinal, id }` by
+  value; `EdgeRef::id` is `Option<&EdgeId>`. `ProjectionEdge` remains the input
+  type of `from_topology` and `from_signed_topology`, whose signatures are
+  unchanged. Ordinals that are the slots are distinct by construction, so their
+  duplicate check is skipped rather than run to a foregone result.
+
+- **An arc's original-edge slot is four bytes.** An edge has at least one arc,
+  so a slot is below the arc count the row offsets already bound, and the
+  `u32::MAX` ceilings 0.23.0 introduced cover it with no new refusal. An
+  outgoing arc is therefore eight bytes unweighted and sixteen weighted, where
+  it was twelve and twenty. **`projectionStats`' `csrBytes` and `estimateCsr`'s
+  `outgoingCsrBytes` report the smaller figure**: on the four-node, three-edge
+  undirected Cypher fixture `csrBytes` falls from 92 to 68. A test that pinned
+  the old number is pinning the old representation.
+
+- **The id-to-row map is built by the first kernel that asks.** A kernel that
+  takes a source by id looks it up in a hash map of every node id. The map was
+  built with the projection, for a map most kernels never read. `from_graph`
+  and `from_arrow_batches` have already refused a duplicate id while mapping
+  ids to rows, so they now leave the map to the first lookup; `from_topology`
+  still builds it at once, because that is where it checks for duplicates. The
+  build charges one unit a node and retains the map's bytes either way, so the
+  first lookup charges nothing and admits nothing. It polls, so a cancelled
+  query does not finish it; two queries that ask at once may both build it,
+  and one is kept.
+
+- **A projection's work is charged a batch at a time when the budget covers
+  it, and a unit at a time when it does not.** The Utf8 Arrow path charged one
+  unit a row through the shared counter in each of its passes, and checked
+  every string for null. It now makes one charge a batch where the
+  row charge is the loop's only charge and the budget covers the batch, and
+  reads strings directly from a batch that holds no null. A budget that would
+  run out inside a batch takes the old path, so it runs out at the same row
+  with the same work counted, and an error in an earlier row still comes
+  first. **A completed build charges the identical total**:
+  `tests/projection_budget.rs` pins four Arrow projections and two
+  `from_topology` projections to the work units the `v0.23.0` tag charged for
+  them, at no concurrency and at four workers, and requires their admitted
+  bytes not to grow.
+
+### Measurements, and their boundary
+
+`benchmarks/projection-ingest` times `from_arrow_batches` over the LDBC
+Graphalytics Parquet files and records every run. **The figures below are
+from one Apple M1 Max laptop and show the shape of the change, not a result to
+quote**; nothing was measured on a dedicated or a Linux host. Median of three
+unless marked.
+
+| Graph, orientation | 0.23.0, Utf8 ids | 0.24.0, Utf8 ids | 0.24.0, Int64 ids, no concurrency | Int64, 4 workers | Int64, 8 workers |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| cit-Patents (16.5M edges), outgoing | 8.09 s | 6.54 s | 0.86 s | 0.42 s | 0.34 s |
+| cit-Patents, undirected | 8.95 s | 7.41 s | 2.01 s | 0.63 s | 0.53 s |
+| graph500-24 (260M edges), outgoing | 119.0 s (one run) | 106.3 s (one run) | 14.84 s | 4.19 s | 3.10 s |
+| graph500-24, undirected | 144.1 s (one run) | 129.7 s (one run) | 37.43 s | 6.65 s | 4.70 s |
+
+Bytes the projection's execution admits, which do not depend on the id type
+or the worker count:
+
+| Graph, orientation | 0.23.0 | 0.24.0 |
+| --- | ---: | ---: |
+| cit-Patents, outgoing | 1.13 GiB | 0.57 GiB |
+| cit-Patents, undirected | 1.31 GiB | 0.70 GiB |
+| graph500-24, outgoing | 13.38 GiB | 4.65 GiB |
+| graph500-24, undirected | 16.29 GiB | 6.59 GiB |
+
+The checksum every run prints (node, edge and arc counts, the largest
+out-degree, the number of weak components) is the same in every row. Both
+graphs have compact ids and take the direct table; the sorted lookup, label
+selections, weights and edge ids are covered by the tests for correctness and
+were not timed.
+
+### Not changed
+
+- **No kernel was touched** beyond reading the edge columns where it read the
+  edge records. Results are Utf8 `nodeId` columns as before, including for a
+  graph built from Int64 ids.
+- **The Utf8 path still hashes two strings an edge.** Its build is a tenth to
+  a fifth shorter, from the batch charges, and what remains is the cost of
+  string identity.
+- **Two tests fail without the `parallel` feature**, as they did in 0.23.0:
+  `accounting` and `pagerank_f32` each hold a test that presupposes a parallel
+  kernel. The release gate runs `--all-features`.
+
 ## 0.23.0 — Langoustine — 2026-09-23
 
 Nothing in this release changes an answer. Every kernel returns the bits it

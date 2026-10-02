@@ -62,8 +62,25 @@ For direct Rust, create an `ExecutionContext` with memory/work limits, batch siz
 and optional deadline; `ExecutionContext::with_accounting` runs with less
 checking, as described under "Running without accounting". `GraphProjection::from_graph` accepts label selection,
 orientation and a weight policy. `from_topology` accepts external IDs and typed
-edges; `from_arrow_batches` reads typed columns directly. Kernel results share
+edges; `from_arrow_batches` reads typed columns directly, with node ids and
+edge endpoints either all Utf8 or all Int64. Integer endpoints are resolved
+through a direct table when the ids are compact, or a sorted lookup when they
+are not, instead of a string hash an endpoint, and in parallel when the
+execution asked for workers; a node's external id is then its id's decimal
+text, so results and kernel sources read as before. Kernel results share
 the projection, so dropping the caller's projection handle cannot invalidate IDs.
+
+Beside the adjacency a projection keeps its edge table, which kernels index by
+edge *slot* to recover an edge's endpoints, its original ordinal and its
+external id. The table is columns: two four-byte endpoints an edge, an ordinal
+column only when some edge's ordinal is not its slot, and an id column only
+when some edge has an id. A graph handed over whole, with no label selection
+and no edge ids, therefore keeps eight bytes an edge. `GraphProjection::edges()`
+returns a view over it — `len`, `get(slot)`, `ordinal(slot)`, `iter()` — that
+hands out `EdgeRef { source, target, ordinal, id }` by value. The map from
+external id to node row, which only a kernel that takes a source by id reads,
+is built by the first such kernel; its work and its bytes are charged when the
+projection is built, so a budget decides as it did.
 Runnable source examples are `weighted_paths` in `grust-algorithms` and
 `custom_procedure` in `grust-cypher`.
 
@@ -129,11 +146,11 @@ adjacency-buffer upper bounds from snapshot counts, excluding graph storage,
 ID maps, original edge tables, kernel scratch, output and allocator overhead.
 Selection can reduce those counts. The estimate is not total memory admission.
 
-The adjacency it sizes is narrow. A row bound and an arc target are each four
-bytes, widened on read, so an outgoing arc costs twelve bytes unweighted — a
-four-byte target beside an eight-byte original-edge slot — and twenty weighted;
-a reverse arc, which carries no edge slots, costs four unweighted and twelve
-weighted. Each CSR's row-bound array is four bytes per node plus one. A
+The adjacency it sizes is narrow. A row bound, an arc target and an arc's
+original-edge slot are each four bytes, widened on read, so an outgoing arc
+costs eight bytes unweighted — a four-byte target beside a four-byte slot — and
+sixteen weighted; a reverse arc, which carries no edge slots, costs four
+unweighted and twelve weighted. Each CSR's row-bound array is four bytes per node plus one. A
 projection therefore holds at most `u32::MAX` nodes and at most `u32::MAX` arcs,
 and one that would pass either ceiling is refused with a named
 `AlgorithmError::Unsupported` at the checked add that would otherwise wrap,
