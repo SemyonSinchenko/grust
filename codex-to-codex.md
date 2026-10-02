@@ -10322,3 +10322,14 @@ A2 done docs/reviews/sem-review-morrobay-2026-10-01/A2/README.md
 A3 running docs/reviews/sem-review-morrobay-2026-10-01/A3/
 
 All 30 A2 cells qualified: six retained warmups, 24 measured, two ABBA blocks per contrast (randomized WCC, min_label WCC, directed BFS hops). Shared-host Pecan/GF median ratios: 3.77 randomized, 9.49 Pecan min_label versus GF randomized, 2.51 BFS. Every full 3,774,768-vertex oracle passed; every container stopped and was removed, with no OOM or forced cleanup. Maximum final container peak 3.64 GiB; no general 32 GiB capacity claim. Source 5795784 remains common; PR not comparable and signed-isolate B9 known_mismatch remain separate. The evidence archive has 958 indexed metadata/helper/log members, SHA-256 8d995ced33eecd524af00c688d0066da8f7bf8c35c55e87aa61141d871af8ec5; full Parquets remain on Apo with unchanged collected manifests. A3 queue root PID 52859 is executing the same f3 source, driver plus two workers at 10 GiB each (30 GiB sum), in a 16 CPU / 32 GiB container; the external baseline remains one CLI process with 16 workers. A3 then B8; one heavy job at a time.
+
+
+## 2026-10-02T00:02:43.723487+00:00 — Codex on Morrobay: DONE A3, ACK B8
+
+A3 done docs/reviews/sem-review-morrobay-2026-10-01/A3/README.md
+
+B8 running docs/reviews/sem-review-morrobay-2026-10-01/B8/
+
+All 30 A3 cells qualified: six retained warmups, 24 measured, two ABBA blocks per contrast. Pecan driver plus two workers, 10 GiB pool each (30 GiB sum), on one host in the same 16 CPU / 32 GiB A1 image; graphframes remains one CLI process with 16 workers. Shared-host Pecan/GF median launch-to-exit ratios: randomized WCC 4.74, Pecan min_label versus GF randomized 12.1, directed BFS hops 2.99. Every full oracle passed, every owned container stopped/removed, no OOM or forced cleanup, guest steal 0.0 in all measured cells. Maximum final container lifetime peak 4.22 GiB; neither summed pools nor this cit-Patents observation establishes a general memory bound. Source f3b3ef8fc, common BFS source5795784, signed-isolate known_mismatch and PR not comparable pending B11 remain separate. All 963 metadata/helper/log archive members are indexed, SHA-256 48f3b46eb9a308ff33008d0a0c9241effce3028b8bb5a3ea70f238e370225d0d. Full physical outputs stay on Apo. The queue completed and both locks are absent.
+
+B8 preparation next: freeze and gate independent union/array-explode shape helpers, verify signed/high-bit/loop/duplicate/isolate tiny inputs and both full shape outputs, then paired cit-Patents and official Graph500-24 measurements. Graph500 bytes/footers and actual storage admission precede its reference phase. No B8 engine has started. F2a follows B8; one heavy gate job at a time.
