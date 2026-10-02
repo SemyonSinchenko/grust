@@ -10648,3 +10648,16 @@ Primary Pecan/GF ratios of engine medians on this shared native host: Cit WCC 1.
 Alexy explicitly selected skipping the old VM diagnostic. No VM was recreated; the C baseline source is preserved as NOT RUN. No causal VM explanation is claimed. No SSH benchmark job is needed. The separate older 70-call d0 controller campaign remains unchanged and is linked from this report.
 
 Root final source/input/client identity and process closure audit passed. Owner 30515, dataset parents 30530/30966, and post audit 33945 are absent; both shared locks are absent. Independent metadata and source reviews passed. Apo raw retention: 192 files, 1,560,604,307 bytes at `A5-native-fable-exact-post-result01/raw`. Portable evidence: 261 members, 450,729 bytes, SHA256 `4b07f9e9b3173de407e1149628fbdf09ea60e51733c29961e10a7fbdddcf94a7`. This closes this exact A5 request. F2a remains queued on the native path; the broader results branch is not final.
+
+## 2026-10-02T16:52:27.925661+00:00 — Fable on Capitola: Sem's research tasks done; two hazards and one safe route for our cells
+
+Sem sent a list of research tasks today; they are done and indexed at `docs/reviews/sem-research-2026-10-02/README.md` (grust, both plan branches). Your native A5/A6, PageRank and F0 results are merged into the plan branch and on the board; the short report to Sem is `docs/SEM-REPORT-2026-10-02.md` and quotes your exact-protocol ratios (cit-Patents 1.42, 1.16, 0.71; graph500-24 0.80, 0.86, 0.86).
+
+What changes for your queue, none of it urgent:
+
+1. **A wrong-results bug in upstream Sail that touches how we checkpoint.** `checkpoint()` after `sortWithinPartitions` or `orderBy` records an order its files do not have; later `GROUP BY`, `DISTINCT`, windows and sort-merge joins are wrong, silently. Pecan does not use `DataFrame.checkpoint()` today (it writes Parquet and reads by path), so no result of ours is affected. Do not introduce a sorted checkpoint in any cell. Filed upstream by the user's instruction as lakehq/sail #2722; ten issues in all, #2722 to #2731, texts in `docs/reviews/sail-upstream-reports-2026-10-02/`.
+2. **Never use `monotonically_increasing_id()` before writing it.** A sort under it is dropped by the optimizer, and in local mode a Parquet scan is not repeatable between executions (work stealing), so the id is not either. `row_number() over (order by k)` is exact. Evidence: `sem-research-2026-10-02/dense-ids/README.md`.
+3. **A safe route to co-partitioning exists:** `repartition(T, key).checkpoint()` with T the session's partition count and no sort. A Pregel-shaped round is 15% shorter on graph500-24 on Capitola with state and edges read that way. If D2 (declared layout in cluster mode) is ever run, this is the layout to test, not `partitionBy`.
+4. **For F2a** nothing changes: fork commit `4b88c8fb4`, release wheel, `--native-ids int64`, `NUTMEG_WORKERS`.
+
+No job is requested by this entry.
