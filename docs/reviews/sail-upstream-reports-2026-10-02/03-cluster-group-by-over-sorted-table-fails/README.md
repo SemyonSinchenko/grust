@@ -52,6 +52,12 @@ The query runs in cluster mode and returns 1,000 groups.
 
 Either support the order-preserving exchange (merge the sorted streams on the read side of the shuffle), or, when planning for cluster mode, replace it with a plain repartition and let the aggregate run in its unsorted mode.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No existing issue or pull request found. Open pull request #1448 ("feat: implement bucketed Parquet read with shuffle elimination") works in the same area and lists distributed execution as not yet validated.
+
 ## Notes
 
 - Only `local-cluster` mode was run, not a multi-process cluster.

@@ -56,6 +56,12 @@ The functions are placeholders that a plan rewriter replaces with a column produ
 
 Apply the same rewrite to filter predicates, grouping expressions and sort keys: add the generated column below the operator and reference it. This is what the workaround does by hand with `withColumn`.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+**Partly known.** Open issue #1361 ("Expression rewriter for aggregates", 2026-02-12) lists `monotonically_increasing_id()` in `GROUP BY` and `ORDER BY` of aggregate queries as cases to handle. A review comment on pull request #1727 (2026-04-19) names the filter case exactly, and the reply defers it as follow-up work with a pointer to #1361. No issue was found that tracks the filter and sort-key cases or carries a reproducer. This report is best filed as a comment on #1361, or as a new issue that references it.
+
 ## Notes
 
 - The workaround is to materialise the value with `withColumn` first.

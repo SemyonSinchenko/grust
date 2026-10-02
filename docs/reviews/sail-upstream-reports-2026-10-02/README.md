@@ -38,9 +38,29 @@ report names, runs, prints, and stops the server. It needs
 `pyspark[connect]` 4.0 and `pyarrow` in the Python that runs it. The server
 embeds Python, so the script points it at that same environment.
 
+## Existing upstream items
+
+`lakehq/sail` issues and pull requests were searched on 2026-10-02 (read
+only). Each report has the detail in its "Related upstream items" section.
+
+| # | Found |
+|---|---|
+| 01 | nothing |
+| 02 | no issue; open pull request #1857 fixes the cause as a performance change and does not mention the wrong order |
+| 03 | nothing; open pull request #1448 is in the same area |
+| 04 | nothing |
+| 05 | no issue for Delta; open pull request #1862 reports the same symptom for CTAS to Parquet |
+| 06 | nothing |
+| 07 | nothing |
+| 08 | **partly known**: open issue #1361 covers the aggregate cases; a review comment on #1727 names the filter case and defers it |
+| 09 | nothing |
+| 10 | no issue; open pull request #1360 addresses Delta partitioned writes; DataFusion's tracker search was incomplete |
+
+So none is an exact duplicate of an open issue. 02 and 08 should reference
+the existing items rather than stand alone.
+
 ## What was not done
 
-- The upstream issue tracker was not searched for existing reports.
 - No fix was built or tested. The "possible fix" sections come from reading
   the code.
 - Nothing was run on a multi-process cluster, on Linux, or against an object

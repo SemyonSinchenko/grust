@@ -71,6 +71,12 @@ In rough order of gain for the work:
 
 Items 2 to 4 belong in DataFusion and would help every engine built on it.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No issue found in Sail. Open pull request #1360 ("feat: introduce partitioned concurrent write orchestration and adaptive demux for Delta Lake", 2026-02-12) addresses partitioned writes for Delta and says it lacks benchmarks. In DataFusion's tracker no issue about the per-row cost of `hive_style_partitions_demuxer` was found; two of the searches there timed out, so that search is incomplete.
+
 ## Notes
 
 - One machine, a laptop with a fast internal SSD and a warm page cache.

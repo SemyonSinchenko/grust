@@ -50,6 +50,12 @@ Inferred from the code, not confirmed by a fix: `crates/sail-plan/src/resolver/c
 
 Resolve the sort columns before the input is renamed, as the partition columns are, or resolve them against the renamed schema by name.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No existing issue or pull request found.
+
 ## Notes
 
 - Both sinks already accept a sort order (`crates/sail-data-source/src/formats/parquet/write.rs:36`, `crates/sail-delta-lake/src/lake_source.rs:602`), so only the resolution stands in the way.

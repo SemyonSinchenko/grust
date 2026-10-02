@@ -73,6 +73,12 @@ Any one of these:
 
 A regression test should compare query results over the checkpoint with the same queries over the source frame, for `sortWithinPartitions` and for `orderBy`.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No existing issue or pull request found. The feature was added by pull request #2270 (merged 2026-07-29); its review thread does not discuss the recorded order.
+
 ## Notes
 
 - The fixes are from reading the code. None was built or tested.

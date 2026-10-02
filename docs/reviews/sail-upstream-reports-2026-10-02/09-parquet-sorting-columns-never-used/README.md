@@ -44,6 +44,12 @@ The listing planner derives an order from the footers only when the source has n
 
 Pass an empty `file_sort_order` when the table has no sort order: `if sort_order.is_empty() { vec![] } else { vec![sort_order] }`.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No existing issue or pull request found. Open pull request #1857 also wires `file_sort_order`, from table metadata rather than from footers.
+
 ## Notes
 
 - Not checked: whether the derived order is then correct for a multi-file scan, where the files' key ranges may overlap. The declared order must hold per partition, so file grouping matters.

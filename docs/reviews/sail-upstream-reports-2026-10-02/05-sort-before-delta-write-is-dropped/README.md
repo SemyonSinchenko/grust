@@ -44,6 +44,12 @@ The Delta sink keeps a sort the user asked for, as the Parquet sink does.
 
 Have `DeltaWriterExec` report that it maintains input order, so an explicit sort below it is kept.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No issue found for Delta. Open pull request #1862 ("fix: preserve global sort order in CTAS ORDER BY", opened 2026-05-06) reports the same symptom for a different path: `CREATE TABLE ... AS SELECT ... ORDER BY` wrote unordered Parquet files.
+
 ## Notes
 
 - Whether Delta's file statistics would then prune on the sorted column was checked only with a table whose files were clustered by construction: there the scan read one row group of one file for a point filter.

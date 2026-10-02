@@ -47,6 +47,12 @@ The conversion of a catalog sort column to a sort expression hard-codes `nulls_f
 
 Set `nulls_first` to match Spark's default for the direction: nulls first for ascending, nulls last for descending.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No issue found. **Open pull request #1857** ("perf: persist sort order from CTAS ORDER BY to eliminate redundant SortExec", opened 2026-05-05) changes the cause: its description says it stores `nulls_first` in `CatalogTableSort`, which "was always `false`, mismatching Spark's convention". It presents this as a performance change. The wrong result order shown here is not mentioned there. This report is best filed with a reference to #1857, or as a comment on it.
+
 ## Notes
 
 - The file in the reproducer was written with pyarrow, in the order Spark uses for an ascending sort. Sail itself cannot write into a bucketed table today.

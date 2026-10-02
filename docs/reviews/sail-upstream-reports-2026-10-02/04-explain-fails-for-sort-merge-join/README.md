@@ -53,6 +53,12 @@ It does not fail when both inputs already have a single partition, or the same h
 
 Do not run the executable-plan invariant on the unoptimized plan that `EXPLAIN` builds for display, or build that plan with the distribution and sorting enforcement rules kept.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No existing issue or pull request found. The option was exposed by pull request #2451 (merged 2026-08-20).
+
 ## Notes
 
 - A workaround to see the plan: in `local-cluster` mode with `RUST_LOG=warn,sail_execution::driver::job_scheduler::core=debug` the driver logs each executed plan.

@@ -45,6 +45,12 @@ DataFusion 55.1.0 has `Partitioning::Range` with explicit split points, and `Rep
 
 Add a range kind to the explicit repartition, choose split points by sampling the input as Spark does, and plan `Partitioning::Range`. Until then, reject `repartitionByRange` or log that it is hash-partitioned.
 
+## Related upstream items
+
+Searched in `lakehq/sail` issues and pull requests on 2026-10-02.
+
+No existing issue or pull request found. Open pull request #2553 ("feat: range partitioning for Iceberg") has no description; from its title it concerns table partitioning, not `repartitionByRange`.
+
 ## Notes
 
 - "Nothing constructs one" rests on a search of the source for `Partitioning::Range` and `RangePartitioning::`.
