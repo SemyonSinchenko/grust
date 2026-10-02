@@ -414,7 +414,30 @@ hosts puts Morrobay at half of Capitola on one thread and equal with 16
 ([`reviews/sem-review-capitola-2026-10-02/host-baseline/README.md`](reviews/sem-review-capitola-2026-10-02/host-baseline/README.md)).
 What remains is the virtual machine the gate runs in (QEMU with HVF, 32
 virtual CPUs on 18 cores). The user's decision, pending Codex's scheduling:
-time on the raw machine and keep the VM as the Linux functional gate. If the binary is a true release build, the second suspect is
+time on the raw machine and keep the VM as the Linux functional gate.
+
+**Confirmed the same day.** Codex built Sail `9f0aa7d2a` natively on
+Morrobay's macOS, with the same release profile, and ran the A2 Pecan cell
+there (randomized WCC, cit-Patents, 16 partitions, snapshot on, full oracle):
+
+| Pecan randomized WCC, cit-Patents | In the gate VM (A2) | Native on the same machine | Capitola |
+|---|---|---|---|
+| Launch to exit | 51.8 s | 8.86 s | 5.00 s |
+| The algorithm call | 48 s | 5.07 s | 4.1 to 4.7 s |
+| Round 1 | 23.2 s | 1.46 s | 1.43 s |
+| Rounds 5 to 16 | 3.2 s | 0.59 s | 0.26 s |
+
+Same machine, same cell: the VM cost a factor of 5.8 launch to exit and 16 in
+the first round. That is one native run, on a controller six commits later
+than A2's and a Mach-O build instead of an ELF one, so the factor is an
+indication; its size leaves no doubt about the direction. graphframes-rs has
+been built natively there too and not yet timed, so the native ratio between
+the two engines on Morrobay is still open. Codex retired the benchmark VM at
+the user's instruction; benchmarks run on the bare machine from here, and a
+VM is kept only for Linux build testing
+([`reviews/sem-review-morrobay-2026-10-01/A5/NATIVE-COMPLETION.md`](reviews/sem-review-morrobay-2026-10-01/A5/NATIVE-COMPLETION.md)).
+Every time in this document measured in that VM (A2, A3, B8, and the
+September capacity campaign) is a time in that VM. If the binary is a true release build, the second suspect is
 Sail on x86 Linux in that VM, and one profiled cell in the A1 container
 separates engine time from write time from round trips. Until that is
 answered, the gate's 3.8, 2.5 and 9.5 should be read as upper bounds on
@@ -712,7 +735,8 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | A2 | Pecan in local mode on cit-Patents in the A1 container, against his binary there, two ABBA blocks, n = 4 per engine, full oracle on every cell | Codex | **done**: Pecan over graphframes-rs, launch to exit: randomized WCC (B9) **3.77**, frontier BFS against his directed hops **2.51**, min-label WCC against his randomized 9.49; engine PSS 2.2 against 1.5 GiB for WCC, equal for BFS; PageRank not compared (contracts differ until B11) | `docs/reviews/sem-review-morrobay-2026-10-01/A2/README.md` |
 | A3 | the same in process-cluster mode: driver and two workers, 10 GiB pool each, 16 partitions | Codex | **done**: randomized WCC **4.74**, BFS **2.99**, min-label 12.1; so cluster mode costs 19 to 27% over local at this size | `.../A3/README.md` |
 | A4 | the decision table of Stage A applied, written into section 4 | Fable | **done, then corrected on 2026-10-02**: the first reading (the controller's actions per round are the gap) does not hold. Repeated on Capitola with release builds, Pecan is 1.37 (WCC) and 1.28 (PageRank) times graphframes-rs, against 3.77 on the gate; the gate slows Sail 2.8 times more than his binary. A5 decides why | section 4, "Stage A result" and "Stage A repeated on Capitola"; `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
-| A5 | why Sail is slower on the gate than on Capitola relative to graphframes-rs | Codex (gate), Fable (reading) | **likely answered: the VM, not the build and not the hardware**. (1) Codex's receipt: the gate host is `cargo build --locked --release -p sail-cli`, optimization level 3, LTO. (2) A plain C baseline run natively on both hosts: Morrobay is half of Capitola on one thread and equal with 16, so the hardware predicts a factor of 1 to 2; the engines showed 3.8 (graphframes-rs), 4.7 (Banda's one-thread ingest) and 10.4 (Pecan). (3) The gate is QEMU with HVF, 32 virtual CPUs on 18 cores, 1 GiB pages disabled. **Decision proposed by the user: time on the raw machine, keep the VM as the Linux functional gate.** Open: `baseline.c` inside the gate container (the VM's cost by kind of work), then native macOS release builds of Sail at `9f0aa7d2a` and graphframes-rs on Morrobay and the three contrasts with inputs in place | `reviews/sem-review-capitola-2026-10-02/host-baseline/README.md`; Codex's receipt `reviews/sem-review-morrobay-2026-10-01/A5/BUILD-PROVENANCE.md` (opt-level 3, LTO, one codegen unit, stripped; no target CPU set, so generic x86-64). Codex's next job: the 16-partition WCC write, write, count diagnostic |
+| A5 | why Sail was slower on the gate than on Capitola relative to graphframes-rs | Codex (gate), Fable (reading) | **done: it was the VM.** The same Pecan cell (randomized WCC, cit-Patents, 16 partitions, snapshot on, oracle passing) takes 51.8 s launch to exit in the gate VM and **8.86 s natively on the same machine**; round 1 takes 23.2 s and 1.46 s. Not the build (release, LTO, confirmed by receipt and by ELF inspection) and not the hardware (plain C baseline: within 2 times of Capitola on one thread, equal on 16). The benchmark VM is retired; benchmarks run on bare macOS, a VM is for Linux build testing only (the user's instruction). Open as A6: the three matched contrasts natively on Morrobay, both engines, inputs in place | `reviews/sem-review-morrobay-2026-10-01/A5/NATIVE-COMPLETION.md`, `native-profile-receipt.json`; `reviews/sem-review-capitola-2026-10-02/host-baseline/README.md` |
+| A6 | the matched contrasts natively on Morrobay: Pecan `9f0aa7d2a` against graphframes-rs `b4da56d`, randomized WCC, PageRank (`pregel_delta` against his `page-rank`, 10 steps, tolerance 0.01) and BFS (frontier against his `shortest-path`), cit-Patents and graph500-24, inputs in place and one snapshot-on WCC pair, ABBA, oracle on every pair; optionally with `-C target-cpu=native` for both | Codex | open; both binaries are built | |
 | B1 | keyless repartition toggle (`repartition_checkpoints`) | done | `6ae2e43a9` | integration |
 | B2 | write receipt from the host's graph-utils service instead of read-back counts | Fable | **parked**: on Capitola what this removes (counts and schema round trips) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
 | B3 | round scalars folded into the state write | Fable | **parked**: on Capitola what this removes (the per-round count) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
