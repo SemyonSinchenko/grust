@@ -1,5 +1,7 @@
 # Note for Sail upstream: a checkpoint taken after a sort returns wrong results
 
+> **For filing upstream, use [`../sail-upstream-reports-2026-10-02/01-checkpoint-after-sort-wrong-results/`](../sail-upstream-reports-2026-10-02/01-checkpoint-after-sort-wrong-results/README.md).** That version is standalone. This note is kept because it carries the project's own context and links.
+
 Written 2026-10-02 for the upstream Sail maintainers. It is self-contained:
 a reproducer, what it prints, the code path, and what would fix it. Nothing
 here depends on the graph extensions.

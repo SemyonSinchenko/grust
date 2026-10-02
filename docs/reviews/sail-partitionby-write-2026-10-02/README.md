@@ -1,5 +1,7 @@
 # Note for Sail upstream: `partitionBy` writes are 5 to 45 times slower than plain writes
 
+> **For filing upstream, use [`../sail-upstream-reports-2026-10-02/10-partitionby-write-slow/`](../sail-upstream-reports-2026-10-02/10-partitionby-write-slow/README.md).** That version is standalone. This note is kept because it carries the project's own context and links.
+
 Written 2026-10-02 for the upstream Sail maintainers. It is self-contained:
 a reproducer, numbers, the code path, and what would fix it. Nothing here
 depends on the graph extensions.

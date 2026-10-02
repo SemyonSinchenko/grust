@@ -1,0 +1,10 @@
+truth: 4,000,000 rows, 1,000,003 distinct k
+repartition(10, k).checkpoint()
+    rows 4,000,000; GROUP BY k: 1,000,003 groups; DISTINCT k: 1,000,003  -> correct
+repartition(10, k).sortWithinPartitions(k).checkpoint()
+    rows 4,000,000; GROUP BY k: 4,000,000 groups; DISTINCT k: 4,000,000  -> WRONG
+    plan: AggregateExec: mode=SinglePartitioned, gby=[#0@0 as #0], aggr=[count(Int64(1))], ordering_mode=Sorted
+orderBy(k).checkpoint()
+    rows 4,000,000; GROUP BY k: 3,965,222 groups; DISTINCT k: 3,965,222  -> WRONG
+    plan: AggregateExec: mode=FinalPartitioned, gby=[#0@0 as #0], aggr=[count(Int64(1))], ordering_mode=Sorted
+    plan: AggregateExec: mode=Partial, gby=[#0@0 as #0], aggr=[count(Int64(1))], ordering_mode=Sorted
