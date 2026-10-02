@@ -13,6 +13,7 @@ parser.add_argument("--graph", default="cit-Patents")
 parser.add_argument("--contrasts", nargs="+", default=["wcc", "pagerank"])
 parser.add_argument("--blocks", type=int, default=2)
 parser.add_argument("--workers", type=int, default=10)
+parser.add_argument("--source", type=int, default=5795784, help="BFS source (the A2 source for cit-Patents)")
 parser.add_argument("--root", type=pathlib.Path, default=W / "target/parity/a2")
 parser.add_argument("--out", type=pathlib.Path, required=True)
 parser.add_argument("--server-env", action="append", default=[])
@@ -57,6 +58,9 @@ def pecan(contrast, out):
         if contrast == "wcc":
             handle = graph.wcc(vertices, edges, method="randomized", seed=42, canonical_labels=True,
                                max_iterations=100, partitions=args.workers)
+        elif contrast == "bfs":
+            handle = graph.bfs(vertices, edges, source=args.source, method="frontier", directed=True,
+                               max_iterations=1000, partitions=args.workers)
         else:
             handle = graph.pagerank(vertices, edges, method="pregel_delta", tolerance=0.01, max_iterations=10,
                                     normalize=True, partitions=args.workers)
@@ -71,10 +75,12 @@ def pecan(contrast, out):
 
 def graphframes(contrast, out):
     out.mkdir(parents=True)
-    command = [str(GF), "wcc" if contrast == "wcc" else "page-rank", "--vertices", str(V), "--edges", str(E),
+    subcommand = {"wcc": "wcc", "pagerank": "page-rank", "bfs": "shortest-path"}[contrast]
+    command = [str(GF), subcommand, "--vertices", str(V), "--edges", str(E),
                "--src-col-name", "source", "--dst-col-name", "target", "--output", (out / "result").as_uri() + "/",
                "--max-memory", "30G", "--num-workers", str(args.workers), "--checkpoint-dir", str(out / "gf_workdir")]
-    command += ["--seed", "42"] if contrast == "wcc" else ["--tol", "0.01", "--max-iter", "10"]
+    command += {"wcc": ["--seed", "42"], "pagerank": ["--tol", "0.01", "--max-iter", "10"],
+                "bfs": ["--landmarks", str(args.source)]}[contrast]
     started = time.perf_counter()
     done = subprocess.run(command, capture_output=True, text=True, cwd=out)
     seconds = time.perf_counter() - started
@@ -90,6 +96,13 @@ def oracle(contrast, ours, theirs):
         mismatches = int((a["component"] != b["component"]).sum())
         assert mismatches == 0, f"{mismatches} component labels differ"
         return dict(rows=len(a), components=int(a["component"].nunique()), label_mismatches=0)
+    if contrast == "bfs":
+        # Pecan: null hops when unreachable. graphframes-rs: INT32 max.
+        ours = a["hops"].fillna(-1).astype("int64")
+        theirs = b[f"dist_{args.source}"].astype("int64").where(b[f"dist_{args.source}"] != 2**31 - 1, -1)
+        mismatches = int((ours != theirs).sum())
+        assert mismatches == 0, f"{mismatches} hop distances differ"
+        return dict(rows=len(a), reached=int((ours >= 0).sum()), depth=int(ours.max()), hop_mismatches=0)
     difference = (a["pagerank"] - b["pagerank"]).abs()
     assert difference.max() < 1e-12, difference.max()
     return dict(rows=len(a), max_abs_difference=float(difference.max()),

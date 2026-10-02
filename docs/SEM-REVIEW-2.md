@@ -419,6 +419,25 @@ peak. So the class holds at 260M edges on this machine, and the 32 GiB
 failure B8 met on the gate is not Pecan's randomized WCC running out of room
 by itself.
 
+With the inputs read in place, as his binary reads them
+(`snapshot_inputs=False`, B7), and BFS no longer writing the edges twice
+(`d0e4e422a`), launch to exit on Capitola:
+
+| Graph | Contrast | graphframes-rs | Pecan | Pecan over graphframes-rs |
+|---|---|---|---|---|
+| cit-Patents | WCC | 3.45 s | 4.05 s | 1.17 |
+| cit-Patents | PageRank, 10 delta steps | 2.78 s | 3.17 s | 1.14 |
+| cit-Patents | BFS | 1.86 s | 1.21 s | 0.65 |
+| graph500-24 | WCC | 25.5 s | 20.3 s | 0.80 |
+| graph500-24 | PageRank, 10 delta steps | 18.1 s | 17.1 s | 0.95 |
+| graph500-24 | BFS | 9.78 s | 8.53 s | 0.87 |
+
+Every pair passed its oracle on every vertex. Four samples per engine on
+cit-Patents, two on graph500-24, a laptop in use: these are indications of
+class, not publishable ratios. What they indicate is parity. The input
+snapshot was the largest cost Pecan added (10 s of the 30 s WCC at
+graph500-24), which is the point Sem made about rewriting the inputs.
+
 Banda on the same machine and files
 ([`reviews/sem-review-capitola-2026-10-02/F1/README.md`](reviews/sem-review-capitola-2026-10-02/F1/README.md)):
 
@@ -692,7 +711,8 @@ Status values: `open`, `running`, `done <commit or evidence path>`,
 | B4 | fused contraction as the default | Fable | superseded by B9: `wcc_fused.py` removed, `randomized_fused` is an alias | |
 | B5 | tail cutover for the contraction | Fable | **parked**: on Capitola what this removes (the twelve tail rounds) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
 | B6 | checkpoint every k rounds | Fable | **parked**: on Capitola what this removes (per-round writes in the tail) is small: a count over a written stage returns in under 10 ms and all twelve tail rounds together take 0.26 s of a 4.1 s call. Reopen only if A5 shows round trips cost much more on the gate | `reviews/sem-review-capitola-2026-10-02/A2-local/README.md` |
-| B7 | trusted immutable Parquet inputs: no snapshot rewrite (Sem, "why rewrite the inputs") | Fable; gate measurement Codex | **done, not yet measured on the gate**: `GraphAlgorithms(snapshot_inputs=False)` reads the caller's vertex and edge frames in place and writes nothing for the inputs; the default keeps the snapshot, because a caller's frame is not known to be immutable. The benchmark cells take `--no-snapshot-inputs` and record `pecan_snapshot_inputs` in the receipt. A test asserts no staging write for the inputs and identical components either way. Stage A put the snapshot at about 5 s of the 48 s public algorithm on cit-Patents; the paired in-place cell is Codex's to run | `querygraph/sail` `pecan` `b522bf3a9` |
+| B7 | trusted immutable Parquet inputs: no snapshot rewrite (Sem, "why rewrite the inputs") | Fable; gate measurement Codex | **done; measured on Capitola, not on the gate**: reading the inputs in place takes the graph500-24 WCC from 30.4 to 20.3 s, the BFS from 14.2 to 8.5 s, and cit-Patents WCC from 5.0 to 4.05 s. Since graphframes-rs reads its inputs in place, a matched comparison uses `snapshot_inputs=False`. `GraphAlgorithms(snapshot_inputs=False)` reads the caller's vertex and edge frames in place and writes nothing for the inputs; the default keeps the snapshot, because a caller's frame is not known to be immutable. The benchmark cells take `--no-snapshot-inputs` and record `pecan_snapshot_inputs` in the receipt. A test asserts no staging write for the inputs and identical components either way. Stage A put the snapshot at about 5 s of the 48 s public algorithm on cit-Patents; the paired in-place cell is Codex's to run | `querygraph/sail` `pecan` `b522bf3a9` |
+| B12 | traversal: no second copy of the edges before the first round | Fable | **done**: BFS and SSSP wrote the snapshotted edge table again as their adjacency (with a constant weight column for BFS). A directed traversal now uses the snapshot, or the in-place input, as its adjacency. graph500-24 BFS on Capitola: 19.7 to 14.2 s with the snapshot, 8.5 s in place, against 9.7 s for graphframes-rs; 191 Pecan and 443 harness tests pass | `querygraph/sail` `pecan` `d0e4e422a` |
 | B8 | `unionByName` against `array(struct, struct)` + explode, paired, on Sail (Sem, remarks 11, 23a); he wants numbers | Codex | **interim**: on cit-Patents, 30 cells, array and explode is slower than union in every shape: adjacency 1.02, representatives 1.12, min-label round 1.12 (median elapsed, explode over union); the graph500-24 adjacency union warmup ran out of the 32 GiB container, cause not yet located, so no scale-24 ratio | `.../B8/INTERIM-FINDINGS.md` |
 | B10 | PageRank in the Pregel paper's and GraphX's static form (`method="pregel"`), optional normalization (Sem, remarks 18, 21) | Fable | **done**: tests equal to `power` without dangling vertices, same order with them | `work/wcc-affine` `f3b3ef8fc` |
 | B11 | PageRank delta as GraphX's vertex program: no certificates, no extra relation (Sem, remarks 20, 21) | Fable; gate measurement Codex | **done, not yet measured on the gate**: `method="pregel_delta"`, read from graphframes-rs `pagerank.rs` and `pregel.rs` at `ba2fdd8`: rank and delta start at the reset probability, a vertex whose delta exceeds the tolerance sends delta/out_degree, a vertex adds (1 - reset) times what it received and takes that gain as its delta; all vertices send in step 1. No dangling term, no residual, no certificate, no vertex count; the state is the only relation a step writes, so a step is one job. A fixed budget counts nothing (his `max_iter > 0`); `vote_to_halt=True` counts the active vertices after each step and stops at zero (GraphX, and his `max_iter = 0`). `normalize=True` divides by the total, as he always does. **Parity against his binary** on Capitola, 200,000 vertices and 2,000,000 edges with sinks, isolates, parallel edges and loops, tolerance 0.01: largest relative difference in any rank 1.0e-15 after 10 fixed steps, 9.1e-16 run to the halt, and both halt after 16 steps. One deliberate difference in execution, not in the result: he checkpoints the aggregated messages and then the state, two writes a step; Pecan writes the state once. The certified `method="delta"` is unchanged and remains the LDBC-contract form with an error bound; whether to retire it is a decision for the review, not made here | `querygraph/sail` `pecan` `0d1ef2ca3`; 191 Pecan tests |

@@ -58,6 +58,41 @@ is 33.3 s. Raw records:
 Banda on the same machine and files is in [`../F1/README.md`](../F1/README.md):
 about 140 s for its first WCC call, 1.1 s for the second.
 
+## Result: three contrasts, both input policies
+
+graphframes-rs reads its inputs where they are. Pecan by default first
+copies them into the run (the snapshot); `snapshot_inputs=False` (B7) reads
+them in place. Both policies were measured, each in its own paired run, at
+`querygraph/sail` `d0e4e422a`, which also stops BFS writing the edge table a
+second time. BFS is Pecan's frontier method against his `shortest-path` from
+one landmark (vertex 5795784 on cit-Patents, 798169 on graph500-24), checked
+hop by hop on every vertex. Median seconds, launch to exit.
+
+| Graph | Contrast | graphframes-rs | Pecan, snapshot | Ratio | graphframes-rs | Pecan, in place | Ratio | Samples |
+|---|---|---|---|---|---|---|---|---|
+| cit-Patents | WCC | 3.66 | 5.00 | 1.37 | 3.45 | 4.05 | **1.17** | 4, 4 |
+| cit-Patents | PageRank | 4.00 | 5.12 | 1.28 | 2.78 | 3.17 | **1.14** | 4, 4 |
+| cit-Patents | BFS | 1.85 | 1.98 | 1.07 | 1.86 | 1.21 | **0.65** | 4, 4 |
+| graph500-24 | WCC | 27.70 | 30.40 | 1.10 | 25.51 | 20.29 | **0.80** | 2, 2 |
+| graph500-24 | PageRank | 20.48 | 24.49 | 1.20 | 18.05 | 17.06 | **0.95** | 2, 2 |
+| graph500-24 | BFS | 9.70 | 14.15 | 1.46 | 9.78 | 8.53 | **0.87** | 2, 2 |
+
+- With the inputs read in place, as his binary reads them, Pecan is between
+  0.65 and 1.17 times graphframes-rs on this machine. At graph500-24 it is
+  at or ahead of it on all three.
+- The snapshot is the largest single cost Pecan adds: 10 s of a 30 s WCC at
+  graph500-24. It is more than the 4 s the copy takes to write. The copy is
+  written round-robin into 10 files, and the rounds that read it are slower
+  than rounds over the original file.
+- Before `d0e4e422a` the graph500-24 BFS took 19.7 s with the snapshot (ratio
+  1.96): it wrote the 260M edges twice before the first round.
+- The medians of the same engine differ between runs by up to 30% (PageRank
+  on cit-Patents: 4.00 and 2.78 s for graphframes-rs). Each ratio is taken
+  inside one run. The laptop was in use.
+
+Records: `a2-launch-to-exit*.json`; the names carry the input policy, the
+graph and, for BFS, the commit.
+
 ## The same contrast on the two hosts
 
 | | Gate (A2) | Capitola | Gate over Capitola |
@@ -98,9 +133,10 @@ Median of five runs of the public call. Raw output:
 
 ## What it says
 
-- On this laptop Pecan is in graphframes-rs's class on cit-Patents: 1.3 to
-  1.4 times launch to exit, with a client-driven controller and the same
-  number of writes per round.
+- On this laptop Pecan is in graphframes-rs's class: 1.1 to 1.5 times launch
+  to exit with its default input snapshot, 0.65 to 1.17 times with the inputs
+  read in place, with a client-driven controller and the same number of
+  writes per round.
 - So the gate's 3.8 is not explained by the controller's actions per round.
   Most of it appears on the gate and not here.
 - Stage B's knobs are worth about 10% each on this graph. None is a large
