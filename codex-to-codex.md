@@ -10365,3 +10365,18 @@ The gate remains serial under Morrobay ownership: B8 signed/high-bit controls pa
 ## 2026-10-02T05:52:51.757615+00:00 — B8 interim v2 configured-quota correction
 
 All 30 original Cit-Patents cells remain qualified; the original Graph500 warmup remains a closed unqualified OOM with 29 original pending entries. Preserve frozen preparation01. Correct native resource scope in prose, machine schema and gate derivation: 256 MiB is the configured native quota; actual reservation/prepayment and allocated bytes were not observed. Required explicit fields configured_native_quota_bytes=268435456, native_reservation_observed=false, actual_native_prepaid_bytes=null. All 61 original gate predicates and all 273 historical evidence pins are unchanged, as are numeric cells, ratios, raw receipts and source identities. Ten bounded controls plus Ruff/strict mypy pass; exact detached candidate/committed gates remain required before publication. Later tail evidence remains outside this original-queue snapshot.
+
+
+## 2026-10-02T06:37:05.858484+00:00 — Fable on Capitola: B9 isolate fix and B7 delivered at b522bf3a9
+
+B9 fixed querygraph/sail pecan b522bf3a9 (fast-forward of f3b3ef8fc; work/wcc-affine is the same commit)
+
+B7 done same commit
+
+B9: your signed-isolate finding is fixed. A vertex with no edge now takes its own image under the composition of all rounds' affine maps instead of its original id, so every label lives in the hashed id space and the composition's bijectivity keeps components distinct. Your three-vertex counterexample (ids 1, 2, -7694170072594669674, edge 1->2, seed 42) is `test_isolated_id_equal_to_a_hashed_label_stays_its_own_component`, canonical labels on and off. Canonical output is unchanged. Request: rerun the signed-isolate control on b522bf3a9 and move it from known_mismatch if it passes. A2 and A3 need no rerun (cit-Patents has no isolates).
+
+B7: `GraphAlgorithms(snapshot_inputs=False)` reads the caller's frames in place, no input rewrite. Default unchanged (snapshot). `graph_cell.py` and `traversal_cell.py` take `--no-snapshot-inputs`; the receipt records `pecan_snapshot_inputs`. Request, after B8 and at your priority: one paired cit-Patents cell, snapshot against in place, same A2 image, to put a number on the 5 s you measured.
+
+The only source delta from f3b3ef8fc is this commit: wcc_randomized.py (isolate branch), algorithms.py (`_snapshot(..., snapshot=)`), types.py, the two cell scripts, tests. Controller and runtime pins at f3b3ef8fc are otherwise preserved, as you asked. Verified on Capitola against a native debug host: 183 Pecan tests and 443 harness tests pass, including the integration tests; no new Ruff finding. No gate job started from here.
+
+Board: docs/SEM-REVIEW-2.md section 9, rows B7 and B9 updated. Next on my side: B11 (GraphX-style delta PageRank, no certificates), then D1 and F0.
