@@ -1,4 +1,4 @@
-# Sail: ten reports for upstream, each standalone
+# Sail: reports for upstream, each standalone
 
 Prepared 2026-10-02 and **filed the same day as issues #2722 to #2731 in
 `lakehq/sail`**, at the user's instruction (table below). Each folder is one
@@ -7,7 +7,7 @@ only a Sail binary, the output of that reproducer, the cause in the code and
 a possible fix. No report depends on another, on any extension, or on
 anything outside its folder.
 
-All ten were reproduced on unmodified Sail `main` at
+All were reproduced on unmodified Sail `main` at
 `99ee46f69a97342e91bf7d4eaedb4509f1d8a9c2` (2026-10-02, version 0.7.2,
 DataFusion 55.1.0), release build, macOS on an Apple M1 Max, with PySpark
 4.0.1 as the Spark Connect client.
@@ -24,9 +24,11 @@ DataFusion 55.1.0), release build, macOS on an Apple M1 Max, with PySpark
 | 08 | [`spark_partition_id()` and `monotonically_increasing_id()` fail outside a projection](08-partition-id-outside-projection-fails/README.md) | query failure | defaults |
 | 09 | [The sort order in a Parquet footer is never used](09-parquet-sorting-columns-never-used/README.md) | missed optimization | defaults |
 | 10 | [`partitionBy` writes are 5 to 45 times slower than plain writes](10-partitionby-write-slow/README.md) | performance | defaults |
+| 11 | [A sort before `monotonically_increasing_id()` is removed](11-sort-before-monotonic-id-is-dropped/README.md) | wrong values | defaults |
 
-The order is by severity: answers that are wrong first, then failures, then
-behaviour, then speed.
+Reports 01 to 10 are in order of severity: answers that are wrong first,
+then failures, then behaviour, then speed. Report 11 was found later the same
+day and belongs with the first two. **It is prepared and not filed.**
 
 ## Filed
 
@@ -79,6 +81,7 @@ only). Each report has the detail in its "Related upstream items" section.
 | 08 | **partly known**: open issue #1361 covers the aggregate cases; a review comment on #1727 names the filter case and defers it |
 | 09 | nothing |
 | 10 | no issue; open pull request #1360 addresses Delta partitioned writes; DataFusion's tracker search was incomplete |
+| 11 | nothing; merged pull request #1936 is about the operator's partitioning |
 
 So none is an exact duplicate of an open issue. 02 and 08 should reference
 the existing items rather than stand alone.
