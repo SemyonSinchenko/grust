@@ -20,7 +20,7 @@
 use std::sync::Mutex;
 
 use arrow_schema::DataType;
-use grust_core::NodeId;
+use grust_core::{EdgeId, NodeId};
 
 use super::*;
 
@@ -328,7 +328,7 @@ fn edge_columns<'a>(
     Ok(columns)
 }
 
-type Edges = (Buffer<ProjectionEdge>, Option<Buffer<f64>>);
+type Edges = (EdgeTable, Option<Buffer<f64>>);
 
 /// The dense endpoints of one edge. `Ok(None)` is an edge the node selection
 /// leaves out; an endpoint that is no node at all is the error.
@@ -345,13 +345,12 @@ fn endpoints(
     Ok(source.zip(target))
 }
 
-/// The rest of a kept edge: its record and, on a weighted projection, its weight.
+/// The rest of a kept edge: its external id and, on a weighted projection, its weight.
 fn kept(
     batch: &EdgeBatch<'_>,
     row: usize,
-    (source, target): (usize, usize),
     options: ProjectionOptions<'_>,
-) -> Result<(ProjectionEdge, Option<f64>)> {
+) -> Result<(Option<EdgeId>, Option<f64>)> {
     let ordinal = batch.first + row;
     let weight = match options.weight.property() {
         None => None,
@@ -365,15 +364,7 @@ fn kept(
         }
     };
     let id = (!batch.ids.is_null(row)).then(|| batch.ids.value(row).into());
-    Ok((
-        ProjectionEdge {
-            source,
-            target,
-            ordinal,
-            id,
-        },
-        weight,
-    ))
+    Ok((id, weight))
 }
 
 /// No label selection: every edge is kept at its ordinal, so the table is
@@ -385,13 +376,11 @@ fn fill_every_edge(
     resolve: &(impl Fn(i64) -> Option<Option<usize>> + Sync),
     context: &ExecutionContext,
 ) -> Result<Edges> {
-    let blank = ProjectionEdge {
-        source: 0,
-        target: 0,
-        ordinal: 0,
-        id: None,
-    };
-    let mut edges = Buffer::indexed(m, blank, context)?;
+    // The id column exists only if some edge has an id.
+    let with_ids = batches
+        .iter()
+        .any(|batch| batch.ids.null_count() != batch.ids.len());
+    let mut edges = EdgeTable::indexed(m, with_ids, context)?;
     let mut weights = match options.weight.property() {
         None => None,
         Some(_) => Some(Buffer::indexed(m, 0.0f64, context)?),
@@ -407,60 +396,84 @@ fn fill_every_edge(
         Some(workers) => crate::parallel::chunk_len(m, workers).min(SEQUENTIAL_STEP * 64),
         None => SEQUENTIAL_STEP,
     };
-    let weight_chunks: Vec<Option<&mut [f64]>> = match &mut weights {
-        Some(weights) => weights.values.chunks_mut(chunk).map(Some).collect(),
-        None => (0..m.div_ceil(chunk)).map(|_| None).collect(),
+    let chunks = m.div_ceil(chunk);
+    let (sources, targets, ids) = edges.columns_mut();
+    let mut ids: Vec<Option<&mut [Option<EdgeId>]>> = match ids {
+        Some(ids) => ids.chunks_mut(chunk).map(Some).collect(),
+        None => (0..chunks).map(|_| None).collect(),
     };
-    let tasks: Vec<(&mut [ProjectionEdge], Option<&mut [f64]>)> =
-        edges.values.chunks_mut(chunk).zip(weight_chunks).collect();
+    let mut weight_chunks: Vec<Option<&mut [f64]>> = match &mut weights {
+        Some(weights) => weights.values.chunks_mut(chunk).map(Some).collect(),
+        None => (0..chunks).map(|_| None).collect(),
+    };
+    let tasks: Vec<Task<'_>> = sources
+        .chunks_mut(chunk)
+        .zip(targets.chunks_mut(chunk))
+        .zip(ids.drain(..).zip(weight_chunks.drain(..)))
+        .map(|((sources, targets), (ids, weights))| Task {
+            sources,
+            targets,
+            ids,
+            weights,
+        })
+        .collect();
     let failure = FirstFailure::default();
-    crate::parallel::for_each_owned(
-        workers.unwrap_or(1),
-        tasks,
-        |index, (edges, mut weights)| {
-            let first = index * chunk;
-            match workers {
-                Some(_) => context.work_meter().charge(edges.len())?,
-                None => context.charge_work(edges.len())?,
-            }
-            // The batch holding this chunk's first row, then onward.
-            let mut at =
-                batches.partition_point(|batch| batch.first + batch.sources.len() <= first);
-            let mut filled = 0;
-            while filled < edges.len() {
-                let batch = &batches[at];
-                let from = first + filled - batch.first;
-                let rows = (batch.sources.len() - from).min(edges.len() - filled);
-                for row in from..from + rows {
-                    let edge = endpoints(batch, row, resolve).and_then(|ends| match ends {
-                        Some(ends) => kept(batch, row, ends, options),
-                        None => Err(AlgorithmError::OutputContract(
-                            "an edge was left out although no label selection was given".into(),
-                        )),
-                    });
-                    match edge {
-                        Ok((edge, weight)) => {
-                            if let (Some(weights), Some(weight)) = (weights.as_deref_mut(), weight)
-                            {
-                                weights[filled] = weight;
-                            }
-                            edges[filled] = edge;
+    crate::parallel::for_each_owned(workers.unwrap_or(1), tasks, |index, mut task| {
+        let first = index * chunk;
+        let rows = task.sources.len();
+        match workers {
+            Some(_) => context.work_meter().charge(rows)?,
+            None => context.charge_work(rows)?,
+        }
+        // The batch holding this chunk's first row, then onward.
+        let mut at = batches.partition_point(|batch| batch.first + batch.sources.len() <= first);
+        let mut filled = 0;
+        while filled < rows {
+            let batch = &batches[at];
+            let from = first + filled - batch.first;
+            let take = (batch.sources.len() - from).min(rows - filled);
+            for row in from..from + take {
+                let edge = endpoints(batch, row, resolve).and_then(|ends| match ends {
+                    Some(ends) => Ok((ends, kept(batch, row, options)?)),
+                    None => Err(AlgorithmError::OutputContract(
+                        "an edge was left out although no label selection was given".into(),
+                    )),
+                });
+                match edge {
+                    Ok(((source, target), (id, weight))) => {
+                        // Rows fit the stored width: `build` refused more than it holds.
+                        task.sources[filled] = source as u32;
+                        task.targets[filled] = target as u32;
+                        if let (Some(ids), Some(id)) = (task.ids.as_deref_mut(), id) {
+                            ids[filled] = Some(id);
                         }
-                        Err(error) => {
-                            // This chunk's first failure; a later row cannot precede it.
-                            failure.record(batch.first + row, error);
-                            return Ok(());
+                        if let (Some(weights), Some(weight)) = (task.weights.as_deref_mut(), weight)
+                        {
+                            weights[filled] = weight;
                         }
                     }
-                    filled += 1;
+                    Err(error) => {
+                        // This chunk's first failure; a later row cannot precede it.
+                        failure.record(batch.first + row, error);
+                        return Ok(());
+                    }
                 }
-                at += 1;
+                filled += 1;
             }
-            Ok(())
-        },
-    )?;
+            at += 1;
+        }
+        Ok(())
+    })?;
     failure.take()?;
     Ok((edges, weights))
+}
+
+/// One chunk of the edge table's columns, and of the weights, for one task.
+struct Task<'a> {
+    sources: &'a mut [u32],
+    targets: &'a mut [u32],
+    ids: Option<&'a mut [Option<EdgeId>]>,
+    weights: Option<&'a mut [f64]>,
 }
 
 /// A label selection: edges are dropped, so positions are not ordinals and the
@@ -472,7 +485,7 @@ fn push_selected_edges(
     resolve: &(impl Fn(i64) -> Option<Option<usize>> + Sync),
     context: &ExecutionContext,
 ) -> Result<Edges> {
-    let mut edges = Buffer::capacity(m, context)?;
+    let mut edges = EdgeTable::with_capacity(m, context)?;
     let mut weights = match options.weight.property() {
         None => None,
         Some(_) => Some(Buffer::capacity(m, context)?),
@@ -491,11 +504,11 @@ fn push_selected_edges(
             )? {
                 continue;
             }
-            let (edge, weight) = kept(batch, row, ends, options)?;
+            let (id, weight) = kept(batch, row, options)?;
             if let (Some(weights), Some(weight)) = (&mut weights, weight) {
                 weights.values.push(weight);
             }
-            edges.values.push(edge);
+            edges.push(ends.0, ends.1, batch.first + row, id, context)?;
         }
     }
     Ok((edges, weights))

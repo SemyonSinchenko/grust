@@ -24,14 +24,14 @@
 //! **Why refusing is not a limitation.** The first graph a `usize` fallback
 //! would admit has 2^32 nodes, or 2^32 arcs. Before a single arc is stored, a
 //! projection of 2^32 nodes has already asked for 34.4 GB for its node-id
-//! vector's pointers alone; the edge list it is built from is 32 bytes a
-//! [`ProjectionEdge`]; and the cheapest kernel result over it, one `f64` a
-//! node, is another 34.4 GB, which PageRank needs three of. A projection of
+//! vector's pointers alone; and the cheapest kernel result over it, one `f64`
+//! a node, is another 34.4 GB, which PageRank needs three of. A projection of
 //! 2^32 arcs holds 17.2 GB of targets at the narrow width and 34.4 GB at the
-//! wide one, and its edge list is 137 GB. So a fallback would double the two
-//! smallest arrays in a working set that is already several hundred gigabytes
-//! for the widest reason, and every per-node `usize` buffer in this crate would
-//! have to be narrowed first for it to matter. A clear refusal costs one
+//! wide one, beside an edge table of at least 34.4 GB and edge slots of 17.2
+//! GB. So a fallback would double the smallest arrays in a working set that
+//! is already over a hundred gigabytes for the widest reason, and every
+//! per-node `usize` buffer in this crate would have to be narrowed first for
+//! it to matter. A clear refusal costs one
 //! comparison per build and one checked add per node and keeps one
 //! representation to reason about.
 
@@ -56,10 +56,12 @@ pub(crate) struct Adjacency {
     /// Read through [`Self::target`] or [`Self::targets`], never widened
     /// anywhere else, so the width is this file's decision alone.
     targets: Buffer<Target>,
-    /// Original edge position per arc. Present on a projection's own adjacency,
-    /// absent on a transpose, whose callers identify arcs by endpoint rather
-    /// than by edge and would otherwise pay eight bytes an arc to ignore.
-    edge_slots: Option<Buffer<usize>>,
+    /// Original edge position per arc, four bytes: an edge has at least one
+    /// arc, so an edge slot is below the arc count the offsets already bound.
+    /// Read through [`Self::edge_slot`]. Present on a projection's own
+    /// adjacency, absent on a transpose, whose callers identify arcs by
+    /// endpoint rather than by edge and would otherwise pay for it to ignore.
+    edge_slots: Option<Buffer<Offset>>,
     pub(crate) weights: Option<Buffer<f64>>,
 }
 
@@ -126,7 +128,7 @@ const MAX_COUNT_CHUNKS: usize = 64;
 impl Adjacency {
     pub(crate) fn build(
         n: usize,
-        edges: &[ProjectionEdge],
+        edges: &EdgeTable,
         weights: Option<&[f64]>,
         orientation: Orientation,
         context: &ExecutionContext,
@@ -136,7 +138,7 @@ impl Adjacency {
 
     pub(crate) fn build_traced(
         n: usize,
-        edges: &[ProjectionEdge],
+        edges: &EdgeTable,
         weights: Option<&[f64]>,
         orientation: Orientation,
         context: &ExecutionContext,
@@ -151,9 +153,12 @@ impl Adjacency {
         // Row and other end of an edge's first arc; an undirected non-loop
         // edge also has the mirrored arc. Counting and both fills read these,
         // so they cannot disagree about which rows an edge lands in.
-        let ends = |edge: &ProjectionEdge| match orientation {
-            Orientation::Outgoing | Orientation::Undirected => (edge.source, edge.target),
-            Orientation::Incoming => (edge.target, edge.source),
+        let (sources, targets) = (edges.sources(), edges.targets());
+        let ends = |slot: usize| match orientation {
+            Orientation::Outgoing | Orientation::Undirected => {
+                (sources[slot] as usize, targets[slot] as usize)
+            }
+            Orientation::Incoming => (targets[slot] as usize, sources[slot] as usize),
         };
         let mirrored =
             |row: usize, other: usize| orientation == Orientation::Undirected && row != other;
@@ -163,10 +168,10 @@ impl Adjacency {
                 let len = edges.len().div_ceil(table.chunks).max(1);
                 table.count(context, |index, row, meter| {
                     let start = (index * len).min(edges.len());
-                    let slice = &edges[start..(start + len).min(edges.len())];
-                    meter.charge(slice.len())?;
-                    for edge in slice {
-                        let (source, target) = ends(edge);
+                    let slots = start..(start + len).min(edges.len());
+                    meter.charge(slots.len())?;
+                    for slot in slots {
+                        let (source, target) = ends(slot);
                         row[source] += 1;
                         if mirrored(source, target) {
                             row[target] += 1;
@@ -177,9 +182,9 @@ impl Adjacency {
                 Some(table.sum_into(context, &mut offsets.values[1..])?)
             }
             None => {
-                for edge in edges {
+                for slot in 0..edges.len() {
                     context.charge_work(1)?;
-                    let (source, target) = ends(edge);
+                    let (source, target) = ends(slot);
                     offsets.values[source + 1] = offsets.values[source + 1]
                         .checked_add(1)
                         .ok_or_else(arc_count_overflow)?;
@@ -197,7 +202,7 @@ impl Adjacency {
         let mut result = Self {
             offsets,
             targets: Buffer::filled(count, 0 as Target, context)?,
-            edge_slots: Some(Buffer::filled(count, 0, context)?),
+            edge_slots: Some(Buffer::filled(count, 0 as Offset, context)?),
             weights: weights
                 .map(|_| Buffer::filled(count, 0.0, context))
                 .transpose()?,
@@ -229,9 +234,9 @@ impl Adjacency {
                 let mut meter = context.work_meter();
                 let end = part.first_arc + part.targets.len();
                 meter.charge(share(end) - share(part.first_arc))?;
-                for (slot, edge) in edges.iter().enumerate() {
+                for slot in 0..edges.len() {
                     part.poll(slot, &meter)?;
-                    let (source, target) = ends(edge);
+                    let (source, target) = ends(slot);
                     let weight = weights.map(|values| values[slot]);
                     if part.holds(source) {
                         part.put(source, target, Some(slot), weight);
@@ -245,9 +250,9 @@ impl Adjacency {
             let chunks = counted.unwrap_or(0);
             return Ok((result, BuildPath::Parallel { chunks, ranges }));
         }
-        for (slot, edge) in edges.iter().enumerate() {
+        for slot in 0..edges.len() {
             context.charge_work(1)?;
-            let (source, target) = ends(edge);
+            let (source, target) = ends(slot);
             let weight = weights.map(|values| values[slot]);
             result.put(&mut positions.values, source, target, slot, weight);
             if mirrored(source, target) {
@@ -268,7 +273,7 @@ impl Adjacency {
         let index = positions[source];
         self.targets.values[index] = narrow(target);
         if let Some(slots) = &mut self.edge_slots {
-            slots.values[index] = edge;
+            slots.values[index] = edge as Offset;
         }
         if let (Some(weights), Some(weight)) = (&mut self.weights, weight) {
             weights.values[index] = weight;
@@ -389,7 +394,7 @@ impl Adjacency {
         self.edge_slots
             .as_ref()
             .expect("arc slots belong to a projection's own adjacency, not a transpose")
-            .values[arc]
+            .values[arc] as usize
     }
 
     pub(crate) fn weight(&self, arc: usize) -> f64 {
@@ -578,7 +583,7 @@ struct RowRange<'a> {
     /// Arc index where `rows.start`'s row begins: the slices are relative to it.
     first_arc: usize,
     targets: &'a mut [Target],
-    slots: Option<&'a mut [usize]>,
+    slots: Option<&'a mut [Offset]>,
     weights: Option<&'a mut [f64]>,
     /// Absolute next-arc index per row in `rows`, as the sequential fill's.
     positions: &'a mut [usize],
@@ -608,7 +613,7 @@ impl RowRange<'_> {
         self.positions[local] += 1;
         self.targets[index] = narrow(target);
         if let (Some(slots), Some(slot)) = (&mut self.slots, slot) {
-            slots[index] = slot;
+            slots[index] = slot as Offset;
         }
         if let (Some(weights), Some(weight)) = (&mut self.weights, weight) {
             weights[index] = weight;
@@ -889,10 +894,18 @@ mod tests {
         (list, weights)
     }
 
+    /// The fixture's edges as the columns a projection keeps, admitted by an
+    /// execution of their own so the builds under test are charged for nothing
+    /// but themselves.
+    fn table(edges: &[ProjectionEdge]) -> EdgeTable {
+        let scratch = sequential(1 << 30, usize::MAX);
+        EdgeTable::from_edges(edges.to_vec(), &scratch).unwrap()
+    }
+
     type Bytes = (
         Vec<Offset>,
         Vec<Target>,
-        Option<Vec<usize>>,
+        Option<Vec<Offset>>,
         Option<Vec<u64>>,
     );
 
@@ -938,7 +951,8 @@ mod tests {
             for weights in [None, Some(weights.as_slice())] {
                 let oracle = sequential(1 << 30, usize::MAX);
                 let (expected, path) =
-                    Adjacency::build_traced(NODES, &edges, weights, orientation, &oracle).unwrap();
+                    Adjacency::build_traced(NODES, &table(&edges), weights, orientation, &oracle)
+                        .unwrap();
                 assert_eq!(path, BuildPath::Sequential);
                 let (expected_in, path) = expected.transposed_traced(&oracle).unwrap();
                 assert_eq!(path, BuildPath::Sequential);
@@ -954,9 +968,14 @@ mod tests {
                         chunks: workers,
                         ranges: workers,
                     };
-                    let (built, path) =
-                        Adjacency::build_traced(NODES, &edges, weights, orientation, &context)
-                            .unwrap();
+                    let (built, path) = Adjacency::build_traced(
+                        NODES,
+                        &table(&edges),
+                        weights,
+                        orientation,
+                        &context,
+                    )
+                    .unwrap();
                     assert_eq!(path, cut, "{label}");
                     assert!(bytes(&built) == bytes(&expected), "build, {label}");
                     let (transposed, path) = built.transposed_traced(&context).unwrap();
@@ -982,12 +1001,18 @@ mod tests {
         for orientation in ORIENTATIONS {
             let oracle = sequential(1 << 30, usize::MAX);
             let expected =
-                Adjacency::build(NODES, &edges, Some(&weights), orientation, &oracle).unwrap();
+                Adjacency::build(NODES, &table(&edges), Some(&weights), orientation, &oracle)
+                    .unwrap();
             let expected_in = expected.transposed(&oracle).unwrap();
             let context = parallel(16, 1 << 30, usize::MAX);
-            let (built, path) =
-                Adjacency::build_traced(NODES, &edges, Some(&weights), orientation, &context)
-                    .unwrap();
+            let (built, path) = Adjacency::build_traced(
+                NODES,
+                &table(&edges),
+                Some(&weights),
+                orientation,
+                &context,
+            )
+            .unwrap();
             // Three edges per two nodes, one per node rounded down, plus two:
             // three counting chunks, not sixteen.
             assert_eq!(
@@ -1017,7 +1042,7 @@ mod tests {
         let oracle = sequential(1 << 30, usize::MAX);
         let expected = Adjacency::build(
             NODES,
-            &edges,
+            &table(&edges),
             Some(&weights),
             Orientation::Undirected,
             &oracle,
@@ -1031,7 +1056,7 @@ mod tests {
                     .unwrap();
             let (built, path) = Adjacency::build_traced(
                 NODES,
-                &edges,
+                &table(&edges),
                 Some(&weights),
                 Orientation::Undirected,
                 &context,
@@ -1066,7 +1091,8 @@ mod tests {
         for orientation in ORIENTATIONS {
             let oracle = sequential(1 << 30, usize::MAX);
             let whole =
-                Adjacency::build(NODES, &edges, Some(&weights), orientation, &oracle).unwrap();
+                Adjacency::build(NODES, &table(&edges), Some(&weights), orientation, &oracle)
+                    .unwrap();
             let needed = work(&oracle).unwrap();
             let transpose_needed = {
                 let probe = sequential(1 << 30, usize::MAX);
@@ -1082,14 +1108,14 @@ mod tests {
             for budget in budgets(needed) {
                 let context = sequential(1 << 30, budget);
                 let expected = outcome(
-                    &Adjacency::build(NODES, &edges, Some(&weights), orientation, &context),
+                    &Adjacency::build(NODES, &table(&edges), Some(&weights), orientation, &context),
                     &context,
                 );
                 for workers in WIDTHS {
                     let context = parallel(workers, 1 << 30, budget);
                     let result = Adjacency::build_traced(
                         NODES,
-                        &edges,
+                        &table(&edges),
                         Some(&weights),
                         orientation,
                         &context,
@@ -1131,7 +1157,8 @@ mod tests {
         for orientation in ORIENTATIONS {
             let oracle = sequential(1 << 30, usize::MAX);
             let expected =
-                Adjacency::build(NODES, &edges, Some(&weights), orientation, &oracle).unwrap();
+                Adjacency::build(NODES, &table(&edges), Some(&weights), orientation, &oracle)
+                    .unwrap();
             let peak = oracle.usage().unwrap().peak_bytes;
             let expected_in = expected.transposed(&oracle).unwrap();
             let transpose_peak = oracle.usage().unwrap().peak_bytes;
@@ -1139,9 +1166,14 @@ mod tests {
             // Exactly what the sequential build needs is enough for the
             // parallel one, which still runs in parallel.
             let context = parallel(16, peak, usize::MAX);
-            let (built, path) =
-                Adjacency::build_traced(NODES, &edges, Some(&weights), orientation, &context)
-                    .unwrap();
+            let (built, path) = Adjacency::build_traced(
+                NODES,
+                &table(&edges),
+                Some(&weights),
+                orientation,
+                &context,
+            )
+            .unwrap();
             assert!(matches!(path, BuildPath::Parallel { chunks: 16, .. }));
             assert!(bytes(&built) == bytes(&expected));
             // One byte less refuses both.
@@ -1150,7 +1182,7 @@ mod tests {
                 sequential(peak - 1, usize::MAX),
             ] {
                 assert!(matches!(
-                    Adjacency::build(NODES, &edges, Some(&weights), orientation, &context),
+                    Adjacency::build(NODES, &table(&edges), Some(&weights), orientation, &context),
                     Err(ProcedureError::BudgetExceeded {
                         resource: "memory",
                         ..
@@ -1161,13 +1193,15 @@ mod tests {
             // The transpose, with the adjacency it reads held beside it.
             let context = parallel(16, transpose_peak, usize::MAX);
             let built =
-                Adjacency::build(NODES, &edges, Some(&weights), orientation, &context).unwrap();
+                Adjacency::build(NODES, &table(&edges), Some(&weights), orientation, &context)
+                    .unwrap();
             let (transposed, path) = built.transposed_traced(&context).unwrap();
             assert!(matches!(path, BuildPath::Parallel { .. }));
             assert!(bytes(&transposed) == bytes(&expected_in));
             let context = parallel(16, transpose_peak - 1, usize::MAX);
             let built =
-                Adjacency::build(NODES, &edges, Some(&weights), orientation, &context).unwrap();
+                Adjacency::build(NODES, &table(&edges), Some(&weights), orientation, &context)
+                    .unwrap();
             assert!(matches!(
                 built.transposed(&context),
                 Err(ProcedureError::BudgetExceeded {

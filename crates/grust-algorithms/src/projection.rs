@@ -10,8 +10,11 @@ use grust_procedures::{ExecutionContext, MemoryReservation, ProcedureError, Resu
 use crate::buffer::Buffer;
 
 mod adjacency;
+mod edges;
 mod origin;
 pub(crate) use adjacency::{Adjacency, Offset, Target};
+pub(crate) use edges::EdgeTable;
+pub use edges::{EdgeIter, EdgeRef, Edges};
 pub use origin::{ProjectionRepresentation, ProjectionSelection};
 
 /// Explicit orientation applied once while preparing topology.
@@ -27,6 +30,10 @@ pub enum Orientation {
 
 /// Topology-only input edge. Dense endpoints refer to the supplied node table.
 /// An original ordinal distinguishes parallel edges and nonunique/missing IDs.
+///
+/// This is what [`GraphProjection::from_topology`] takes. A built projection
+/// keeps its edges as columns and hands them out as [`EdgeRef`] through
+/// [`GraphProjection::edges`].
 #[derive(Clone, Debug)]
 pub struct ProjectionEdge {
     /// Source row in the supplied external-ID mapping.
@@ -68,7 +75,7 @@ struct ProjectionData {
     signed: bool,
     nodes: Buffer<NodeId>,
     node_by_id: HashMap<NodeId, usize>,
-    edges: Buffer<ProjectionEdge>,
+    edges: EdgeTable,
     outgoing: Adjacency,
     /// Built on first use, then kept as long as the projection: admitted by
     /// `owner`, never by the view whose kernel happened to build it.
@@ -95,7 +102,7 @@ impl GraphProjection {
         Self::from_buffers(
             identity,
             Buffer::adopt(nodes, context)?,
-            Buffer::adopt(edges, context)?,
+            adopt_edges(edges, context)?,
             weights
                 .map(|values| Buffer::adopt(values, context))
                 .transpose()?,
@@ -121,7 +128,7 @@ impl GraphProjection {
         Self::from_buffers(
             identity,
             Buffer::adopt(nodes, context)?,
-            Buffer::adopt(edges, context)?,
+            adopt_edges(edges, context)?,
             Some(Buffer::adopt(weights, context)?),
             true,
             orientation,
@@ -132,7 +139,7 @@ impl GraphProjection {
     pub(crate) fn from_buffers(
         identity: SnapshotIdentity,
         nodes: Buffer<NodeId>,
-        edges: Buffer<ProjectionEdge>,
+        edges: EdgeTable,
         weights: Option<Buffer<f64>>,
         signed: bool,
         orientation: Orientation,
@@ -148,25 +155,29 @@ impl GraphProjection {
                     .saturating_mul(2 * (size_of::<NodeId>() + size_of::<usize>() + 1)),
             )
             .saturating_add(identity.owned_bytes());
+        // One unit a node and one an edge, as when each was visited in turn.
+        crate::parallel::charge_each(context, nodes.len())?;
         for id in nodes.iter() {
-            context.charge_work(1)?;
             bytes = bytes
                 .saturating_add(id.as_str().len())
                 .saturating_add(2 * size_of::<usize>());
         }
-        for edge in edges.iter() {
-            context.charge_work(1)?;
-            if let Some(id) = &edge.id {
-                bytes = bytes
-                    .saturating_add(id.as_str().len())
-                    .saturating_add(2 * size_of::<usize>());
-            }
+        crate::parallel::charge_each(context, edges.len())?;
+        for id in edges.ids().into_iter().flatten().flatten() {
+            bytes = bytes
+                .saturating_add(id.as_str().len())
+                .saturating_add(2 * size_of::<usize>());
         }
         let retained = context.reserve(bytes)?;
         let mut node_by_id = HashMap::new();
         node_by_id.try_reserve(nodes.len())?;
+        // A duplicate is an error of its own, so the charge stays in step with
+        // the inserts unless the budget covers every node.
+        let charged = crate::parallel::charge_whole(context, nodes.len())?;
         for (index, id) in nodes.iter().enumerate() {
-            context.charge_work(1)?;
+            if !charged {
+                context.charge_work(1)?;
+            }
             if node_by_id.insert(id.clone(), index).is_some() {
                 return Err(ProcedureError::InvalidArguments(format!(
                     "duplicate node ID: {id}"
@@ -282,9 +293,9 @@ impl GraphProjection {
     pub fn node_ids(&self) -> &[NodeId] {
         &self.inner.nodes
     }
-    /// Original edge identity mapping. Kernel edge slots index this slice.
-    pub fn edges(&self) -> &[ProjectionEdge] {
-        &self.inner.edges
+    /// The projection's edges. Kernel edge slots index this.
+    pub fn edges(&self) -> Edges<'_> {
+        Edges::new(&self.inner.edges)
     }
     /// Resource context for kernels and consumers on this handle: the owner,
     /// or the execution a view was made for.
@@ -399,7 +410,7 @@ impl std::ops::Deref for InArcs<'_> {
 /// back to sorting a copy, which is slower than the bitmap and still faster than
 /// hashing.
 fn validate_edges(
-    edges: &[ProjectionEdge],
+    edges: &EdgeTable,
     weights: Option<&[f64]>,
     nodes: usize,
     signed: bool,
@@ -414,6 +425,7 @@ fn validate_edges(
             "weights must be finite and nonnegative".into()
         })
     };
+    let (sources, targets) = (edges.sources(), edges.targets());
     // A budget that can pay for every edge is charged a chunk at a time. One
     // that cannot takes the sequential pass, charged an edge at a time as the
     // loop this replaced was, so it refuses at the same edge, with the same
@@ -430,44 +442,50 @@ fn validate_edges(
     // largest ordinal is a maximum, so one pass answers all of them. Work is
     // charged once per edge, as the sequential loop charged it.
     let largest = |first: usize,
-                   slice: &[ProjectionEdge],
+                   slice: &[Target],
                    meter: &mut grust_procedures::WorkMeter|
      -> Result<usize> {
         if fits {
             meter.charge(slice.len())?;
         }
         let mut largest = 0usize;
-        for (offset, edge) in slice.iter().enumerate() {
+        for (offset, &source) in slice.iter().enumerate() {
             if !fits {
                 context.charge_work(1)?;
             }
-            if edge.source >= nodes || edge.target >= nodes {
+            let slot = first + offset;
+            if source as usize >= nodes || targets[slot] as usize >= nodes {
                 return Err(ProcedureError::InvalidArguments(
                     "edge endpoint outside node table".into(),
                 ));
             }
             if let Some(weights) = weights {
-                let weight = weights[first + offset];
+                let weight = weights[slot];
                 if !weight.is_finite() || (!signed && weight < 0.0) {
                     return Err(weight_message());
                 }
             }
-            largest = largest.max(edge.ordinal);
+            largest = largest.max(edges.ordinals().map_or(slot, |ordinals| ordinals[slot]));
         }
         Ok(largest)
     };
     let largest = match workers {
         Some(workers) => {
             let chunk = crate::parallel::chunk_len(edges.len(), workers);
-            let parts = crate::parallel::map_chunks_sized(context, workers, edges, chunk, largest)?;
+            let parts =
+                crate::parallel::map_chunks_sized(context, workers, sources, chunk, largest)?;
             crate::parallel::reduce_in_order(&parts, 0usize, usize::max)
         }
         None => {
             let mut meter = context.work_meter();
-            largest(0, edges, &mut meter)?
+            largest(0, sources, &mut meter)?
         }
     };
-    if edges.is_empty() {
+    // Ordinals that are the slots are distinct by construction.
+    let Some(ordinals) = edges.ordinals() else {
+        return Ok(());
+    };
+    if ordinals.is_empty() {
         return Ok(());
     }
 
@@ -476,39 +494,37 @@ fn validate_edges(
     // worker that is cannot change the answer: the error is the same either way.
     let dense = largest
         .checked_add(1)
-        .is_some_and(|span| span <= edges.len().saturating_mul(4).max(1024));
+        .is_some_and(|span| span <= ordinals.len().saturating_mul(4).max(1024));
     if dense {
         let words = (largest / 64) + 1;
         let _admission = context.reserve(words.saturating_mul(size_of::<u64>()))?;
         let mut seen = Vec::new();
         seen.try_reserve_exact(words)?;
         seen.resize_with(words, || AtomicU64::new(0));
-        let claim = |_: usize,
-                     slice: &[ProjectionEdge],
-                     meter: &mut grust_procedures::WorkMeter|
-         -> Result<()> {
-            // The first pass charged these edges; this one polls rather than
-            // charging again, so a projection's work total is what it was before
-            // the check changed shape and a budget still means the same thing.
-            meter.checkpoint()?;
-            for edge in slice {
-                let bit = 1u64 << (edge.ordinal % 64);
-                if seen[edge.ordinal / 64].fetch_or(bit, Ordering::Relaxed) & bit != 0 {
-                    return Err(ProcedureError::InvalidArguments(
-                        "duplicate original edge ordinal".into(),
-                    ));
+        let claim =
+            |_: usize, slice: &[usize], meter: &mut grust_procedures::WorkMeter| -> Result<()> {
+                // The first pass charged these edges; this one polls rather than
+                // charging again, so a projection's work total is what it was before
+                // the check changed shape and a budget still means the same thing.
+                meter.checkpoint()?;
+                for &ordinal in slice {
+                    let bit = 1u64 << (ordinal % 64);
+                    if seen[ordinal / 64].fetch_or(bit, Ordering::Relaxed) & bit != 0 {
+                        return Err(ProcedureError::InvalidArguments(
+                            "duplicate original edge ordinal".into(),
+                        ));
+                    }
                 }
-            }
-            Ok(())
-        };
+                Ok(())
+            };
         match workers {
             Some(workers) => {
-                let chunk = crate::parallel::chunk_len(edges.len(), workers);
-                crate::parallel::map_chunks_sized(context, workers, edges, chunk, claim)?;
+                let chunk = crate::parallel::chunk_len(ordinals.len(), workers);
+                crate::parallel::map_chunks_sized(context, workers, ordinals, chunk, claim)?;
             }
             None => {
                 let mut meter = context.work_meter();
-                claim(0, edges, &mut meter)?;
+                claim(0, ordinals, &mut meter)?;
             }
         }
         return Ok(());
@@ -516,18 +532,18 @@ fn validate_edges(
 
     // Sparse ordinals: sort a copy and look at neighbours. Still linear in
     // memory rather than quadratic in cache misses.
-    let _admission = context.reserve(edges.len().saturating_mul(size_of::<usize>()))?;
-    let mut ordinals = Vec::new();
-    ordinals.try_reserve_exact(edges.len())?;
-    for chunk in edges.chunks(1024) {
+    let _admission = context.reserve(ordinals.len().saturating_mul(size_of::<usize>()))?;
+    let mut sorted = Vec::new();
+    sorted.try_reserve_exact(ordinals.len())?;
+    for chunk in ordinals.chunks(1024) {
         context.checkpoint()?;
-        ordinals.extend(chunk.iter().map(|edge| edge.ordinal));
+        sorted.extend_from_slice(chunk);
     }
     match workers {
-        Some(workers) => crate::parallel::sort_total(workers, &mut ordinals, usize::cmp)?,
-        None => ordinals.sort_unstable(),
+        Some(workers) => crate::parallel::sort_total(workers, &mut sorted, usize::cmp)?,
+        None => sorted.sort_unstable(),
     }
-    for pair in ordinals.windows(2) {
+    for pair in sorted.windows(2) {
         if pair[0] == pair[1] {
             return Err(ProcedureError::InvalidArguments(
                 "duplicate original edge ordinal".into(),
@@ -535,6 +551,13 @@ fn validate_edges(
         }
     }
     Ok(())
+}
+
+/// Caller-supplied edges as the projection's columns. The vector is admitted
+/// while it is converted, as it was while it was kept.
+fn adopt_edges(edges: Vec<ProjectionEdge>, context: &ExecutionContext) -> Result<EdgeTable> {
+    let mut adopted = Buffer::adopt(edges, context)?;
+    EdgeTable::from_edges(std::mem::take(&mut adopted.values), context)
 }
 
 #[cfg(test)]

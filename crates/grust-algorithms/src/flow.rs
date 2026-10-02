@@ -55,7 +55,7 @@ impl MaxFlow {
         let mut ordinals = Buffer::capacity(count, context)?;
         for &slot in &self.edges.values {
             ordinals.values.push(
-                i64::try_from(self.graph.edges()[slot].ordinal)
+                i64::try_from(self.graph.edges().ordinal(slot))
                     .map_err(|_| AlgorithmError::Numerical("edge ordinal exceeds Int64".into()))?,
             );
         }

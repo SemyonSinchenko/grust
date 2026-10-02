@@ -5,8 +5,8 @@ use std::collections::HashMap;
 use grust_core::{Graph, NodeId, Value};
 
 use crate::{
-    AlgorithmError, ExecutionContext, GraphProjection, Orientation, ProjectionEdge, Result,
-    SnapshotIdentity, buffer::Buffer,
+    AlgorithmError, ExecutionContext, GraphProjection, Orientation, Result, SnapshotIdentity,
+    buffer::Buffer, projection::EdgeTable,
 };
 
 /// Handling of an absent or explicitly null selected weight property.
@@ -110,7 +110,7 @@ impl GraphProjection {
                 nodes.values.push(node.id.clone());
             }
         }
-        let mut edges = Buffer::capacity(graph.edges.len(), context)?;
+        let mut edges = EdgeTable::with_capacity(graph.edges.len(), context)?;
         let signed = options
             .weight
             .property()
@@ -155,12 +155,7 @@ impl GraphProjection {
                     weights.values.push(value);
                 }
             }
-            edges.values.push(ProjectionEdge {
-                source,
-                target,
-                ordinal,
-                id: edge.id.clone(),
-            });
+            edges.push(source, target, ordinal, edge.id.clone(), context)?;
         }
         drop(mapping);
         drop(mapping_reservation);

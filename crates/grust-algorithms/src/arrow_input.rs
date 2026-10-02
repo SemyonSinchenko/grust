@@ -5,12 +5,13 @@ use std::collections::HashMap;
 use arrow_array::{Array, BooleanArray, Float64Array, Int64Array, RecordBatch, StringArray};
 
 use crate::{
-    AlgorithmError, ExecutionContext, GraphProjection, ProjectionEdge, ProjectionOptions, Result,
-    SnapshotIdentity, WeightSelection,
+    AlgorithmError, ExecutionContext, GraphProjection, ProjectionOptions, Result, SnapshotIdentity,
+    WeightSelection,
     buffer::Buffer,
     graph_input::{
         integer_weight, missing_weight, selects, validate_weight, validate_weight_selection,
     },
+    projection::EdgeTable,
 };
 
 mod int64;
@@ -52,14 +53,24 @@ impl GraphProjection {
         for batch in node_batches {
             let ids = strings(batch, "node_id")?;
             let labels = strings(batch, "label")?;
+            // Without a label selection the row charge is the loop's only
+            // charge, so a budget that covers the batch pays for it at once.
+            let charged = options.node_labels.is_none()
+                && crate::parallel::charge_whole(context, batch.num_rows())?;
+            let plain = ids.null_count() == 0 && labels.null_count() == 0;
             for row in 0..batch.num_rows() {
-                context.charge_work(1)?;
-                let id = required(ids, row, "node_id")?;
-                let selected = selects(
-                    options.node_labels,
-                    required(labels, row, "label")?,
-                    context,
-                )?;
+                if !charged {
+                    context.charge_work(1)?;
+                }
+                let (id, label) = if plain {
+                    (ids.value(row), labels.value(row))
+                } else {
+                    (
+                        required(ids, row, "node_id")?,
+                        required(labels, row, "label")?,
+                    )
+                };
+                let selected = selects(options.node_labels, label, context)?;
                 let index = selected.then_some(nodes.values.len());
                 if mapping.insert(id, index).is_some() {
                     return Err(AlgorithmError::InvalidArguments(format!(
@@ -71,7 +82,7 @@ impl GraphProjection {
                 }
             }
         }
-        let mut edges = Buffer::capacity(m, context)?;
+        let mut edges = EdgeTable::with_capacity(m, context)?;
         let signed = options
             .weight
             .property()
@@ -87,25 +98,33 @@ impl GraphProjection {
             let labels = strings(batch, "label")?;
             let ids = strings(batch, "edge_id")?;
             let weight_column = WeightColumn::new(batch, options.weight)?;
+            // As for nodes: one charge for the batch when nothing else in the
+            // loop charges and the budget covers it.
+            let charged = options.relationship_labels.is_none()
+                && crate::parallel::charge_whole(context, batch.num_rows())?;
+            let plain =
+                sources.null_count() == 0 && targets.null_count() == 0 && labels.null_count() == 0;
             for row in 0..batch.num_rows() {
-                context.charge_work(1)?;
+                if !charged {
+                    context.charge_work(1)?;
+                }
                 let original = ordinal;
                 ordinal += 1;
                 let source = mapping
-                    .get(required(sources, row, "source")?)
+                    .get(text(sources, row, "source", plain)?)
                     .ok_or_else(|| {
                         AlgorithmError::InvalidArguments(format!(
                             "edge {original} has missing source"
                         ))
                     })?;
                 let target = mapping
-                    .get(required(targets, row, "target")?)
+                    .get(text(targets, row, "target", plain)?)
                     .ok_or_else(|| {
                         AlgorithmError::InvalidArguments(format!(
                             "edge {original} has missing target"
                         ))
                     })?;
-                let label = required(labels, row, "label")?;
+                let label = text(labels, row, "label", plain)?;
                 let (Some(source), Some(target)) = (*source, *target) else {
                     continue;
                 };
@@ -121,12 +140,8 @@ impl GraphProjection {
                         weights.values.push(value);
                     }
                 }
-                edges.values.push(ProjectionEdge {
-                    source,
-                    target,
-                    ordinal: original,
-                    id: (!ids.is_null(row)).then(|| ids.value(row).into()),
-                });
+                let id = (!ids.is_null(row)).then(|| ids.value(row).into());
+                edges.push(source, target, original, id, context)?;
             }
         }
         drop(mapping);
@@ -163,6 +178,16 @@ fn strings<'a>(batch: &'a RecordBatch, name: &str) -> Result<&'a StringArray> {
         })
 }
 
+/// A structural string: read directly when its batch holds no null in any
+/// structural column, checked row by row otherwise.
+fn text<'a>(column: &'a StringArray, row: usize, name: &str, plain: bool) -> Result<&'a str> {
+    if plain {
+        Ok(column.value(row))
+    } else {
+        required(column, row, name)
+    }
+}
+
 fn required<'a>(column: &'a StringArray, row: usize, name: &str) -> Result<&'a str> {
     if column.is_null(row) {
         return Err(AlgorithmError::InvalidArguments(format!(
@@ -181,14 +206,19 @@ fn identity_bytes(
     for (batches, name) in [(nodes, "node_id"), (edges, "edge_id")] {
         for batch in batches {
             let values = strings(batch, name)?;
-            for row in 0..batch.num_rows() {
-                context.charge_work(1)?;
-                if !values.is_null(row) {
-                    bytes = bytes
-                        .saturating_add(values.value(row).len())
-                        .saturating_add(2 * size_of::<usize>());
+            // One unit a row, as when each row was visited in turn.
+            crate::parallel::charge_each(context, values.len())?;
+            let present = values.len() - values.null_count();
+            if values.null_count() == 0 {
+                // No nulls: the offsets give the text bytes without a pass.
+                let offsets = values.value_offsets();
+                bytes = bytes.saturating_add((offsets[values.len()] - offsets[0]) as usize);
+            } else if present != 0 {
+                for value in values.iter().flatten() {
+                    bytes = bytes.saturating_add(value.len());
                 }
             }
+            bytes = bytes.saturating_add(present.saturating_mul(2 * size_of::<usize>()));
         }
     }
     Ok(bytes)

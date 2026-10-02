@@ -83,13 +83,15 @@ impl GraphProjection {
                 let parts = crate::parallel::map_chunks_sized(
                     context,
                     workers,
-                    self.edges(),
+                    self.edges().sources(),
                     chunk,
-                    |_, slice, meter| {
+                    |first, slice, meter| {
                         meter.charge(slice.len())?;
+                        let targets = &self.edges().targets()[first..first + slice.len()];
                         Ok(slice
                             .iter()
-                            .filter(|edge| edge.source == edge.target)
+                            .zip(targets)
+                            .filter(|(source, target)| source == target)
                             .count())
                     },
                 )?;
@@ -97,7 +99,7 @@ impl GraphProjection {
             }
             None => {
                 let mut self_loops = 0;
-                for edge in self.edges() {
+                for edge in self.edges().iter() {
                     context.charge_work(1)?;
                     self_loops += usize::from(edge.source == edge.target);
                 }

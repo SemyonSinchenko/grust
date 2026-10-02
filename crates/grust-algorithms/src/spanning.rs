@@ -61,7 +61,7 @@ impl SpanningForest {
         let mut targets = Buffer::capacity(count, context)?;
         let mut ordinals = Buffer::capacity(count, context)?;
         for &slot in &self.edges.values {
-            let edge = &self.graph.edges()[slot];
+            let edge = self.graph.edges().get(slot);
             sources.values.push(edge.source);
             targets.values.push(edge.target);
             ordinals.values.push(
@@ -137,7 +137,7 @@ pub fn spanning_tree(
         } else {
             by_weight
         };
-        by_weight.then(edges[a].ordinal.cmp(&edges[b].ordinal))
+        by_weight.then(edges.ordinal(a).cmp(&edges.ordinal(b)))
     })?;
 
     let mut parent = Buffer::capacity(n, context)?;
@@ -157,8 +157,8 @@ pub fn spanning_tree(
             break;
         }
         meter.charge(1)?;
-        let a = find(&mut parent.values, edges[slot].source);
-        let b = find(&mut parent.values, edges[slot].target);
+        let a = find(&mut parent.values, edges.get(slot).source);
+        let b = find(&mut parent.values, edges.get(slot).target);
         if a == b {
             continue;
         }

@@ -123,6 +123,44 @@ pub(crate) fn work_fits(context: &ExecutionContext, units: usize) -> Result<bool
     })
 }
 
+/// Charge `units` in one step when the budget covers them all, and say whether
+/// it did.
+///
+/// For a loop that used to charge one unit an item and can also fail on its
+/// data. When this returns `true` the loop charges nothing more. When it
+/// returns `false` nothing was charged and the loop charges an item at a time
+/// as before, so a budget that runs out mid-loop runs out at the same item,
+/// with the same work counted, and an error in an earlier item still comes
+/// first.
+pub(crate) fn charge_whole(context: &ExecutionContext, units: usize) -> Result<bool> {
+    if !work_fits(context, units)? {
+        return Ok(false);
+    }
+    context.charge_work(units)?;
+    Ok(true)
+}
+
+/// What `units` charges of one unit would charge, for a loop that cannot fail
+/// on its data. A budget that covers them all is charged a block at a time,
+/// which also bounds how long a cancellation waits; one that does not is
+/// charged a unit at a time, so it runs out at exactly the unit it used to.
+pub(crate) fn charge_each(context: &ExecutionContext, units: usize) -> Result<()> {
+    const BLOCK: usize = 1 << 16;
+    if work_fits(context, units)? {
+        let mut left = units;
+        while left > 0 {
+            let block = left.min(BLOCK);
+            context.charge_work(block)?;
+            left -= block;
+        }
+        return Ok(());
+    }
+    for _ in 0..units {
+        context.charge_work(1)?;
+    }
+    Ok(())
+}
+
 /// Items per chunk for a pass that writes each item's own output slot.
 ///
 /// Sized from the worker count, so threads each get a few chunks and a skewed

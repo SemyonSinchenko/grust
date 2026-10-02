@@ -233,7 +233,7 @@ pub fn weakly_connected_components(graph: &GraphProjection) -> Result<Components
         parents.values.push(node);
     }
     let mut sizes = Buffer::filled(n, 1usize, context)?;
-    for edge in graph.edges() {
+    for edge in graph.edges().iter() {
         meter.charge(1)?;
         let mut left = root(&mut parents.values, edge.source, &mut meter)?;
         let mut right = root(&mut parents.values, edge.target, &mut meter)?;
@@ -321,13 +321,14 @@ fn union_find(graph: &GraphProjection, workers: usize) -> Result<Components> {
     crate::parallel::map_chunks_sized(
         context,
         workers,
-        graph.edges(),
+        graph.edges().sources(),
         chunk,
-        |_, slice, meter| {
-            for edge in slice {
+        |first, slice, meter| {
+            let targets = &graph.edges().targets()[first..first + slice.len()];
+            for (&source, &target) in slice.iter().zip(targets) {
                 meter.charge(1)?;
-                let mut left = root(parents, edge.source);
-                let mut right = root(parents, edge.target);
+                let mut left = root(parents, source as usize);
+                let mut right = root(parents, target as usize);
                 while left != right {
                     meter.charge(1)?;
                     let (larger, smaller) = if left > right {

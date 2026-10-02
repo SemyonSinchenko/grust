@@ -95,6 +95,6 @@ pub use grust_procedures::{
     ProcedureError as AlgorithmError, Result, WorkAccounting, WorkCount,
 };
 pub use projection::{
-    GraphProjection, Orientation, ProjectionEdge, ProjectionRepresentation, ProjectionSelection,
-    SnapshotIdentity,
+    EdgeIter, EdgeRef, Edges, GraphProjection, Orientation, ProjectionEdge,
+    ProjectionRepresentation, ProjectionSelection, SnapshotIdentity,
 };

@@ -283,7 +283,7 @@ fn path_batch(
     }
     context.charge_work(path.edges.len())?;
     for &edge in path.edges {
-        ordinals.push(integer(graph.edges()[edge].ordinal)?);
+        ordinals.push(integer(graph.edges().ordinal(edge))?);
     }
     let mut row = Vec::new();
     row.try_reserve_exact(width)?;

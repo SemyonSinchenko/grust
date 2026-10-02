@@ -67,7 +67,7 @@ impl AStarPath {
             ordinals.values.push(if hop == 0 {
                 -1
             } else {
-                i64::try_from(self.graph.edges()[self.edges.values[hop - 1]].ordinal)
+                i64::try_from(self.graph.edges().ordinal(self.edges.values[hop - 1]))
                     .map_err(|_| AlgorithmError::Numerical("edge ordinal exceeds Int64".into()))?
             });
         }

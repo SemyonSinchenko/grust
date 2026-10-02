@@ -76,7 +76,7 @@ fn edge_table(
     let mut targets = Buffer::capacity(slots.len(), context)?;
     let mut ordinals = Buffer::capacity(slots.len(), context)?;
     for &slot in slots {
-        let edge = &graph.edges()[slot];
+        let edge = graph.edges().get(slot);
         sources.values.push(edge.source);
         targets.values.push(edge.target);
         ordinals.values.push(integer(edge.ordinal)?);
@@ -199,7 +199,7 @@ pub fn biconnectivity(graph: &GraphProjection) -> Result<Biconnectivity> {
                 meter.charge(pending.values.len() - start)?;
                 let name = pending.values[start..]
                     .iter()
-                    .map(|&slot| edges[slot].ordinal)
+                    .map(|&slot| edges.ordinal(slot))
                     .min();
                 for &slot in &pending.values[start..] {
                     components.values[slot] = name;

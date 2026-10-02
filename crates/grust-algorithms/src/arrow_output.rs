@@ -667,7 +667,7 @@ fn path_batch(
         context.charge_work(1)?;
         edges
             .values()
-            .append_value(signed(graph.edges()[edge].ordinal, "edgeOrdinals")?);
+            .append_value(signed(graph.edges().ordinal(edge), "edgeOrdinals")?);
     }
     nodes.append(true);
     costs.append(true);

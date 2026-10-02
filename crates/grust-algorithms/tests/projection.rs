@@ -74,8 +74,8 @@ fn selection_keeps_original_ordinals_and_ignores_unselected_properties() {
         vec!["a", "b", "isolate"]
     );
     assert_eq!(projection.edges().len(), 1);
-    assert_eq!(projection.edges()[0].ordinal, 1);
-    assert_eq!(projection.edges()[0].id.as_ref().unwrap().as_str(), "edge");
+    assert_eq!(projection.edges().get(0).ordinal, 1);
+    assert_eq!(projection.edges().get(0).id.unwrap().as_str(), "edge");
     assert_eq!(
         dijkstra(&projection, "a").unwrap().values(),
         &[0.0, 2.5, f64::INFINITY]
@@ -234,7 +234,7 @@ mod arrow {
             Some("cost")
         );
         assert_eq!(native.node_ids(), reference.node_ids());
-        assert_eq!(native.edges()[0].ordinal, 1);
+        assert_eq!(native.edges().get(0).ordinal, 1);
         assert_eq!(
             dijkstra(&native, "a").unwrap().values(),
             dijkstra(&reference, "a").unwrap().values()

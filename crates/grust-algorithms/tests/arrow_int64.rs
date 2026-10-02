@@ -181,12 +181,10 @@ fn build(
 fn assert_same(integer: &GraphProjection, text: &GraphProjection) {
     assert_eq!(integer.node_ids(), text.node_ids());
     assert_eq!(integer.edge_count(), text.edge_count());
-    for (a, b) in integer.edges().iter().zip(text.edges()) {
-        assert_eq!(
-            (a.source, a.target, a.ordinal, &a.id),
-            (b.source, b.target, b.ordinal, &b.id)
-        );
-    }
+    assert!(
+        integer.edges().iter().eq(text.edges()),
+        "same endpoints, ordinals and ids"
+    );
     assert_eq!(integer.representation(), text.representation());
     assert_eq!(integer.orientation(), text.orientation());
     assert_eq!(integer.is_weighted(), text.is_weighted());
