@@ -13,10 +13,15 @@ use crate::{
     },
 };
 
+mod int64;
+
 impl GraphProjection {
     /// Prepare topology directly from multiple node and edge record batches.
     /// Structural columns follow grust-arrow: Utf8 `node_id`, `label`, `source`,
-    /// `target`, nullable Utf8 `edge_id`. Selected weights use Float64 or Int64
+    /// `target`, nullable Utf8 `edge_id`. `node_id`, `source` and `target` may
+    /// instead all be Int64: endpoints are then resolved as integers, in
+    /// parallel when the execution asked for workers, and a node's external
+    /// identity is its id's decimal text. Selected weights use Float64 or Int64
     /// `property.<key>` with a nonnullable Boolean `present.<key>` column.
     /// Node and original-edge order span batches. Caller-owned input Arrow
     /// buffers require caller admission; copied IDs and topology are charged here.
@@ -28,6 +33,9 @@ impl GraphProjection {
         context: &ExecutionContext,
     ) -> Result<Self> {
         validate_weight_selection(options.weight)?;
+        if int64::applies(node_batches, edge_batches)? {
+            return int64::build(identity, node_batches, edge_batches, options, context);
+        }
         let n = row_count(node_batches, context)?;
         let m = row_count(edge_batches, context)?;
         let map_reservation = context.reserve(

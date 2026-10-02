@@ -1,0 +1,20 @@
+[package]
+name = "projection-ingest"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "Times GraphProjection::from_arrow_batches over Parquet vertex and edge files"
+
+# A measurement helper, outside the Grust workspace like the other benchmarks.
+[workspace]
+
+[dependencies]
+arrow-array = "59.3.0"
+arrow-schema = "59.3.0"
+grust-algorithms = { path = "../../crates/grust-algorithms", features = ["arrow"] }
+parquet = { version = "59.3.0", default-features = false, features = ["arrow", "snap", "zstd", "lz4"] }
+rayon = "1.11"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
