@@ -18,7 +18,7 @@ The median ratio compares the four-sample medians. Each block pairs adjacent run
 
 ## Contract and resources
 
-Each fresh engine container has 16 CPUs, cpuset 0–15, 32 GiB memory and no swap. graphframes has a 30 GiB FairSpillPool with SnMalloc. Pecan local has a 30 GiB greedy pool with mimalloc; in A3, driver and two workers each have 10 GiB, summing to 30 GiB. Each Pecan process prepays its 256 MiB native quota from its pool. Pool sums do not guarantee a physical memory bound.
+Each fresh engine container has 16 CPUs, cpuset 0–15, 32 GiB memory and no swap. graphframes has a 30 GiB FairSpillPool with SnMalloc. Pecan local has a 30 GiB greedy pool with mimalloc; in A3, driver and two workers each have 10 GiB, summing to 30 GiB. The harness configures 256 MiB native quota settings for Nutmeg and Argentea. Native quotas are admitted from the ordinary process pool when the corresponding extension owner is bound; actual per-process reservations were not measured. See the [source correction and C3 accounting audit](../C3-NATIVE-QUOTA-CORRECTION.md). Pool sums do not guarantee a physical memory bound.
 
 The timer spans engine process launch through completed exit, including startup, input reads, Pecan snapshots, algorithm, full Parquet export, cleanup and shutdown. Hashing, input/reference construction, full physical oracle and parent final observations are outside. Pecan input_snapshot is nested in public_algorithm: raw phase medians below overlap and must not be added or subtracted from the launch-to-exit ratio. graphframes has no corresponding structured phase breakdown.
 

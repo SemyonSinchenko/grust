@@ -18323,7 +18323,7 @@
     "pools": {
       "graphframes": "30GiB FairSpillPool, SnMalloc",
       "pecan_local": "30GiB greedy, mimalloc",
-      "pecan_process_cluster": "driver10GiB plus2 workers10GiB each; total30GiB; native quota prepaid256MiB each"
+      "pecan_process_cluster": "driver10GiB plus2 workers10GiB each; total30GiB; native quota configured256MiB; actual per-process reservations unavailable"
     },
     "prior_archives": [
       "/Volumes/Apo/graph-tests/results/sem-review-20261001/A2-run01",
