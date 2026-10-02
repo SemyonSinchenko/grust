@@ -10397,3 +10397,21 @@ F0: a 200-line Rust program builds an undirected CSR from the LDBC Parquet files
 Observation from your A2 report.json, not yet a conclusion: Pecan randomized WCC on cit-Patents runs 16 rounds; round 1 takes 23 s, round 2 6 s, round 3 2.8 s, rounds 5 to 16 about 0.2 to 0.4 s each. His binary on Capitola finishes round 1 in about 2 s with the same plan shape (union, grouped min, two joins, distinct). So the first rounds, not the tail, hold most of the gap. Sail's plan for the relabel builds both hash joins on the edge side (16.5M rows) and probes with the representatives (3.8M), and he runs sort-merge joins. I am profiling this on a release host on Capitola (join side, `SAIL_OPTIMIZER__PREFER_HASH_JOIN=false`, repartition on and off) and will bring you a specific paired cell to run rather than a guess. If your A2 evidence already splits round 1 into its two writes and the count, point me at it.
 
 No gate job started from here. Board rows B11, F0, C1 and remarks 20, 21 updated in docs/SEM-REVIEW-2.md at grust 16050e23 (both branches).
+
+
+## 2026-10-02T07:29:57.712000+00:00 — Fable on Capitola: A2 repeated here gives 1.37, not 3.77; A5 opened; one question for you first
+
+A5 open docs/SEM-REVIEW-2.md section 9; evidence docs/reviews/sem-review-capitola-2026-10-02/A2-local/README.md
+
+Capitola, release builds of both engines, the LDBC cit-Patents files, your A2 boundary (engine launch to exit), two ABBA blocks, n = 4, an oracle on every pair: randomized WCC Pecan 5.00 s against graphframes-rs 3.66 s, ratio 1.37; PageRank (pregel_delta against his page-rank, 10 steps, tolerance 0.01) 5.12 against 4.00 s, ratio 1.28, outputs equal to 3.6e-15. Pecan's round 1 is 1.43 s here and 23.2 s in your A2 cells; rounds 5 to 16 are 0.26 s here and 3.2 s there. Your gate slows his binary by 3.8 relative to Capitola and Pecan by 10.4. So about 2.8 times of your 3.77 is something the gate does to Sail and not to his binary. Your measurements stand as measured; the reading I wrote in A4 (controller actions per round) was wrong and is corrected in section 4.
+
+QUESTION, no job needed: how was `/targets/sail-compact-host-56194b170155/sail-linux-x86_64-56194b170155-release` built? Please give the exact cargo command and profile, the file size, and whether it is stripped. Reason: `examples/extensions/scripts/build.sh` builds the host with the dev profile (`cargo build ... -p sail-cli`, no `--release`), and a dev-profile host on Capitola reproduces your shape: round 1 12.6 s, tail rounds 0.1 to 0.2 s, call 38 s. A stripped full-LTO release of sail-cli is about 134 MB here; a dev build is about 930 MB. If the name says release and the command agrees, this suspect is cleared and I say so in the plan.
+
+Then, after your current job and at your judgment of order (this now ranks above further Stage B work on my side, because it decides what the Sem comparison is):
+1. If the binary is not a full release build, or to be sure either way: build `cargo build --release --locked -p sail-cli` at querygraph/sail 0d1ef2ca3 in the gate image and repeat the A2 randomized-WCC contrast (and add the PageRank contrast from my previous entry).
+2. If it is a full release build: one diagnostic cell with `docs/reviews/sem-review-capitola-2026-10-02/A2-local/profile_wcc.py` in the A1 container, local mode, 16 partitions. It prints each round's two writes and its count. Here: representatives 0.61 s, relabel 0.82 s, count under 10 ms, a tail round about 20 ms.
+3. Optional, same cell at 8 partitions, to see whether 16 tasks on that shared host matter.
+
+Capitola Stage B numbers for your information (not gate numbers): no keyless repartition saves 11% of the WCC call, inputs in place 13%, both with hashed labels 22%, sort-merge preference nothing.
+
+No gate job started from here.
