@@ -10445,3 +10445,23 @@ B9 DONE `docs/reviews/sem-review-morrobay-2026-10-01/B9/README.md`. The original
 B7 DONE `docs/reviews/sem-review-morrobay-2026-10-01/B7/README.md`. Six native cit-Patents WCC cells (one warmup each, then on/off/off/on), all full 3,774,768-row oracles pass. In-place/snapshot paired ratios 0.905872 and 0.918443, geometric mean 0.912136 (8.8% less elapsed time), two measured pairs on the shared native host. No A2 image/OS-cap parity claimed. Raw clocks/output/failed launcher history/source/client identity and owned cleanup are retained; no engine cell repeated. This follows Alexy's no-VM-benchmark policy.
 
 Fable: reports are ready to fold from both Morrobay handoff branches after the exact committed metadata gate passes. No native gate job remains running; gate and serial locks released.
+
+## Morrobay matched PageRank and CSR floor ACK — 2026-10-02T11:25:56.704365+00:00
+
+B11/A2/A3 ACK `docs/reviews/sem-review-morrobay-2026-10-01/PageRank/README.md` (planned evidence). I read grust 796b24be and the later handoff entries. The requested controller 0d1ef2ca3 has identical compiled Rust paths to the completed native 9f0aa7d2a release binary; the exact client lock also matches. Prepare one separate GF reference, then warmups and two ABBA blocks in native local and process-cluster modes, a full per-vertex oracle after every engine exit. Native hardware follows Alexy's explicit policy; the retired A1 VM benchmark envelope will not be recreated. The cluster resource layout is disclosed separately from the local one.
+
+F0 ACK `docs/reviews/sem-review-morrobay-2026-10-01/F0/README.md` (planned evidence). Exact source/lock from grust 796b24be; four native one-shot cells at 4 threads, directed/undirected Cit and Graph500. Original Graph500 Parquet is retained outside the retired VM; its exact copied bytes are being staged on SSD. This supplies a native CSR-floor diagnostic for a future native F2a, with the original checksum scope retained. One heavy job at a time, root-owned. Latest F1 Linux release-gate request read; source review follows the native sequence, and no new VM or Linux job has started.
+
+
+## Morrobay native matched PageRank and CSR diagnostic DONE — 2026-10-02T12:29:05.907556+00:00
+
+B11 DONE docs/reviews/sem-review-morrobay-2026-10-01/PageRank/README.md
+A2 DONE (native matched PageRank supplement) docs/reviews/sem-review-morrobay-2026-10-01/PageRank/README.md
+A3 DONE (native process-cluster supplement) docs/reviews/sem-review-morrobay-2026-10-01/PageRank/README.md
+F0 DONE docs/reviews/sem-review-morrobay-2026-10-01/F0/README.md
+
+PageRank: exact Python controller 0d1ef2ca3 / optimized native compiled Sail 9f0aa7d2a, with empty scoped Rust diff; graphframes-rs b4da56dabe. Separate GF reference, four warmups, and two ABBA blocks per mode: all 21 calls qualified, no failed or repeated engine calls. All 3,774,768 original vertices per output pass physical/domain checks; all 20 candidate vectors agree with the reference within absolute 1e-12, with maximum error 2.168404344971009e-19. Pecan/GF launch-through-wait geometric mean ratios are 1.690909 local and 1.991734 process-cluster (four adjacent pairs per mode, shared native host). Full lifecycle/read/export/cleanup are charged. Local software threads16/pool30GiB; cluster driver+two workers threads16 each/pool10GiB each (potential48threads), versus local GF16/pool30GiB. No equal CPU envelope or native OS cap claimed. Exact source/client/input closure, all owned PID/groups absent, both shared locks released, and 156 retained files / 673,206,357 bytes verified fully on SSD and Apo. Portable indexed metadata, original logs, helpers and oracle sources are linked in the report.
+
+F0: unchanged Grust 796b24be source and lock; four native, one-shot, four-thread Cit/Graph500 directed/undirected cells all passed counts and the original target-sum guard. Actual optimized compiler is Rust/Cargo 1.98.1 with thin LTO, separately disclosed from the 1.97.1 Pecan/GF build. Internal clocks include buffer teardown; cache was not flushed. No full topology oracle, reusable CSR, Sem phase equivalence or cross-host ratio asserted. Exact small receipts/source/raw logs and independent root process/artifact audit retained.
+
+Ready to fold from both Morrobay handoff branches once the exact candidate and committed metadata gates pass and refs are pushed. Historical A2/A3/B8 evidence is retained. No native engine remains. F2a is still pending. Latest F1 Linux-only release-gate source plan is retained at /Volumes/Apo/graph-tests/results/sem-review-20261001/F1-linux-preparation01; no new VM or Linux gate has been started. Await the specific WCC join/sort-merge paired cell from Fable.

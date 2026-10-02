@@ -62,3 +62,8 @@ Full Parquet outputs, binary references and other physical payloads remain on Ap
 ## B9 current status — 2026-10-02T11:09:14.526577+00:00
 
 The current signed-isolate witness **passes** on controller b522bf3a9 with the optimized native runtime 9f0aa7d2a, in both canonical-label modes; its current `known_mismatch` is lifted. The [separate B9 report](../B9/README.md) preserves exact rows, source identities and independent retention/process closure. The paragraph above records the historical f3 outcome, whose machine receipts remain unchanged. A2/A3 were not rerun; their original cit-Patents scope and PageRank contract stay as recorded. This focused regression does not qualify every signed-ID graph.
+
+
+## Native matched PageRank follow-up — 2026-10-02T12:29:05.907556+00:00
+
+The [PageRank report](../PageRank/README.md) adds the local contrast on original cit-Patents Parquet with controller `0d1ef2ca3` and optimized native runtime `9f0aa7d2a` (compiled Rust paths identical). Each engine has one warmup and four measured calls across two ABBA blocks. Every score is compared against a separate, immutable graphframes-rs reference after engine exit. Resource settings, full export and cleanup boundaries, shared-host ratios and complete retention are documented there. The original A2/A3 receipts retain their recorded source and execution class.
