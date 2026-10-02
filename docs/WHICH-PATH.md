@@ -22,9 +22,11 @@ here, in both directions.
 - **The gate is slow for Sail in a way it is not for a plain DataFusion
   binary.** Pecan's randomized WCC on cit-Patents takes 5.0 s launch to exit
   on Capitola and 51.8 s on the gate; graphframes-rs takes 3.7 s and 13.8 s.
-  The cause is not known yet (item A5 of
-  [`SEM-REVIEW-2.md`](SEM-REVIEW-2.md)). Until it is, gate times for the
-  relational paths are upper bounds.
+  The likely cause is the gate's virtual machine (item A5 of
+  [`SEM-REVIEW-2.md`](SEM-REVIEW-2.md)): natively the two hosts are within a
+  factor of 2 on one thread and equal on 16. Gate times are times in that
+  VM, and the relational paths lose most in it. Timing moves to the raw
+  machine.
 - **Build profiles were not recorded per cell.** The extension build script
   (`scripts/build.sh`) builds the host and the native wheels with the dev
   profile, which is about 9 times slower for the host on this workload.
