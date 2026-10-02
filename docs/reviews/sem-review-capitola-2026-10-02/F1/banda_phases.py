@@ -8,6 +8,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--graph", default="cit-Patents")
 parser.add_argument("--order", choices=["canonical", "asStaged"], default="asStaged")
 parser.add_argument("--threads", type=int, default=10)
+parser.add_argument("--ids", choices=["string", "int64"], default="string")
+parser.add_argument("--workers", type=int, default=0, help="NUTMEG_WORKERS for projection builds; 0 leaves it unset")
 parser.add_argument("--quota-gib", type=int, default=40)
 parser.add_argument("--sail", type=pathlib.Path, default=W / "target/host/release/sail")
 parser.add_argument("--root", type=pathlib.Path, default=W / "target/parity/banda")
@@ -26,7 +28,9 @@ env = dict(os.environ, PYTHONHOME=sys.base_prefix, PYTHONPATH=sysconfig.get_path
            SAIL_RUNTIME__MEMORY_POOL__GREEDY__MAX_SIZE=str((args.quota_gib + 8) * 2**30),
            SAIL_NUTMEG_MEMORY_BYTES=str(args.quota_gib * 2**30), SAIL_GRAPH_UTILS_ROOT=(args.root / "staging").as_uri(),
            TOKIO_WORKER_THREADS=str(args.threads), RAYON_NUM_THREADS=str(args.threads), RUST_LOG="warn")
-record = dict(graph=args.graph, order=args.order, threads=args.threads, phases={})
+if args.workers:
+    env["NUTMEG_WORKERS"] = str(args.workers)
+record = dict(graph=args.graph, order=args.order, threads=args.threads, ids=args.ids, workers=args.workers, phases={})
 launched = time.perf_counter()
 with (args.root / "server.log").open("w") as log:
     server = subprocess.Popen([str(args.sail), "spark", "server", "--ip", "127.0.0.1", "--port", str(port)],
@@ -52,14 +56,15 @@ try:
         print(name, round(record["phases"][name], 2), flush=True)
         return value
 
-    # The harness's staging contract: ids as strings.
-    nodes = spark.read.parquet(V.as_uri()).select(F.col("id").cast("string").alias("node_id"))
-    links = spark.read.parquet(E.as_uri()).select(F.col("source").cast("string").alias("source"),
-                                                  F.col("target").cast("string").alias("target"))
-    receipt = phase("read_and_stage", lambda: nm.stage("g", nodes, links, order=None if args.order == "canonical" else args.order))
+    # Ids as text (the harness's contract until now) or kept BIGINT.
+    kind = "long" if args.ids == "int64" else "string"
+    mapping = {"ids": "int64"} if args.ids == "int64" else None
+    nodes = spark.read.parquet(V.as_uri()).select(F.col("id").cast(kind).alias("node_id"))
+    links = spark.read.parquet(E.as_uri()).select(F.col("source").cast(kind).alias("source"),
+                                                  F.col("target").cast(kind).alias("target"))
+    receipt = phase("read_and_stage", lambda: nm.stage("g", nodes, links, node_mapping=mapping, edge_mapping=mapping,
+                                                     order=None if args.order == "canonical" else args.order))
     record["stage_receipt"] = receipt.asDict()
-    stats = phase("projection_undirected", lambda: nm.run("g", "projectionStats", orientation="undirected").first())
-    record["projection_stats"] = stats.asDict()
 
     def run_and_write(name, kernel, select, **options):
         out = args.root / f"result-{name}"
@@ -70,7 +75,8 @@ try:
     components = lambda f: f.select(F.col("nodeId").cast("long").alias("id"), F.col("componentId").cast("long").alias("component"))
     run_and_write("wcc_call_1", "wcc", components)
     run_and_write("wcc_call_2", "wcc", components)
-    phase("projection_outgoing", lambda: nm.run("g", "projectionStats", orientation="outgoing").first())
+    stats = phase("projection_stats_outgoing", lambda: nm.run("g", "projectionStats", orientation="outgoing").first())
+    record["projection_stats"] = stats.asDict()
     ranks = lambda f: f.select(F.col("nodeId").cast("long").alias("id"), "score")
     run_and_write("pagerank_10_steps", "pagerank", ranks, damping=0.85, tolerance=1e-30, maxIterations=10,
                   precision="f64", orientation="outgoing")

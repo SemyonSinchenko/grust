@@ -121,10 +121,67 @@ identity model. They do not change its order of magnitude. Items 1 and 2 are
 a change to `grust-algorithms`, which is a published crate pinned by the
 extension at `=0.23.0`, so they need a Grust release and a re-vendoring.
 
+## After: Grust 0.24.0 and integer identity in the extension
+
+The change was made and measured the same day. Grust 0.24.0 "Tanaid"
+(`origin/work/int64-projection`, release candidate `fa49fbb7`, passing every
+gate on macOS; not yet on crates.io when this was written) does items 1 to 4
+above inside `grust-algorithms`:
+
+- `from_arrow_batches` accepts Int64 `node_id`, `source` and `target` and
+  resolves endpoints through a direct table or a sorted lookup;
+- the edge table is columns, 8 bytes an edge where it was 40, and an arc's
+  edge slot is 4 bytes;
+- the id-to-row map is built by the first kernel that needs it;
+- work is charged a batch at a time, to the same totals as 0.23.0.
+
+The extension needed two things on top, on the fork branch
+`work/nutmeg-int64-identity` (uncommitted until the crates are published):
+a staging option `ids` = `int64` that keeps integer ids as Int64 instead of
+casting them to text, off by default because it changes the canonical order
+of integer ids from text order to numeric; and `NUTMEG_WORKERS`, which gives
+the store's execution a worker count so projections build in parallel.
+
+Banda end to end again, same machine, same files, `asStaged`, one run each:
+
+| Phase | cit-Patents, before | cit-Patents, Int64, 8 workers | graph500-24, before | graph500-24, Int64, no workers | graph500-24, Int64, 8 workers |
+|---|---|---|---|---|---|
+| Read Parquet and stage | 0.4 | 0.33 | 1.9 | 1.57 | 1.62 |
+| First WCC call, written to Parquet | 7.6 | 0.64 | 136.8 | 16.54 | 4.82 |
+| of which the projection build | 7.3 | 0.39 | 135.7 | 15.07 | 3.10 |
+| Second WCC call | 0.26 | 0.24 | 1.1 | 1.49 | 1.47 |
+| PageRank, 10 steps | 0.40 | 0.45 | 4.1 | 3.67 | 3.77 |
+| **One call, launch to exit** | **8.4** | **1.4** | **139** | **18.5** | **6.8** |
+| Staged rows | 0.52 GiB | 0.41 GiB | 7.6 GiB | 5.95 GiB | 5.95 GiB |
+| One projection | 1.13 GiB | 0.57 GiB | 13.4 GiB | 4.65 GiB | 4.65 GiB |
+
+With text ids and Grust 0.24.0 the cit-Patents first call is 6.9 s, a tenth
+shorter than before: the string path keeps its two hashes an edge.
+
+The three paths on one machine, one WCC launch to exit, with this change:
+
+| Path | cit-Patents | graph500-24 |
+|---|---|---|
+| graphframes-rs | 3.5 to 3.7 s | 25.5 to 27.7 s |
+| Pecan, inputs in place | 4.1 s | 20.3 s |
+| Banda, first call (Int64 ids, 8 build workers) | 1.4 s | 6.8 s |
+| Banda, each further call | 0.24 s | 1.5 s |
+| CSR floor (F0, 4 threads) | 0.4 s | 7.7 s |
+
+So the first conclusion of this record reverses. With integer identity the
+resident CSR is the fastest path for a single call at both sizes, and its
+first call on graph500-24 is under the floor program's 4-thread time,
+because the build uses eight workers. Sem's reference build, 179 to 186 s on
+4 cores, is 27 times this one's one-call total; the hosts and the thread
+counts differ, so that is an order of magnitude, not a ratio.
+
 ## Limits
 
-- One run per graph, a laptop, a warm cache. The gate numbers are from the
-  September campaign and Stage A, on other builds.
+- One run per cell, a laptop, a warm cache. The gate numbers are from the
+  September campaign and Stage A, on other builds and in a VM.
+- The after-numbers use an unreleased Grust build through a path patch and
+  an uncommitted extension change. They are to be repeated on the released
+  crates.
 - The sample is of cit-Patents only.
 - WCC only for the three-path table. BFS and PageRank were not compared
   across paths here.

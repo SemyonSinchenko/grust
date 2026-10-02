@@ -40,22 +40,28 @@ here, in both directions.
     records. Those numbers are not performance numbers.
   - A future cell records its cargo profile in the receipt.
 
-The ranking between paths is exposed too. On Capitola, with release builds
-and the LDBC files, one WCC call launch to exit:
+The ranking between paths was exposed too, and has now been re-measured on
+Capitola with release builds and the LDBC files. One WCC call, launch to
+exit:
 
 | Path | cit-Patents | graph500-24 (260M edges) |
 |---|---|---|
 | Pecan, default (copies the inputs first) | 5.0 s | 30.4 s |
 | Pecan, inputs read in place | 4.1 s | 20.3 s |
-| Banda, first call | 8.4 s | 139 s |
-| Banda, each further call | 0.26 s | 1.1 s |
+| Banda on Grust 0.23.0, text ids: first call | 8.4 s | 139 s |
+| Banda on Grust 0.24.0, integer ids, 8 build workers: first call | 1.4 s | 6.8 s |
+| Banda, each further call | 0.24 s | 1.5 s |
 
-There the relational path wins a single call at both sizes, and Banda wins
-from the fifth call on the same staged graph. That contradicts the first two
-rows of the short answer below, which came from gate cells where the
-relational path was the slow one. Until A5 says which host to believe, read
-the short answer as: **Banda when the same graph is queried many times;
-Pecan or Grenada for one pass, or when the graph does not fit one process.**
+On Grust 0.23.0 the relational path won a single call, because Banda's
+projection took 136 s on one thread through a string map. Grust 0.24.0
+(release in progress) takes integer ids as integers and builds in parallel,
+and Banda is then first from the first call at both sizes. So the short
+answer below stands again for a graph that fits one process, **provided the
+ids are staged as integers and the extension is built on Grust 0.24.0**; with
+text ids on 0.23.0, read it as "Banda when the same graph is queried five
+times or more". Pecan and Grenada remain the paths for a graph that does not
+fit one process, and they are within about 1.2 times graphframes-rs on this
+machine.
 
 ## The short answer
 
