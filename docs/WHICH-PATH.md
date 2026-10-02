@@ -136,6 +136,29 @@ frontier BFS inside the algorithm call (Stage A diagnostics, shared host).
 Banda's cit-Patents times have not been re-measured in that container, so
 the first two rows of the short answer still rest on the September cells.
 
+## A caution on every time in this guide
+
+Two things found on 2026-10-02 lower the confidence in the absolute times
+here, in both directions.
+
+- **The gate is slow for Sail in a way it is not for a plain DataFusion
+  binary.** Pecan's randomized WCC on cit-Patents takes 5.0 s launch to exit
+  on Capitola and 51.8 s on the gate; graphframes-rs takes 3.7 s and 13.8 s.
+  The cause is not known yet (item A5 of
+  [`SEM-REVIEW-2.md`](SEM-REVIEW-2.md)). Until it is, gate times for the
+  relational paths are upper bounds.
+- **Build profiles were not recorded per cell.** The extension build script
+  (`scripts/build.sh`) builds the host and the native wheels with the dev
+  profile, which is about 9 times slower for the host on this workload. The
+  gate cells of the September campaign were built with `--release` as far
+  as the session records show. The Capitola cells (the scale-22 column, and
+  Argentea's 1179 s) ran x86 builds under Rosetta, at least some of them
+  dev-profile. A future cell records its cargo profile in the receipt.
+
+The ranking between paths at a given scale was measured within one host and
+one set of builds, so it is less exposed than the seconds are. It still
+needs the rerun the first point calls for.
+
 ## The ceilings, by scale
 
 | Input | Banda | Pecan / Grenada | Argentea (one host) | Argentea (two hosts) |
