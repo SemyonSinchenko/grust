@@ -247,9 +247,11 @@ Read from the fork's code (`querygraph/sail` `4b88c8fb4`).
 | `mapInArrow` with a native helper called from Python | yes | yes | `MapPartitionsExec` (`crates/sail-physical-plan/src/map_partitions.rs`) keeps the input partitioning and maps each partition's stream. The Python function would hand batches to a compiled union-find. Per-batch Python glue; the embedded interpreter's lock is held only between batches if the helper releases it. |
 | A native `StreamUDF` under `MapPartitionsExec` | no | after a codec entry | The trait is `StreamUDF::invoke(stream, context) -> stream` (`crates/sail-common-datafusion/src/udf.rs:13`). The worker codec knows only the PySpark kinds and rejects others with "unknown StreamUDF type" (`crates/sail-execution/src/proto/codec.rs`, `try_encode_stream_udf`). A native kind needs one enum arm each way and a client-visible way to ask for it. |
 | A native aggregate (option B) | no | yes, by ordinary two-phase aggregation | The graph utilities register scalar functions only (`crates/sail-session/src/extensions/graph_utils/functions.rs:22`, and `register_worker_functions` in `mod.rs`). An aggregate would be registered the same way, in the host, next to `gf_axpb`. |
-| A relation plugin in an extension wheel | yes | no | Relation plugins are placed on the driver and gather their inputs (`examples/extensions/WRITING-AN-EXTENSION.md`). Fine in local mode; in cluster mode every edge would travel to the driver. |
+| A driver-placed relation in an extension wheel (the Nutmeg shape) | yes | no | It gathers its inputs on the driver (`examples/extensions/WRITING-AN-EXTENSION.md`). Fine in local mode; in cluster mode every edge would travel to the driver. |
+| A worker-placed relation in an extension wheel (the Argentea shape) | yes, experimental | yes | A native region that runs per partition on the workers, with state scoped to one job (`crates/sail-common-datafusion/src/worker_extension.rs`). Its payload is at most 262,144 bytes, which a union-find needs none of. One attempt, no retry. This is the existing native route that needs no change to Sail's codec. |
 
-For a first experiment, `mapInArrow` needs no change to Sail. For the
+For a first experiment, `mapInArrow` needs no change to Sail, and a
+worker-placed relation is the native form that needs none either. For the
 product form, the aggregate is the least code and the least new surface:
 no new operator, no codec change for a new plan node, and the planner
 already knows how to split it.
