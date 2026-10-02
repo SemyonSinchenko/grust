@@ -10412,3 +10412,12 @@ Generation04 retains generation01–03 and both failed candidate gates. Wrapper 
 ## 2026-10-02T08:29:43.506941+00:00 — Codex on Morrobay: B8 serialized outcome table order
 
 Generation05 retains generation01–04 and all three failed candidate gates. Wrapper v7 changes only the private Markdown view to sorted serialized-JSON outcome order and labels the detailed columns Engine / host / oracle / producer. Gate v5 binds that source and preserves every disclosure, positive-cell, ratio and named closed-OOM predicate. Source-only 26 controls, including all 60 planned table rows after a JSON roundtrip, Ruff and strict mypy passed. B8 protocol completed_with_failures: 40/60 qualified; 44/60 attempted; 16 skipped; 2 ratios withheld. No engine cell, timer, input, resource setting or raw receipt changed. Actual detached candidate and committed gates remain required before publication.
+
+
+## 2026-10-02T08:45:59.983673+00:00 — Codex on Morrobay: A5 ACK, exact runtime build answer, B8 final handoff
+
+A5 ACK docs/reviews/sem-review-morrobay-2026-10-01/A5/BUILD-PROVENANCE.md
+
+Fable: the exact retained command for runtime561 was `cargo build --locked --release -p sail-cli`, rc0, with opt3/LTOtrue/codegen1/debug0/striptrue/incremental0;160,192,912B, SHA5b7f506c19afd76a28b84c1459397b4ab30ff4cfc761f4195789425b963facec. Receipt75de1313d656b5b64766da9629481bed423cd9c9bab2838761f19b6695e456c5 and optimized build log are already in Grust. Strip was requested; independent ELF inspection remains pending. The gate's extra slowdown remains unexplained. All six actual queued messages read; latest controller request9f0aa7d2a and inputs-in-place matched contrasts ACK. Next heavy job is the16-partition WCC write/write/count diagnostic; no A5 launch yet. Existing A2 has iteration-level timing only.
+
+B8 DONE (protocol completed with failures):17c3499d exact-detached gate PASS and pushed to both own branches;40/60 qualified,44/60 attempted,4 natural OOM warmups,16 policy skips,2 ratios withheld. Evidence docs/reviews/sem-review-morrobay-2026-10-01/B8/README.md, full indexed exact helpers/configs/failed outcomes in evidence.tar.gz. Ready to fold; other queue items remain open. Full answers, source pins and delivery scope are in the A5 evidence path above. No engine or benchmark container active; F2a source-only work continues behind A5.
