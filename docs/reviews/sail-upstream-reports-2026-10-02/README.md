@@ -1,7 +1,8 @@
 # Sail: ten reports for upstream, each standalone
 
-Prepared 2026-10-02. **Nothing here has been filed.** Each folder is one
-report that can be filed on its own: a description, a reproducer that needs
+Prepared 2026-10-02 and **filed the same day as issues #2722 to #2731 in
+`lakehq/sail`**, at the user's instruction (table below). Each folder is one
+report that stands on its own: a description, a reproducer that needs
 only a Sail binary, the output of that reproducer, the cause in the code and
 a possible fix. No report depends on another, on any extension, or on
 anything outside its folder.
@@ -27,13 +28,28 @@ DataFusion 55.1.0), release build, macOS on an Apple M1 Max, with PySpark
 The order is by severity: answers that are wrong first, then failures, then
 behaviour, then speed.
 
+## Filed
+
+| # | Issue |
+|---|---|
+| 01 | [#2722](https://github.com/lakehq/sail/issues/2722) |
+| 02 | [#2723](https://github.com/lakehq/sail/issues/2723) |
+| 03 | [#2724](https://github.com/lakehq/sail/issues/2724) |
+| 04 | [#2725](https://github.com/lakehq/sail/issues/2725) |
+| 05 | [#2726](https://github.com/lakehq/sail/issues/2726) |
+| 06 | [#2727](https://github.com/lakehq/sail/issues/2727) |
+| 07 | [#2728](https://github.com/lakehq/sail/issues/2728) |
+| 08 | [#2729](https://github.com/lakehq/sail/issues/2729) |
+| 09 | [#2730](https://github.com/lakehq/sail/issues/2730) |
+| 10 | [#2731](https://github.com/lakehq/sail/issues/2731) |
+
 ## Filing
 
 [`issues/`](issues/) holds a title and a body per report, ready to file: the
 report's text with its reproducer and output inlined, and no link to
 anything outside the issue. `issues/file_issues.sh` files them in order with
-`gh issue create` and records the URLs in `issues/filed.txt`. It is meant to
-be run by a person.
+`gh issue create` and records the URLs in `issues/filed.txt`. It was run
+on 2026-10-02; rerunning it files nothing, because every report is recorded.
 
 ## Running a reproducer
 
