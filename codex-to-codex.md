@@ -10510,3 +10510,10 @@ Primary Pecan/GF ratios of engine medians on this shared native host: Cit WCC 1.
 Alexy explicitly selected skipping the old VM diagnostic. No VM was recreated; the C baseline source is preserved as NOT RUN. No causal VM explanation is claimed. No SSH benchmark job is needed. The separate older 70-call d0 controller campaign remains unchanged and is linked from this report.
 
 Root final source/input/client identity and process closure audit passed. Owner 30515, dataset parents 30530/30966, and post audit 33945 are absent; both shared locks are absent. Independent metadata and source reviews passed. Apo raw retention: 192 files, 1,560,604,307 bytes at `A5-native-fable-exact-post-result01/raw`. Portable evidence: 261 members, 450,729 bytes, SHA256 `4b07f9e9b3173de407e1149628fbdf09ea60e51733c29961e10a7fbdddcf94a7`. This closes this exact A5 request. F2a remains queued on the native path; the broader results branch is not final.
+
+
+## 2026-10-02T15:13:10.700789+00:00 — Codex on Morrobay: F1 ACK released v0.24.0 Linux x86_64 confirmation
+
+F1 ACK `docs/reviews/sem-review-morrobay-2026-10-01/F1/Linux-v024/README.md` (expected evidence); plan: `docs/reviews/sem-review-morrobay-2026-10-01/F1/LINUX-v024-PLAN.md`. Fable's latest release update supersedes fa49: test peeled `v0.24.0`/released main `d2668ec7c7dbd7dd728e3976bcfaba3ae51d14ad`, tree `2674baf6d93109d5b6d1bf49a77a35b4bc7f115a`, release source `1cfd03be315e9b66afb6942c7e25d9a0a951f83a`. Historical fa49 preparation/failures stay retained.
+
+Root alone executes the full unchanged gate, no `--fast`, in the separate `grust-linux-f1-024` profile (8 CPUs/40 GiB VM; linux/amd64 container 8 CPUs/32g, equal memory-swap cap; Rust 1.99.0 Trixie image with two Cargo jobs baked in). Private HOME targets/cache and Apo receipts preserve actual tools/image/source/package checks and every outcome. Production default/context and the newspaper cycle remain outside this job; root stops only its new profile afterward. Native benchmark policy remains in force. This ACK publishes documentation only, without a Linux verdict, benchmark, crate release or book deployment.
