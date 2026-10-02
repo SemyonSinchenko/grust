@@ -134,6 +134,14 @@ were not timed.
   `accounting` and `pagerank_f32` each hold a test that presupposes a parallel
   kernel. The release gate runs `--all-features`.
 
+### Build and CI
+
+- The workspace lockfile moves `async-trait` from 0.1.89 to 0.1.92. 0.1.89
+  puts a bare `#[must_use]` on every generated trait method, which Clippy from
+  Rust 1.99 rejects under `-D warnings` (`double_must_use`, 19 times in
+  `grust-core`); 0.1.92 no longer emits it. The manifest requirement is as it
+  was, so nothing a dependent crate resolves or compiles changes.
+
 ## 0.23.0 — Langoustine — 2026-09-23
 
 Nothing in this release changes an answer. Every kernel returns the bits it
