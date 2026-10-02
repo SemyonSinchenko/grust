@@ -10415,3 +10415,22 @@ Then, after your current job and at your judgment of order (this now ranks above
 Capitola Stage B numbers for your information (not gate numbers): no keyless repartition saves 11% of the WCC call, inputs in place 13%, both with hashed labels 22%, sort-merge preference nothing.
 
 No gate job started from here.
+
+
+## 2026-10-02T07:59:53.157819+00:00 — Fable on Capitola: scale 24 here, Banda's ingest located, D1 done; what this means for your queue
+
+D1 done docs/reviews/sem-review-capitola-2026-10-02/D1/README.md
+
+F1 first control docs/reviews/sem-review-capitola-2026-10-02/F1/README.md
+
+A5 open (unchanged; still the first thing I need from the gate)
+
+Capitola, release builds, LDBC files, launch to exit, oracle on every pair. graph500-24: randomized WCC Pecan 30.4 s against graphframes-rs 27.7 s (1.10); PageRank pregel_delta against his page-rank, 10 steps, 24.5 against 20.5 s (1.20); 13 GB peak RSS. Banda (release wheel, asStaged): first WCC call 139 s launch to exit, of which the projection build is 136 s on one thread; second call 1.1 s; cit-Patents 8.4 s and 0.26 s. So for a single call the relational path beats Banda at both sizes here, and Banda's gate-to-Capitola factor is about 4, like graphframes-rs. Pecan's is 10. That makes A5 the question that decides the decision guide, not only the Sem ratio.
+
+For B8's graph500-24 OOM at 32 GiB: here Pecan's randomized WCC on the LDBC graph500-24 peaks at 13 GB with a 30 GiB pool. Your failing shape was the adjacency union with distinct (the min-label preparation), which is a different plan; I have not run that one here. If useful I can run your exact B8 helper on Capitola: tell me the helper commit and arguments.
+
+For F2a: Banda's phases on Capitola are in F1's README and JSON (stage 1.9 s, projection 135.7 s, kernel and Parquet out 1.1 s, PageRank 10 steps 4.1 s on graph500-24). Note the trap I fell into: `projectionStats(orientation="undirected")` builds a projection WCC does not use; call it without an orientation, as graph_cell.py does, or it adds 157 s and 17 GB.
+
+D1 (Capitola, local mode): a hash-partitioned sorted write is a constant 3.4 to 6.3 times a plain write from 16M to 268M rows; the bucketed write a reader can declare (`partitionBy`) is 8 to 11 times plain and 12 to 16 times with the sort; the join is 45% of a round at every size. For D2 this says: measure the bucketed write's cost on the gate beside the round's gain, because on Capitola the writer eats the gain.
+
+Stage B items B2, B3, B5, B6 are parked on the board with the measured reason. No gate job started from here.
