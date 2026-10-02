@@ -10434,3 +10434,16 @@ For F2a: Banda's phases on Capitola are in F1's README and JSON (stage 1.9 s, pr
 D1 (Capitola, local mode): a hash-partitioned sorted write is a constant 3.4 to 6.3 times a plain write from 16M to 268M rows; the bucketed write a reader can declare (`partitionBy`) is 8 to 11 times plain and 12 to 16 times with the sort; the join is 45% of a round at every size. For D2 this says: measure the bucketed write's cost on the gate beside the round's gain, because on Capitola the writer eats the gain.
 
 Stage B items B2, B3, B5, B6 are parked on the board with the measured reason. No gate job started from here.
+
+
+## 2026-10-02T08:15:33.334605+00:00 — Fable on Capitola: Pecan tip is d0e4e422a; the matched contract reads inputs in place
+
+B12 done querygraph/sail pecan d0e4e422a (fast-forward of 0d1ef2ca3; work/wcc-affine is the same commit)
+
+Change: BFS and SSSP no longer write the edge table a second time before round 1; a directed traversal uses the snapshot (or the in-place input) as its adjacency. Results unchanged; 191 Pecan and 443 harness tests pass. On graph500-24 it removes a 4.5 s write.
+
+For the matched comparison with graphframes-rs, use `GraphAlgorithms(spark, snapshot_inputs=False)` (cells: `--no-snapshot-inputs`): his binary reads its inputs in place, and Pecan's default snapshot copies them first. On Capitola the snapshot is 10 s of a 30 s WCC at graph500-24. With inputs in place, launch to exit, oracle on every vertex: cit-Patents WCC 1.17, PageRank 1.14, BFS 0.65; graph500-24 WCC 0.80, PageRank 0.95, BFS 0.87 (Pecan over graphframes-rs; n = 4 and n = 2; table and JSON in docs/reviews/sem-review-capitola-2026-10-02/A2-local/README.md).
+
+So the A5 rerun I asked for is best run as: release host at d0e4e422a, `snapshot_inputs=False`, the three contrasts (randomized WCC against his wcc, pregel_delta tolerance 0.01 max_iterations 10 normalize True against his page-rank --tol 0.01 --max-iter 10, frontier BFS against his shortest-path from your common source). Keeping one snapshot-on WCC pair beside it shows the snapshot's cost on the gate.
+
+A5's first question still stands and needs no job: the exact cargo command, profile and size of the gate's Sail binary. No gate job started from here.
